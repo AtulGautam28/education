@@ -42,7 +42,7 @@
                                 @endif
                             </td>
                             <td>
-                                <a href="{{ route('admin.agents.show',$item->id) }}" class="btn btn-success btn-sm"><i class="fas fa-eye"></i></a>
+                                <!-- <a href="{{ route('admin.agents.show',$item->id) }}" class="btn btn-success btn-sm"><i class="fas fa-eye"></i></a> -->
                                 @if ($item->properties->count()==0)
                                 <a href="{{ route('admin.agents.delete',$item->id) }}" onclick="return confirm('{{ $confirmNotify }}')" class="btn btn-danger btn-sm"><i class="fas fa-trash    "></i></a>
                                 @endif

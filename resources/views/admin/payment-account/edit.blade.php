@@ -4,7 +4,7 @@
 @endsection
 @section('admin-content')
 
-<div class="row">
+<div class="row d-none">
     <div class="col-md-12">
         <div class="card shadow mb-4">
             <div class="card-header py-3">
@@ -158,7 +158,7 @@
     </div>
 </div>
 
-<div class="row">
+<div class="row d-none">
     <div class="col-md-12">
         <div class="card shadow mb-4">
             <div class="card-header py-3">
@@ -261,7 +261,7 @@
 </div>
 
 
-<div class="row">
+<div class="row d-none">
     <div class="col-md-12">
         <div class="card shadow mb-4">
             <div class="card-header py-3">
@@ -356,7 +356,7 @@
 </div>
 
 
-<div class="row">
+<div class="row d-none">
     <div class="col-md-12">
         <div class="card shadow mb-4">
             <div class="card-header py-3">
@@ -427,7 +427,7 @@
 </div>
 
 
-<div class="row">
+<div class="row d-none">
     <div class="col-md-12">
         <div class="card shadow mb-4">
             <div class="card-header py-3">
@@ -492,7 +492,7 @@
 </div>
 
 
-<div class="row">
+<div class="row d-none">
     <div class="col-md-12">
         <div class="card shadow mb-4">
             <div class="card-header py-3">
@@ -540,7 +540,7 @@
 </div>
 
 
-<div class="row">
+<div class="row d-none">
     <div class="col-md-12">
         <div class="card shadow mb-4">
             <div class="card-header py-3">
