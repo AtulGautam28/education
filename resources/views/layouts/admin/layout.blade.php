@@ -76,7 +76,7 @@
 
 
 
-                        <a class="collapse-item {{ Route::is('admin.listing-review')?'active':'' }}" href="{{ route('admin.listing-review') }}">{{ $websiteLang->where('lang_key','review')->first()->custom_text }}</a> --}}
+                     <a class="collapse-item {{ Route::is('admin.listing-review')?'active':'' }}" href="{{ route('admin.listing-review') }}">{{ $websiteLang->where('lang_key','review')->first()->custom_text }}</a> --}}
 
 
 
