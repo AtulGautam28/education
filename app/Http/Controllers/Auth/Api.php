@@ -1631,4 +1631,120 @@ class Api extends Controller
         }
 
     }
+    public function pricingPlan(){
+        $packages=Package::where('status',1)->orderBy('package_order','asc')->get();
+        if($packages){
+            $notification='Data found successfully';
+            return response()->json(['status'=>'success','message'=>$notification,'data'=>$packages]);
+        }else{
+            $notification='Data Not found!';
+            return response()->json(['status'=>'error','message'=>$notification]);
+        }
+    }
+
+    
+    public function stripePayment(Request $request,$id){
+
+        $stripe=PaymentAccount::first();
+        $currency=Setting::first();
+        $package=Package::find($id);
+        $user=Auth::guard('web')->user();
+
+
+        if($package){
+            Stripe\Stripe::setApiKey($stripe->stripe_secret);
+
+            $setting=Setting::first();
+            $amount_usd= round($package->price * $stripe->stripe_currency_rate,2);
+            $payableAmount = round($package->price * $stripe->stripe_currency_rate,2);
+            $result=Stripe\Charge::create ([
+                    "amount" =>$payableAmount * 100,
+                    "currency" => $stripe->stripe_currency_code,
+                    "source" => $request->stripeToken,
+                    "description" => env('APP_NAME')
+            ]);
+
+
+            $activeOrder=Order::where(['user_id'=>$user->id,'status'=>1])->count();
+            $oldOrders=Order::where('user_id',$user->id)->update(['status'=>0]);
+
+
+            $order=new Order();
+            $order->user_id=$user->id;
+            $order->order_id='#'.rand(22,44).date('Ydmis');
+            $order->package_id=$package->id;
+            $order->purchase_date=date('Y-m-d');
+            $order->expired_day=$package->number_of_days;
+            $order->expired_date=$package->number_of_days ==-1 ? null : date('Y-m-d', strtotime($package->number_of_days.' days'));
+            $order->payment_method="Stripe";
+            $order->transaction_id=$result->balance_transaction;
+            $order->payment_status=1;
+            $order->amount_usd=$amount_usd;
+            $order->amount_real_currency=$package->price;
+            $order->currency_type=$setting->currency_name;
+            $order->currency_icon=$setting->currency_icon;
+            $order->status=1;
+            $order->save();
+
+            // active and  in-active minimum limit listing
+            $userProperties=Property::where('user_id',$user->id)->orderBy('id','desc')->get();
+            if($userProperties->count() !=0){
+                if($package->number_of_property !=-1){
+                    foreach($userProperties as $index => $listing){
+                        if(++$index <= $package->number_of_property){
+                            $listing->status=1;
+                            $listing->save();
+                        }else{
+                            $listing->status=0;
+                            $listing->save();
+                        }
+                    }
+                }elseif($package->number_of_property ==-1){
+                    foreach($userProperties as $index => $listing){
+                        $listing->status=1;
+                        $listing->save();
+                    }
+                }
+            }
+            // end inactive
+
+            // setup expired date
+            if($userProperties->count() != 0){
+                foreach($userProperties as $index => $listing){
+                    $listing->expired_date=$order->expired_date;
+                    $listing->save();
+                }
+            }
+
+
+            MailHelper::setMailConfig();
+
+            $order_details='Purchase Date: '.$order->purchase_date.'<br>';
+            $order_details .='Expired Date: '.$order->expired_date;
+
+            // send email
+            $template=EmailTemplate::where('id',6)->first();
+            $message=$template->description;
+            $subject=$template->subject;
+            $message=str_replace('{{user_name}}',$user->name,$message);
+            $message=str_replace('{{payment_method}}','Stripe',$message);
+            $total_amount=$currency->currency_icon. $package->price;
+            $message=str_replace('{{amount}}',$total_amount,$message);
+            $message=str_replace('{{order_details}}',$order_details,$message);
+            Mail::to($user->email)->send(new OrderConfirmation($message,$subject));
+
+            $notify_lang=NotificationText::all();
+            $notification=$notify_lang->where('lang_key','order_success')->first()->custom_text;
+            $notification=array('messege'=>$notification,'status'=>'success');
+            return redirect()->route('user.my-order')->with($notification);
+
+        }else{
+            $notify_lang=NotificationText::all();
+            $notification=$notify_lang->where('lang_key','something')->first()->custom_text;
+            $notification=array('messege'=>$notification,'status'=>'error');
+
+            return redirect()->route('pricing.plan')->with($notification);
+        }
+
+    }
 }

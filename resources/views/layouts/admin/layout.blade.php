@@ -34,10 +34,20 @@
             <!-- Divider -->
             <hr class="sidebar-divider">
             <!-- Nav Item - Pages Collapse Menu -->
-             <li class="nav-item">
+            <li class="nav-item {{ Route::is('admin.agents')?'active':'' }}">
+                <a class="nav-link" href="{{ route('admin.agents') }}">
+                    <i class="fas fa-user"></i>
+                    <span>{{ $websiteLang->where('lang_key','admin')->first()->custom_text }}</span></a>
+            </li>
+            <li class="nav-item {{ Route::is('admin.order') || Route::is('admin.order-show') ?'active':'' }}">
+                <a class="nav-link" href="{{ route('admin.order') }}">
+                    <i class="far fa-credit-card"></i>
+                    <span>{{ $websiteLang->where('lang_key','order')->first()->custom_text }}</span></a>
+            </li>
+             <li class="nav-item d-none">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#real_estate"
                     aria-expanded="true" aria-controls="real_estate">
-                    <i class="fas far fa-building"></i>
+                    <i class="fas fa-user-alt"></i>
                     User Management
                 </a>
                 <div id="real_estate" class="collapse {{ Route::is('admin.property.*') ||
@@ -57,18 +67,14 @@
                         <a class="collapse-item {{ Route::is('admin.aminity.*')?'active':'' }}" href="{{ route('admin.aminity.index') }}">{{ $websiteLang->where('lang_key','aminities')->first()->custom_text }}</a>
                         <a class="collapse-item {{ Route::is('admin.package.*')?'active':'' }}" href="{{ route('admin.package.index') }}">{{ $websiteLang->where('lang_key','package')->first()->custom_text }}</a> --}}
 
-
                         <a class="collapse-item {{ Route::is('admin.agents') ||  Route::is('admin.agents.show')?'active':'' }}" href="{{ route('admin.agents') }}">{{ $websiteLang->where('lang_key','agent')->first()->custom_text }}</a>
 
-                        {{-- <a class="collapse-item {{ Route::is('admin.order') || Route::is('admin.order-show') ?'active':'' }}" href="{{ route('admin.order') }}">{{ $websiteLang->where('lang_key','order')->first()->custom_text }}</a>
+                         <a class="collapse-item {{ Route::is('admin.order') || Route::is('admin.order-show') ?'active':'' }}" href="{{ route('admin.order') }}">{{ $websiteLang->where('lang_key','order')->first()->custom_text }}</a>
+                         {{--
 
                         <a class="collapse-item {{ Route::is('admin.pending-order') ?'active':'' }}" href="{{ route('admin.pending-order') }}">{{ $websiteLang->where('lang_key','pending_order')->first()->custom_text }}</a>
 
-
-
                         <a class="collapse-item {{ Route::is('admin.listing-review')?'active':'' }}" href="{{ route('admin.listing-review') }}">{{ $websiteLang->where('lang_key','review')->first()->custom_text }}</a> --}}
-
-
 
                     </div>
                 </div>
@@ -93,10 +99,9 @@
 
 
 
-                        <a class="collapse-item {{ Route::is('admin.custom-page.*')?'active':'' }}" href="{{ route('admin.custom-page.index') }}">{{ $websiteLang->where('lang_key','custom_page')->first()->custom_text }}</a>
+                        {{-- <a class="collapse-item {{ Route::is('admin.custom-page.*')?'active':'' }}" href="{{ route('admin.custom-page.index') }}">{{ $websiteLang->where('lang_key','custom_page')->first()->custom_text }}</a> --}}
 
                         <a class="collapse-item {{ Route::is('admin.faq.*')?'active':'' }}" href="{{ route('admin.faq.index') }}">{{ $websiteLang->where('lang_key','faq')->first()->custom_text }}</a>
-
 
                     </div>
                 </div>
@@ -124,10 +129,6 @@
                 </div>
             </li>
 
-
-
-
-
             <!-- Nav Item - Pages Collapse Menu -->
              <li class="nav-item d-none">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#section-control"
@@ -149,7 +150,6 @@
                 </div>
             </li>
 
-
             <!-- Nav Item - Pages Collapse Menu -->
             <li class="nav-item d-none">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#home-section-2-pages"
@@ -167,7 +167,6 @@
 
                         <a class="collapse-item {{ Route::is('admin.service.index')?'active':'' }}" href="{{ route('admin.service.index') }}">{{ $websiteLang->where('lang_key','services')->first()->custom_text }}</a>
                         <a class="collapse-item {{ Route::is('admin.overview.index')?'active':'' }}" href="{{ route('admin.overview.index') }}">{{ $websiteLang->where('lang_key','overview')->first()->custom_text }}</a>
-
 
                     </div>
                 </div>
@@ -204,8 +203,6 @@
                         <a class="collapse-item {{ Route::is('admin.contact-us-seo-setup')?'active':'' }}" href="{{ route('admin.contact-us-seo-setup',7) }}">{{ $websiteLang->where('lang_key','contact_us')->first()->custom_text }}</a>
                         <a class="collapse-item {{ Route::is('admin.faq-seo-setup')?'active':'' }}" href="{{ route('admin.faq-seo-setup',8) }}">{{ $websiteLang->where('lang_key','faq_page')->first()->custom_text }}</a>
 
-
-
                     </div>
                 </div>
             </li>
@@ -226,16 +223,11 @@
 
                         <a class="collapse-item {{ Route::is('admin.notification.text')?'active':'' }}" href="{{ route('admin.notification.text') }}">{{ $websiteLang->where('lang_key','notify_language')->first()->custom_text }}</a>
 
-
-
                     </div>
                 </div>
             </li>
 
-
-
-
-            <li class="nav-item">
+            <li class="nav-item d-none">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#setting-pages"
                     aria-expanded="true" aria-controls="setting-pages">
                     <i class="fas fa-cog"></i>
@@ -275,13 +267,9 @@
 
                         <a class="collapse-item {{ Route::is('admin.theme-color')?'active':'' }}" href="{{ route('admin.theme-color') }}">{{ $websiteLang->where('lang_key','theme_color')->first()->custom_text }}</a>
 
-
-
                         <a class="collapse-item {{ Route::is('admin.email.template') || Route::is('admin.email-edit')?'active':'' }}" href="{{ route('admin.email.template') }}">{{ $websiteLang->where('lang_key','email_template')->first()->custom_text }}</a>
 
                         <a class="collapse-item {{ Route::is('admin.email-configuration')?'active':'' }}" href="{{ route('admin.email-configuration') }}">{{ $websiteLang->where('lang_key','email_config')->first()->custom_text }}</a>
-
-
 
                         <a class="collapse-item {{ Route::is('admin.banner.image')?'active':'' }}" href="{{ route('admin.banner.image') }}">{{ $websiteLang->where('lang_key','banner_img')->first()->custom_text }}</a>
                         <a class="collapse-item {{ Route::is('admin.login.image')?'active':'' }}" href="{{ route('admin.login.image') }}">{{ $websiteLang->where('lang_key','login_img')->first()->custom_text }}</a>
@@ -295,21 +283,21 @@
                 $admin=Auth::guard('admin')->user();
             @endphp
             @if ($admin->admin_type==1)
-            <li class="nav-item {{ Route::is('admin.admin-list.*')?'active':'' }}">
+            <li class="nav-item d-none {{ Route::is('admin.admin-list.*')?'active':'' }}">
                 <a class="nav-link" href="{{ route('admin.admin-list.index') }}">
                     <i class="fas fa-user"></i>
                     <span>{{ $websiteLang->where('lang_key','admin')->first()->custom_text }}</span></a>
             </li>
             @endif
 
-            <li class="nav-item {{ Route::is('admin.file-manager.*')?'active':'' }}">
+            <li class="nav-item d-none {{ Route::is('admin.file-manager.*')?'active':'' }}">
                 <a class="nav-link" href="{{ route('admin.file-manager.index') }}">
                     <i class="fas fa-fw fa-folder"></i>
                     <span>{{ $websiteLang->where('lang_key','file_manager')->first()->custom_text }}</span></a>
             </li>
 
 
-            <li class="nav-item {{ Route::is('admin.staff') || Route::is('admin.create-staff') ?'active':'' }}">
+            <li class="nav-item d-none {{ Route::is('admin.staff') || Route::is('admin.create-staff') ?'active':'' }}">
                 <a class="nav-link" href="{{ route('admin.staff') }}">
                     <i class="fas fa-user"></i>
                     <span>{{ $websiteLang->where('lang_key','manage_staff')->first()->custom_text }}</span></a>
@@ -317,7 +305,7 @@
 
 
             <!-- Nav Item - Pages Collapse Menu -->
-            <li class="nav-item">
+            <li class="nav-item d-none">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#blog-pages"
                     aria-expanded="true" aria-controls="blog-pages">
                     <i class="fas fa-th-large"></i>
@@ -351,7 +339,7 @@
             </li>
 
             <!-- Nav Item - Pages Collapse Menu -->
-            <li class="nav-item">
+            <li class="nav-item d-none">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#subscriber-2-pages"
                     aria-expanded="true" aria-controls="subscriber-2-pages">
                     <i class="fas fa-fire"></i>
@@ -365,24 +353,6 @@
                     </div>
                 </div>
             </li>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
             <!-- Divider -->
             <hr class="sidebar-divider d-none d-md-block">
@@ -487,8 +457,6 @@
 
             </div>
             <!-- End of Main Content -->
-
-
 
         </div>
         <!-- End of Content Wrapper -->

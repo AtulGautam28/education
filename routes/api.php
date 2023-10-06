@@ -43,6 +43,7 @@ Route::get('contactUs',[Api::class,'contactUs'])->name('contactUs');
 Route::get('aboutUs',[Api::class,'aboutUs'])->name('aboutUs');
 Route::get('privacyPolicy',[Api::class,'privacyPolicy'])->name('privacyPolicy');
 Route::get('termsCondition',[Api::class,'termsCondition'])->name('termsCondition');
+Route::get('pricingPlan',[Api::class,'pricingPlan'])->name('pricingPlan');
 
 Route::post('filterProperty',[Api::class,'filterProperty'])->name('filterProperty');
 Route::post('activity',[Api::class,'activity'])->name('activity');
