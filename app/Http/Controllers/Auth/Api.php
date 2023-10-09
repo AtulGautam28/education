@@ -11,9 +11,11 @@ use Illuminate\Http\Request;
 use App\User;
 use Auth;
 use App\PrivacyPolicy;
+use App\Blog;
 use App\Mail\ForgetPassword;
 use App\Message;
 use App\MessageComment;
+use App\BlogCategory;
 use Image;
 use File;
 use App\CustomPaginator;
@@ -46,6 +48,7 @@ use App\ListingCategory;
 use App\PropertyPurpose;
 use App\PropertyAminity;
 use App\Wishlist;
+use App\Faq;
 use App\PropertyNearestLocation;
 use App\Order;
 use App\PropertyReview;
@@ -1746,5 +1749,38 @@ class Api extends Controller
             return redirect()->route('pricing.plan')->with($notification);
         }
 
+    }
+    public function faq(){
+        $faqs=Faq::where('status',1)->get();
+        if($faqs){
+            $notification='Data found successfully';
+            return response()->json(['status'=>'success','message'=>$notification,'data'=>$faqs]);
+        }else{
+            $notification='Data Not found!';
+            return response()->json(['status'=>'error','message'=>$notification]);
+        }
+
+    }
+    public function vocabulary_category()
+    {
+        $categories=BlogCategory::all();
+        if($categories){
+            $notification='Data found successfully';
+            return response()->json(['status'=>'success','message'=>$notification,'data'=>$categories]);
+        }else{
+            $notification='Data Not found!';
+            return response()->json(['status'=>'error','message'=>$notification]);
+        }
+    }
+    public function vocabulary()
+    {
+        $blogs=Blog::with('category')->get();
+        if($blogs){
+            $notification='Data found successfully';
+            return response()->json(['status'=>'success','message'=>$notification,'data'=>$blogs]);
+        }else{
+            $notification='Data Not found!';
+            return response()->json(['status'=>'error','message'=>$notification]);
+        }
     }
 }

@@ -6,21 +6,9 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 
-use App\Http\Controllers\User\DashboardController;
-use App\Http\Controllers\User\PropertyController;
-use App\Http\Controllers\User\UserHomeController;
-use App\Http\Controllers\User\WishlistController;
-use App\Http\Controllers\User\PaymentController;
-use App\Http\Controllers\User\PaypalController;
-use App\Http\Controllers\User\OrderController;
-
-
-
 use App\Http\Controllers\Admin\Auth\AdminLoginController;
 use App\Http\Controllers\Admin\Auth\AdminForgotPasswordController;
 use App\Http\Controllers\Admin\AdminDashboardController;
-
-
 
 use App\Http\Controllers\Admin\ProfileController;
 use App\Http\Controllers\Admin\AdminController;
@@ -47,8 +35,6 @@ use App\Http\Controllers\Admin\BlogCommentController;
 
 use App\Http\Controllers\Admin\PracticeController;
 
-
-
 use App\Http\Controllers\Admin\SeoTextController;
 use App\Http\Controllers\Admin\MenuController;
 use App\Http\Controllers\Admin\BannerImageController;
@@ -71,29 +57,13 @@ use App\Http\Controllers\Admin\OverviewController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\FileManagerController;
 
-
-use App\Http\Controllers\Staff\Auth\StaffLoginController;
-use App\Http\Controllers\Staff\Auth\StaffForgotPasswordController;
-use App\Http\Controllers\Staff\StaffDashboardController;
-use App\Http\Controllers\Staff\StaffPropertyController;
-use App\Http\Controllers\Staff\StaffProfileController;
-
-
-
-
-
-
-
-
-
-
-
 use Illuminate\Support\Facades\Route;
 
 // Route::get('/',function(){
 //     return view('layouts.user.index');
 // });
 Route::get('/',[AdminDashboardController::class,'index'])->name('dashboard');
+
 Route::get('/home',[HomeController::class,'index'])->name('home');
 Route::get('/about-us',[HomeController::class,'aboutUs'])->name('about.us');
 Route::get('/blog',[HomeController::class,'blog'])->name('blog');
@@ -118,10 +88,6 @@ Route::get('/properties',[HomeController::class,'properties'])->name('properties
 Route::get('/property/{slug}',[HomeController::class,'propertDetails'])->name('property.details');
 Route::get('search-property',[HomeController::class,'searchPropertyPage'])->name('search-property');
 
-
-
-
-
 Route::post('user-contact-message',[ContactController::class,'messageForUser'])->name('user.contact.message');
 
 Route::get('/download-listing-file/{file}',[HomeController::class,'downloadListingFile'])->name('download-listing-file');
@@ -138,8 +104,6 @@ Route::get('forget-password',[ForgotPasswordController::class,'forgetPassForm'])
 Route::post('send-forget-password',[ForgotPasswordController::class,'sendForgetEmail'])->name('send.forget.password');
 Route::get('reset-password/{token}',[ForgotPasswordController::class,'resetPassword'])->name('reset.password');
 Route::post('store-reset-password/{token}',[ForgotPasswordController::class,'storeResetData'])->name('store.reset.password');
-
-
 
 
 // admin routes
@@ -162,8 +126,6 @@ Route::group(['as'=> 'admin.', 'prefix' => 'admin'],function (){
     //  admin
     Route::resource('admin-list',AdminController::class);
     Route::get('admin-status/{id}', [AdminController::class,'changeStatus'])->name('admin.status');
-
-
 
 
     // Terms-condition and privacy-policy
@@ -228,21 +190,12 @@ Route::group(['as'=> 'admin.', 'prefix' => 'admin'],function (){
     Route::post('send-subscriber-email',[SubscriberController::class,'sendMail'])->name('send.subscriber.mail');
 
 
-
-
-
-
     // check notification
     Route::get('view-order-notify',[AdminOrderController::class,'viewOrderNotify'])->name('view.order.notify');
     Route::get('view-message-notify',[AdminOrderController::class,'viewMessageNotify'])->name('view.message.notify');
 
-
-
     Route::get('setup-text',[TextController::class,'index'])->name('setup.text');
     Route::post('update-text',[TextController::class,'update'])->name('update.text');
-
-
-
 
     Route::get('validation-errors',[ValidationTextController::class,'index'])->name('validation.errors');
     Route::post('update-validation-text',[ValidationTextController::class,'update'])->name('update.validation.text');
@@ -308,8 +261,6 @@ Route::group(['as'=> 'admin.', 'prefix' => 'admin'],function (){
     Route::get('property-review',[ListingReviewController::class,'index'])->name('listing-review');
     Route::get('review-delete/{id}',[ListingReviewController::class,'destroy'])->name('review.delete');
     Route::get('review-status/{id}',[ListingReviewController::class,'changeStatus'])->name('review-status');
-
-
 
 
     // manage seo
@@ -400,8 +351,6 @@ Route::group(['as'=> 'admin.', 'prefix' => 'admin'],function (){
     Route::post('service-image', [ServiceController::class,'serviceBgImage'])->name('service-image');
     Route::resource('overview',OverviewController::class);
     Route::get('overview-status/{id}', [OverviewController::class,'changeStatus'])->name('overview.status');
-
-
 
     Route::get('agents',[UserController::class,'index'])->name('agents');
     Route::get('agents-show/{id}',[UserController::class,'show'])->name('agents.show');

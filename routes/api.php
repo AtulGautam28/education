@@ -72,4 +72,9 @@ Route::post('property_status',[Api::class,'property_status'])->name('property_st
 
 Route::post('agentprofile',[Api::class,'agentprofile'])->name('agentprofile');
 
+Route::get('faq',[Api::class,'faq'])->name('faq');
+
+Route::get('vocabulary_category',[Api::class,'vocabulary_category'])->name('vocabulary_category');
+Route::get('vocabulary',[Api::class,'vocabulary'])->name('vocabulary');
+
 

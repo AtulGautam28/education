@@ -84,7 +84,24 @@
                     </div>
                 </div>
             </li>
+                        <!-- Nav Item - Pages Collapse Menu -->
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#blog-pages"
+                    aria-expanded="true" aria-controls="blog-pages">
+                    <i class="fas fa-th-large"></i>
+                    <span>{{ $websiteLang->where('lang_key','blog')->first()->custom_text }}</span>
+                </a>
+                <div id="blog-pages" class="collapse {{ Route::is('admin.blog-comment') || Route::is('admin.blog-category.*') || Route::is('admin.blog.index') || Route::is('admin.blog.edit') || Route::is('admin.blog.create')  ? 'show': '' }}" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
 
+                        <a class="collapse-item {{ Route::is('admin.blog-category.*')?'active':'' }}" href="{{ route('admin.blog-category.index') }}">{{ $websiteLang->where('lang_key','blog_cat')->first()->custom_text }}</a>
+
+                        <a class="collapse-item {{ Route::is('admin.blog.index') || Route::is('admin.blog.create') || Route::is('admin.blog.edit') ? 'active':'' }}" href="{{ route('admin.blog.index') }}">{{ $websiteLang->where('lang_key','blog')->first()->custom_text }}</a>
+
+                        {{-- <a class="collapse-item {{ Route::is('admin.blog-comment')?'active':'' }}" href="{{ route('admin.blog-comment') }}">{{ $websiteLang->where('lang_key','blog_comment')->first()->custom_text }}</a> --}}
+                    </div>
+                </div>
+            </li>
 
             <!-- Nav Item - Pages Collapse Menu -->
             <li class="nav-item">
@@ -308,25 +325,6 @@
                     <span>{{ $websiteLang->where('lang_key','manage_staff')->first()->custom_text }}</span></a>
             </li>
 
-
-            <!-- Nav Item - Pages Collapse Menu -->
-            <li class="nav-item d-none">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#blog-pages"
-                    aria-expanded="true" aria-controls="blog-pages">
-                    <i class="fas fa-th-large"></i>
-                    <span>{{ $websiteLang->where('lang_key','blog')->first()->custom_text }}</span>
-                </a>
-                <div id="blog-pages" class="collapse {{ Route::is('admin.blog-comment') || Route::is('admin.blog-category.*') || Route::is('admin.blog.index') || Route::is('admin.blog.edit') || Route::is('admin.blog.create')  ? 'show': '' }}" aria-labelledby="headingPages" data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-
-                        <a class="collapse-item {{ Route::is('admin.blog-category.*')?'active':'' }}" href="{{ route('admin.blog-category.index') }}">{{ $websiteLang->where('lang_key','blog_cat')->first()->custom_text }}</a>
-
-                        <a class="collapse-item {{ Route::is('admin.blog.index') || Route::is('admin.blog.create') || Route::is('admin.blog.edit') ? 'active':'' }}" href="{{ route('admin.blog.index') }}">{{ $websiteLang->where('lang_key','blog')->first()->custom_text }}</a>
-
-                        <a class="collapse-item {{ Route::is('admin.blog-comment')?'active':'' }}" href="{{ route('admin.blog-comment') }}">{{ $websiteLang->where('lang_key','blog_comment')->first()->custom_text }}</a>
-                    </div>
-                </div>
-            </li>
 
             <!-- Nav Item - Pages Collapse Menu -->
             <li class="nav-item">

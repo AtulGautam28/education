@@ -41,27 +41,16 @@ class BlogController extends Controller
     public function store(Request $request)
     {
 
-         // project demo mode check
-         if(env('PROJECT_MODE')==0){
-            $notification=array(
-                'messege'=>env('NOTIFY_TEXT'),
-                'alert-type'=>'error'
-            );
-
-            return redirect()->back()->with($notification);
-        }
-        // end
-
         $valid_lang=ValidationText::all();
         $rules = [
             'title'=>'required|unique:blogs',
             'slug'=>'required|unique:blogs',
             'category'=>'required',
-            'image'=>'required',
-            'short_description'=>'required',
-            'description'=>'required',
+            // 'image'=>'required',
+            // 'short_description'=>'required',
+            // 'description'=>'required',
             'status'=>'required',
-            'show_homepage'=>'required',
+            // 'show_homepage'=>'required',
         ];
         $customMessages = [
             'title.required' => $valid_lang->where('lang_key','title')->first()->custom_text,
@@ -69,19 +58,19 @@ class BlogController extends Controller
             'slug.required' => $valid_lang->where('lang_key','slug')->first()->custom_text,
             'slug.unique' => $valid_lang->where('lang_key','unique_slug')->first()->custom_text,
             'category.required' => $valid_lang->where('lang_key','cat')->first()->custom_text,
-            'image.required' => $valid_lang->where('lang_key','img')->first()->custom_text,
-            'short_description.required' => $valid_lang->where('lang_key','short_des')->first()->custom_text,
-            'description.required' => $valid_lang->where('lang_key','des')->first()->custom_text,
+            // 'image.required' => $valid_lang->where('lang_key','img')->first()->custom_text,
+            // 'short_description.required' => $valid_lang->where('lang_key','short_des')->first()->custom_text,
+            // 'description.required' => $valid_lang->where('lang_key','des')->first()->custom_text,
         ];
         $this->validate($request, $rules, $customMessages);
 
 
-        $image=$request->image;
-        $extention=$image->getClientOriginalExtension();
-        $name= 'blog-img-'.date('Y-m-d-h-i-s-').rand(999,9999).'.'.$extention;
-        $image_path='uploads/custom-images/'.$name;
-        Image::make($image)
-        ->save(public_path().'/'.$image_path);
+        // $image=$request->image;
+        // $extention=$image->getClientOriginalExtension();
+        // $name= 'blog-img-'.date('Y-m-d-h-i-s-').rand(999,9999).'.'.$extention;
+        // $image_path='uploads/custom-images/'.$name;
+        // Image::make($image)
+        // ->save(public_path().'/'.$image_path);
 
         $admin=Auth::guard('admin')->user();
         $blog=new Blog();
@@ -91,7 +80,7 @@ class BlogController extends Controller
         $blog->blog_category_id=$request->category;
         $blog->description=$request->description;
         $blog->short_description=$request->short_description;
-        $blog->image=$image_path;
+        // $blog->image=$image_path;
         $blog->status=$request->status;
         $blog->show_homepage=$request->show_homepage;
         $blog->seo_title=$request->seo_title ? $request->seo_title : $request->title;
@@ -116,28 +105,16 @@ class BlogController extends Controller
 
     public function update(Request $request, Blog $blog)
     {
-         // project demo mode check
-         if(env('PROJECT_MODE')==0){
-            $notification=array(
-                'messege'=>env('NOTIFY_TEXT'),
-                'alert-type'=>'error'
-            );
-
-            return redirect()->back()->with($notification);
-        }
-        // end
-
-
 
         $valid_lang=ValidationText::all();
         $rules = [
             'title'=>'required|unique:blogs,title,'.$blog->id,
             'slug'=>'required|unique:blogs,slug,'.$blog->id,
             'category'=>'required',
-            'description'=>'required',
-            'short_description'=>'required',
+            // 'description'=>'required',
+            // 'short_description'=>'required',
             'status'=>'required',
-            'show_homepage'=>'required',
+            // 'show_homepage'=>'required',
         ];
         $customMessages = [
             'title.required' => $valid_lang->where('lang_key','title')->first()->custom_text,
@@ -145,8 +122,8 @@ class BlogController extends Controller
             'slug.required' => $valid_lang->where('lang_key','slug')->first()->custom_text,
             'slug.unique' => $valid_lang->where('lang_key','unique_slug')->first()->custom_text,
             'category.required' => $valid_lang->where('lang_key','cat')->first()->custom_text,
-            'short_description.required' => $valid_lang->where('lang_key','short_des')->first()->custom_text,
-            'description.required' => $valid_lang->where('lang_key','des')->first()->custom_text,
+            // 'short_description.required' => $valid_lang->where('lang_key','short_des')->first()->custom_text,
+            // 'description.required' => $valid_lang->where('lang_key','des')->first()->custom_text,
         ];
         $this->validate($request, $rules, $customMessages);
 
@@ -164,8 +141,6 @@ class BlogController extends Controller
                 ->save(public_path().'/'.$image_path);
             $blog->image=$image_path;
             if(File::exists(public_path().'/'.$old_image))unlink(public_path().'/'.$old_image);
-
-
 
         }
         $blog->title=$request->title;

@@ -19,13 +19,12 @@
                         <tr>
                             <th width="5%">{{ $websiteLang->where('lang_key','serial')->first()->custom_text }}
                             </th>
-                            <th width="40%">{{ $websiteLang->where('lang_key','title')->first()->custom_text }}
+                            <th width="30%">{{ $websiteLang->where('lang_key','title')->first()->custom_text }}
                             </th>
-                            <th width="5%">{{ $websiteLang->where('lang_key','views')->first()->custom_text }}
-                            </th>
+                            <th width="40%">Meaning</th>
                             <th width="15%">{{ $websiteLang->where('lang_key','cat')->first()->custom_text }}
                             </th>
-                            <th width="10%">{{ $websiteLang->where('lang_key','img')->first()->custom_text }}
+                            {{-- <th width="10%">{{ $websiteLang->where('lang_key','img')->first()->custom_text }} --}}
                             </th>
                             <th width="5%">{{ $websiteLang->where('lang_key','status')->first()->custom_text }}
                             </th>
@@ -38,10 +37,10 @@
                         <tr>
                             <td>{{ ++$index }}</td>
                             <td>{{ $item->title }}</td>
-                            <td>{{ $item->view }}</td>
+                            <td>{{ $item->seo_title }} ({{ $item->seo_description }})</td>
                             <td>{{ $item->category->name }}</td>
-                            <td> <img src="{{ $item->image ? url($item->image) : "" }}" alt="" class="blog-img">
-                            </td>
+                            {{-- <td> <img src="{{ $item->image ? url($item->image) : "" }}" alt="" class="blog-img">
+                            </td> --}}
                             <td>
                                 @if ($item->status==1)
                                 <a href="" onclick="blogStatus({{ $item->id }})"><input type="checkbox" checked data-toggle="toggle"
@@ -53,7 +52,7 @@
                             </td>
                             <td>
                                 <a href="{{ route('admin.blog.edit',$item->id) }}" class="btn btn-primary btn-sm"><i class="fas fa-edit    "></i></a>
-                                <a target="_blank" href="{{ url('blog-details/'.$item->slug) }}" class="btn btn-success btn-sm"><i class="fas fa-eye"></i></a>
+                                {{-- <a target="_blank" href="{{ url('blog-details/'.$item->slug) }}" class="btn btn-success btn-sm"><i class="fas fa-eye"></i></a> --}}
                                 <a data-toggle="modal" data-target="#deleteModal" href="javascript:;" onclick="deleteData({{ $item->id }})" class="btn btn-danger btn-sm"><i class="fas fa-trash    "></i></a>
 
 
