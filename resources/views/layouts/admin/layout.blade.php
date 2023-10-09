@@ -36,6 +36,7 @@
             <!-- Nav Item - Pages Collapse Menu -->
             <li class="nav-item {{ Route::is('admin.agents')?'active':'' }}">
                 <a class="nav-link" href="{{ route('admin.agents') }}">
+<<<<<<< HEAD
                     <i class="fas fa-user"></i>
                     <span>{{ $websiteLang->where('lang_key','admin')->first()->custom_text }}</span></a>
             </li>
@@ -48,6 +49,15 @@
                 <a class="nav-link" href="{{ route('admin.practice') }}">
                     <i class="fas fa-comment-alt"></i>
                     <span>Practice Dialogues</span></a>
+=======
+                    <i class="fas fa-fw fa-user"></i>
+                    <span> User Management</span></a>
+            </li>
+            <li class="nav-item {{ Route::is('admin.package.index')?'active':'' }}">
+                <a class="nav-link" href="{{ route('admin.package.index') }}">
+                    <i class="fas fa-fw fa-credit-card"></i>
+                    <span> Pricing Plan</span></a>
+>>>>>>> main
             </li>
              <li class="nav-item d-none">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#real_estate"
@@ -69,8 +79,8 @@
                         <a class="collapse-item {{ Route::is('admin.property-type.*')?'active':'' }}" href="{{ route('admin.property-type.index') }}">{{ $websiteLang->where('lang_key','property_type')->first()->custom_text }}</a>
                         <a class="collapse-item {{ Route::is('admin.nearest-location.*')?'active':'' }}" href="{{ route('admin.nearest-location.index') }}">{{ $websiteLang->where('lang_key','nearest_loc')->first()->custom_text }}</a>
 
-                        <a class="collapse-item {{ Route::is('admin.aminity.*')?'active':'' }}" href="{{ route('admin.aminity.index') }}">{{ $websiteLang->where('lang_key','aminities')->first()->custom_text }}</a>
-                        <a class="collapse-item {{ Route::is('admin.package.*')?'active':'' }}" href="{{ route('admin.package.index') }}">{{ $websiteLang->where('lang_key','package')->first()->custom_text }}</a> --}}
+                        <a class="collapse-item {{ Route::is('admin.aminity.*')?'active':'' }}" href="{{ route('admin.aminity.index') }}">{{ $websiteLang->where('lang_key','aminities')->first()->custom_text }}</a>--}}
+                        <a class="collapse-item {{ Route::is('admin.package.*')?'active':'' }}" href="{{ route('admin.package.index') }}">{{ $websiteLang->where('lang_key','package')->first()->custom_text }}</a> 
 
                         <a class="collapse-item {{ Route::is('admin.agents') ||  Route::is('admin.agents.show')?'active':'' }}" href="{{ route('admin.agents') }}">{{ $websiteLang->where('lang_key','agent')->first()->custom_text }}</a>
 
@@ -104,7 +114,7 @@
             </li>
 
             <!-- Nav Item - Pages Collapse Menu -->
-            <li class="nav-item">
+            <li class="nav-item d-none">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages"
                     aria-expanded="true" aria-controls="collapsePages">
                     <i class="fas fa-columns"></i>
