@@ -17,7 +17,7 @@
                         <tr>
                             <th width="5%">{{ $websiteLang->where('lang_key','serial')->first()->custom_text }}</th>
                             <th width="10%">Title</th>
-                            <th width="15%">Video Tutorial</th>                           
+                            <th width="15%">Image </th>                           
                             <th width="15%">Discription</th>                           
                             <th width="10%">{{ $websiteLang->where('lang_key','action')->first()->custom_textt }}</th>
                         </tr>
@@ -29,7 +29,7 @@
                             <td>{{ $textformates->title }}</td>
                             <td> 
                                 <img src="{{ url($textformates->image) }}"  alt=""></td>                           
-                            <td>{{ $textformates->discription }}</td>                          
+                                <td>{!! $textformates->discription !!}</td>                       
                             <td>
                                 <a onclick="return confirm('{{ $confirmNotify }}')" href="{{ route('admin.textformate-delete',$textformates->id) }}" class="btn btn-danger btn-sm"><i class="fas fa-trash" aria-hidden="true"></i></a>
                                 <a href="{{ route('admin.textformate-edit',$textformates->id) }}" class="btn btn-info btn-sm"><i class="fas fa-edit" aria-hidden="true"></i></a>

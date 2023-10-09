@@ -115,7 +115,7 @@ class AdminTextFormateController extends Controller
             $extention=$image->getClientOriginalExtension();
             $name= 'textformate-'.date('Y-m-d-h-i-s-').rand(999,9999).'.'.$extention;
             $image_path='uploads/custom-images/'.$name;
-            $request->video->move(public_path('uploads/custom-images'), $image_path);
+            $request->image->move(public_path('uploads/custom-images'), $image_path);
 
             $tutorial->title=$request->title;
             $tutorial->discription=$request->description;

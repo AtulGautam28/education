@@ -24,7 +24,7 @@
                     <label for="name">Image</label> 
                     <br>
                     <span> <img src="{{ url($textformate->image) }}"  alt=""></td>        </span>                  
-                    <input type="file" class="form-control"  id="video" name="video"  accept="video/mp4, video/mov">
+                    <input type="file" class="form-control"  id="image" name="image"  >
                 </div>
                 <div class="form-group">
                     <label for="name">Description</label>
