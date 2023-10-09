@@ -44,24 +44,21 @@
                     <i class="far fa-credit-card"></i>
                     <span>{{ $websiteLang->where('lang_key','order')->first()->custom_text }}</span></a>
             </li>
-<<<<<<< HEAD
             <li class="nav-item {{ Route::is('admin.practice') ?'active':'' }}">
                 <a class="nav-link" href="{{ route('admin.practice') }}">
                     <i class="fas fa-comment-alt"></i>
                     <span>Practice Dialogues</span></a>
-=======
             <li class="nav-item {{ Route::is('admin.toturial')  ?'active':'' }}">
                 <a class="nav-link" href="{{ route('admin.toturial') }}">
-                    <i class="far fa-credit-card"></i>
+                    <i class="fas fa-clock"></i>
                     <span>Tutorial</span></a>
             </li>
             <li class="nav-item {{ Route::is('admin.textformate')  ?'active':'' }}">
                 <a class="nav-link" href="{{ route('admin.textformate') }}">
-                    <i class="far fa-credit-card"></i>
+                    <i class="fa fa-file"></i>
                     <span>Text Formate</span></a>
->>>>>>> origin/deepshikha
             </li>
-             <li class="nav-item d-none">
+            <li class="nav-item d-none">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#real_estate"
                     aria-expanded="true" aria-controls="real_estate">
                     <i class="fas fa-user-alt"></i>
@@ -81,13 +78,10 @@
                         <a class="collapse-item {{ Route::is('admin.property-type.*')?'active':'' }}" href="{{ route('admin.property-type.index') }}">{{ $websiteLang->where('lang_key','property_type')->first()->custom_text }}</a>
                         <a class="collapse-item {{ Route::is('admin.nearest-location.*')?'active':'' }}" href="{{ route('admin.nearest-location.index') }}">{{ $websiteLang->where('lang_key','nearest_loc')->first()->custom_text }}</a>
 
-<<<<<<< HEAD
                         <a class="collapse-item {{ Route::is('admin.aminity.*')?'active':'' }}" href="{{ route('admin.aminity.index') }}">{{ $websiteLang->where('lang_key','aminities')->first()->custom_text }}</a>--}}
                         <a class="collapse-item {{ Route::is('admin.package.*')?'active':'' }}" href="{{ route('admin.package.index') }}">{{ $websiteLang->where('lang_key','package')->first()->custom_text }}</a> 
-=======
                         <a class="collapse-item {{ Route::is('admin.aminity.*')?'active':'' }}" href="{{ route('admin.aminity.index') }}">{{ $websiteLang->where('lang_key','aminities')->first()->custom_text }}</a>
                         <a class="collapse-item {{ Route::is('admin.package.*')?'active':'' }}" href="{{ route('admin.package.index') }}">{{ $websiteLang->where('lang_key','package')->first()->custom_text }}</a> --}}
->>>>>>> origin/deepshikha
 
                         <a class="collapse-item {{ Route::is('admin.agents') ||  Route::is('admin.agents.show')?'active':'' }}" href="{{ route('admin.agents') }}">{{ $websiteLang->where('lang_key','agent')->first()->custom_text }}</a>
 
@@ -344,8 +338,6 @@
 
 
             <!-- Nav Item - Pages Collapse Menu -->
-<<<<<<< HEAD
-=======
             <li class="nav-item d-none">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#blog-pages"
                     aria-expanded="true" aria-controls="blog-pages">
@@ -365,7 +357,6 @@
             </li>
 
             <!-- Nav Item - Pages Collapse Menu -->
->>>>>>> origin/deepshikha
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#contact-2-pages"
                     aria-expanded="true" aria-controls="contact-2-pages">
