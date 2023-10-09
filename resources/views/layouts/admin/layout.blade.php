@@ -36,7 +36,6 @@
             <!-- Nav Item - Pages Collapse Menu -->
             <li class="nav-item {{ Route::is('admin.agents')?'active':'' }}">
                 <a class="nav-link" href="{{ route('admin.agents') }}">
-<<<<<<< HEAD
                     <i class="fas fa-user"></i>
                     <span>{{ $websiteLang->where('lang_key','admin')->first()->custom_text }}</span></a>
             </li>
@@ -49,15 +48,6 @@
                 <a class="nav-link" href="{{ route('admin.practice') }}">
                     <i class="fas fa-comment-alt"></i>
                     <span>Practice Dialogues</span></a>
-=======
-                    <i class="fas fa-fw fa-user"></i>
-                    <span> User Management</span></a>
-            </li>
-            <li class="nav-item {{ Route::is('admin.package.index')?'active':'' }}">
-                <a class="nav-link" href="{{ route('admin.package.index') }}">
-                    <i class="fas fa-fw fa-credit-card"></i>
-                    <span> Pricing Plan</span></a>
->>>>>>> main
             </li>
              <li class="nav-item d-none">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#real_estate"
