@@ -49,6 +49,11 @@
                     <i class="far fa-credit-card"></i>
                     <span>Tutorial</span></a>
             </li>
+            <li class="nav-item {{ Route::is('admin.textformate')  ?'active':'' }}">
+                <a class="nav-link" href="{{ route('admin.textformate') }}">
+                    <i class="far fa-credit-card"></i>
+                    <span>Text Formate</span></a>
+            </li>
              <li class="nav-item d-none">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#real_estate"
                     aria-expanded="true" aria-controls="real_estate">
