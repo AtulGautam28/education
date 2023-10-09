@@ -30,6 +30,8 @@ use App\Http\Controllers\Admin\PaymentAccountController;
 use App\Http\Controllers\Admin\SettingsController;
 use App\Http\Controllers\Admin\SubscriberController;
 use App\Http\Controllers\Admin\AdminOrderController;
+use App\Http\Controllers\Admin\AdminToturialController;
+use App\Http\Controllers\Admin\AdminTextFormateController;
 use App\Http\Controllers\Admin\TextController;
 use App\Http\Controllers\Admin\ValidationTextController;
 use App\Http\Controllers\Admin\BlogCategoryController;
@@ -412,6 +414,19 @@ Route::group(['as'=> 'admin.', 'prefix' => 'admin'],function (){
     Route::get('payment-accept/{id}',[AdminOrderController::class,'paymentAccept'])->name('payment-accept');
     Route::get('order-show/{id}',[AdminOrderController::class,'show'])->name('order-show');
     Route::get('order-delete/{id}',[AdminOrderController::class,'destroy'])->name('order-delete');
+    Route::get('toturial',[AdminToturialController::class,'index'])->name('toturial');
+    Route::get('toturial-create',[AdminToturialController::class,'create'])->name('toturial-create');
+    Route::get('tutorial-delete/{id}',[AdminToturialController::class,'destroy'])->name('tutorial-delete');
+    Route::get('tutorial-edit/{id}',[AdminToturialController::class,'edit'])->name('tutorial-edit');
+    Route::post('toturial-update/{id}',[AdminToturialController::class,'update'])->name('toturial-update');
+    Route::post('toturial-store',[AdminToturialController::class,'store'])->name('toturial-store');
+
+    Route::get('textformate',[AdminTextFormateController::class,'index'])->name('textformate');
+    Route::get('textformate-create',[AdminTextFormateController::class,'create'])->name('textformate-create');
+    Route::get('textformate-delete/{id}',[AdminTextFormateController::class,'destroy'])->name('textformate-delete');
+    Route::get('textformate-edit/{id}',[AdminTextFormateController::class,'edit'])->name('textformate-edit');
+    Route::post('textformate-update/{id}',[AdminTextFormateController::class,'update'])->name('textformate-update');
+    Route::post('textformate-store',[AdminTextFormateController::class,'store'])->name('textformate-store');
 
 
 
