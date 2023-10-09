@@ -44,6 +44,11 @@
                     <i class="far fa-credit-card"></i>
                     <span>{{ $websiteLang->where('lang_key','order')->first()->custom_text }}</span></a>
             </li>
+            <li class="nav-item {{ Route::is('admin.practice') ?'active':'' }}">
+                <a class="nav-link" href="{{ route('admin.practice') }}">
+                    <i class="fas fa-comment-alt"></i>
+                    <span>Practice Dialogues</span></a>
+            </li>
              <li class="nav-item d-none">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#real_estate"
                     aria-expanded="true" aria-controls="real_estate">

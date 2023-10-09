@@ -45,6 +45,8 @@ use App\Http\Controllers\Admin\PartnerController;
 use App\Http\Controllers\Admin\ListingReviewController;
 use App\Http\Controllers\Admin\BlogCommentController;
 
+use App\Http\Controllers\Admin\PracticeController;
+
 
 
 use App\Http\Controllers\Admin\SeoTextController;
@@ -413,7 +415,12 @@ Route::group(['as'=> 'admin.', 'prefix' => 'admin'],function (){
     Route::get('order-show/{id}',[AdminOrderController::class,'show'])->name('order-show');
     Route::get('order-delete/{id}',[AdminOrderController::class,'destroy'])->name('order-delete');
 
-
+    // Practice Dialogue
+    // Route::resource('practice',PracticeController::class);
+    Route::get('practice',[PracticeController::class,'index'])->name('practice');
+    Route::post('store-practice',[PracticeController::class,'store'])->name('store.practice');
+    Route::post('practice-update/{id}',[PracticeController::class,'update'])->name('practice.update');
+    Route::get('practice-delete/{id}',[PracticeController::class,'destroy'])->name('practice.delete');
 
 });
 
