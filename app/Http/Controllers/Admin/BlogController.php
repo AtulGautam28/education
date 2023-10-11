@@ -46,6 +46,7 @@ class BlogController extends Controller
             'title'=>'required|unique:blogs',
             'slug'=>'required|unique:blogs',
             'category'=>'required',
+            'image'=>'required',
             // 'image'=>'required',
             // 'short_description'=>'required',
             // 'description'=>'required',
@@ -64,19 +65,22 @@ class BlogController extends Controller
         ];
         $this->validate($request, $rules, $customMessages);
 
+        if($request->image){
 
-        // $image=$request->image;
-        // $extention=$image->getClientOriginalExtension();
-        // $name= 'blog-img-'.date('Y-m-d-h-i-s-').rand(999,9999).'.'.$extention;
-        // $image_path='uploads/custom-images/'.$name;
-        // Image::make($image)
-        // ->save(public_path().'/'.$image_path);
+            $audio=$request->image;
+            $extention=$audio->getClientOriginalExtension();
+            $name= 'mp3-'.date('Y-m-d-h-i-s-').rand(999,9999).'.'.$extention;
+            $audio_path='uploads/vocabulary-audio/'.$name;
+            $request->image->move(public_path('uploads/vocabulary-audio'), $audio_path);  
+
+        }
 
         $admin=Auth::guard('admin')->user();
         $blog=new Blog();
         $blog->admin_id=$admin->id;
         $blog->title=$request->title;
         $blog->slug=$request->slug;
+        $blog->image=$audio_path;
         $blog->blog_category_id=$request->category;
         $blog->description=$request->description;
         $blog->short_description=$request->short_description;
@@ -130,24 +134,22 @@ class BlogController extends Controller
 
 
         $admin=Auth::guard('admin')->user();
-        if($request->file('image')){
-            $old_image=$blog->image;
-            $image=$request->image;
-            $extention=$image->getClientOriginalExtension();
-            $name= 'blog-img-'.date('Y-m-d-h-i-s-').rand(999,9999).'.'.$extention;
-            $image_path='uploads/custom-images/'.$name;
-
-            Image::make($image)
-                ->save(public_path().'/'.$image_path);
-            $blog->image=$image_path;
-            if(File::exists(public_path().'/'.$old_image))unlink(public_path().'/'.$old_image);
-
+        $audio=$request->image;
+        $old_audio=$request->image;
+        if($old_audio){
+         if(File::exists(public_path().'/'."uploads/vocabulary-audio/".$old_audio)) unlink(public_path().'/'."uploads/vocabulary-audio/".$old_audio);
         }
+        $extention=$audio->getClientOriginalExtension();
+        $name= 'mp3-'.date('Y-m-d-h-i-s-').rand(999,9999).'.'.$extention;
+        $audio_path='uploads/vocabulary-audio/'.$name;
+        $request->image->move(public_path('uploads/vocabulary-audio'), $audio_path);
+
         $blog->title=$request->title;
         $blog->slug=$request->slug;
         $blog->description=$request->description;
         $blog->short_description=$request->short_description;
         $blog->blog_category_id=$request->category;
+        $blog->image=$audio_path;
         $blog->status=$request->status;
         $blog->seo_title=$request->seo_title ? $request->seo_title : $request->title;
         $blog->seo_description=$request->seo_description ? $request->seo_description: $request->title;

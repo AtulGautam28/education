@@ -24,7 +24,7 @@
                             <th width="40%">Meaning</th>
                             <th width="15%">{{ $websiteLang->where('lang_key','cat')->first()->custom_text }}
                             </th>
-                            {{-- <th width="10%">{{ $websiteLang->where('lang_key','img')->first()->custom_text }} --}}
+                            <th width="10%">Audio
                             </th>
                             <th width="5%">{{ $websiteLang->where('lang_key','status')->first()->custom_text }}
                             </th>
@@ -39,8 +39,11 @@
                             <td>{{ $item->title }}</td>
                             <td>{{ $item->seo_title }} ({{ $item->seo_description }})</td>
                             <td>{{ $item->category->name }}</td>
-                            {{-- <td> <img src="{{ $item->image ? url($item->image) : "" }}" alt="" class="blog-img">
-                            </td> --}}
+                            <td> 
+                                <audio controls>
+                                    <source src="{{ $item->image ? url($item->image) : "" }}" type="audio/mpeg">
+                                </audio>
+                            </td>
                             <td>
                                 @if ($item->status==1)
                                 <a href="" onclick="blogStatus({{ $item->id }})"><input type="checkbox" checked data-toggle="toggle"

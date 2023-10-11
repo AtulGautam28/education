@@ -51,10 +51,10 @@
                         </div>
 
 
-                        {{-- <div class="form-group">
-                            <label for="image">{{ $websiteLang->where('lang_key','img')->first()->custom_text }}</label>
+                        <div class="form-group">
+                            <label for="image">Audio</label>
                             <div><input type="file" name="image" id="image"></div>
-                        </div> --}}
+                        </div>
 
                         {{-- <div class="form-group">
                             <label for="short_description">{{ $websiteLang->where('lang_key','short_des')->first()->custom_text }}</label>
