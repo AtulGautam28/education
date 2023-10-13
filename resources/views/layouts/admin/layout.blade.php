@@ -49,10 +49,32 @@
                     <i class="far fa-credit-card"></i>
                     <span>{{ $websiteLang->where('lang_key','order')->first()->custom_text }}</span></a>
             </li>
-            <li class="nav-item {{ Route::is('admin.practice') ?'active':'' }}">
+            <li class="nav-item d-none {{ Route::is('admin.practice') ?'active':'' }}">
                 <a class="nav-link" href="{{ route('admin.practice') }}">
                     <i class="fas fa-comment-alt"></i>
                     <span>Practice Dialogues</span></a>
+            </li>
+            
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapge_location"
+                    aria-expanded="true" aria-controls="collapge_location">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <span>Practice Dialogues</span>
+                </a>
+                <div id="collapge_location" class="collapse {{
+                Route::is('admin.practice.*') || Route::is('admin.country-state')
+                 ? 'show':'' }}" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <a class="collapse-item {{ Route::is('admin.practice.*')?'active':'' }}" href="{{ route('admin.practice') }}">Practice Dialogues</a>
+
+                        <a class="collapse-item {{ Route::is('admin.segments.*')?'active':'' }}" href="{{ route('admin.segments') }}">Segments</a>
+
+
+                    </div>
+                </div>
+            </li>
+            
+
             <li class="nav-item {{ Route::is('admin.toturial')  ?'active':'' }}">
                 <a class="nav-link" href="{{ route('admin.toturial') }}">
                     <i class="fas fa-clock"></i>

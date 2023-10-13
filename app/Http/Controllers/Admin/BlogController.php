@@ -135,9 +135,10 @@ class BlogController extends Controller
 
         $admin=Auth::guard('admin')->user();
         $audio=$request->image;
-        $old_audio=$request->image;
+        $old_audio=$request->old_image;
         if($old_audio){
-         if(File::exists(public_path().'/'."uploads/vocabulary-audio/".$old_audio)) unlink(public_path().'/'."uploads/vocabulary-audio/".$old_audio);
+            if(File::exists(public_path().'/'.$old_audio)) unlink(public_path().'/'.$old_audio);
+            print_r(public_path().'/'.$old_audio);die;
         }
         $extention=$audio->getClientOriginalExtension();
         $name= 'mp3-'.date('Y-m-d-h-i-s-').rand(999,9999).'.'.$extention;

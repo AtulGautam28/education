@@ -11,5 +11,9 @@ class Practice extends Model
     protected $fillable=[
         'title','description','instructions','slug','status'
     ];
+
+    public function segments(){
+        return $this->hasMany(Segments::class);
+    }
     
 }

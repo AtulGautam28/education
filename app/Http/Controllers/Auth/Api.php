@@ -2,6 +2,7 @@
 
 
 namespace App\Http\Controllers\Auth;
+use Exception;
 header('Content-Type: application/json');
 
 use App\Http\Controllers\Controller;
@@ -18,7 +19,6 @@ use App\MessageComment;
 use App\BlogCategory;
 use Image;
 use File;
-use App\CustomPaginator;
 use App\SeoText;
 use App\PropertyImage;
 use Hash;
@@ -44,7 +44,6 @@ use App\Helpers\MailHelper;
 use App\EmailTemplate;
 use App\Mail\UserVerification;
 use Mail;
-use App\ListingCategory;
 use App\PropertyPurpose;
 use App\PropertyAminity;
 use App\Wishlist;
@@ -55,6 +54,12 @@ use App\PropertyReview;
 use App\Testimonial;
 use App\About;
 use App\AboutSection;
+use App\Practice;
+use App\Segments;
+use App\PaymentAccount;
+Use Stripe;
+use Stripe\Token;
+use App\Mail\OrderConfirmation;
 use Illuminate\Pagination\Paginator;
 
 
@@ -1646,31 +1651,38 @@ class Api extends Controller
     }
 
     
-    public function stripePayment(Request $request,$id){
+    public function stripePayment(Request $request){
 
-        $stripe=PaymentAccount::first();
+        $id = $request->package_id;
+        $stripes=PaymentAccount::first();
         $currency=Setting::first();
         $package=Package::find($id);
-        $user=Auth::guard('web')->user();
-
+        $user=User::find($request->user_id);
 
         if($package){
-            Stripe\Stripe::setApiKey($stripe->stripe_secret);
+            try {
 
-            $setting=Setting::first();
-            $amount_usd= round($package->price * $stripe->stripe_currency_rate,2);
-            $payableAmount = round($package->price * $stripe->stripe_currency_rate,2);
-            $result=Stripe\Charge::create ([
-                    "amount" =>$payableAmount * 100,
-                    "currency" => $stripe->stripe_currency_code,
-                    "source" => $request->stripeToken,
-                    "description" => env('APP_NAME')
+            $stripe = new \Stripe\StripeClient($stripes->stripe_secret);
+            $token = $stripe->tokens->create([
+            'card' => [
+                'number' => $request->number,
+                'exp_month' => $request->exp_month,
+                'exp_year' => $request->exp_year,
+                'cvc' => $request->cvc,
+            ],
             ]);
 
+            Stripe\Stripe::setApiKey($stripes->stripe_secret);
 
-            $activeOrder=Order::where(['user_id'=>$user->id,'status'=>1])->count();
-            $oldOrders=Order::where('user_id',$user->id)->update(['status'=>0]);
-
+            $setting=Setting::first();
+            $amount_usd= round($package->price * $stripes->stripe_currency_rate,2);
+            $payableAmount = round($package->price * $stripes->stripe_currency_rate,2);
+            $result=Stripe\Charge::create ([
+                    "amount" =>$payableAmount * 100,
+                    "currency" => $stripes->stripe_currency_code,
+                    "source" => $token['id'],
+                    "description" => env('APP_NAME')
+            ]);
 
             $order=new Order();
             $order->user_id=$user->id;
@@ -1689,66 +1701,37 @@ class Api extends Controller
             $order->status=1;
             $order->save();
 
-            // active and  in-active minimum limit listing
-            $userProperties=Property::where('user_id',$user->id)->orderBy('id','desc')->get();
-            if($userProperties->count() !=0){
-                if($package->number_of_property !=-1){
-                    foreach($userProperties as $index => $listing){
-                        if(++$index <= $package->number_of_property){
-                            $listing->status=1;
-                            $listing->save();
-                        }else{
-                            $listing->status=0;
-                            $listing->save();
-                        }
-                    }
-                }elseif($package->number_of_property ==-1){
-                    foreach($userProperties as $index => $listing){
-                        $listing->status=1;
-                        $listing->save();
-                    }
-                }
-            }
-            // end inactive
+            // MailHelper::setMailConfig();
 
-            // setup expired date
-            if($userProperties->count() != 0){
-                foreach($userProperties as $index => $listing){
-                    $listing->expired_date=$order->expired_date;
-                    $listing->save();
-                }
-            }
+            // $order_details='Purchase Date: '.$order->purchase_date.'<br>';
+            // $order_details .='Expired Date: '.$order->expired_date;
 
-
-            MailHelper::setMailConfig();
-
-            $order_details='Purchase Date: '.$order->purchase_date.'<br>';
-            $order_details .='Expired Date: '.$order->expired_date;
-
-            // send email
-            $template=EmailTemplate::where('id',6)->first();
-            $message=$template->description;
-            $subject=$template->subject;
-            $message=str_replace('{{user_name}}',$user->name,$message);
-            $message=str_replace('{{payment_method}}','Stripe',$message);
-            $total_amount=$currency->currency_icon. $package->price;
-            $message=str_replace('{{amount}}',$total_amount,$message);
-            $message=str_replace('{{order_details}}',$order_details,$message);
-            Mail::to($user->email)->send(new OrderConfirmation($message,$subject));
+            // // send email
+            // $template=EmailTemplate::where('id',6)->first();
+            // $message=$template->description;
+            // $subject=$template->subject;
+            // $message=str_replace('{{user_name}}',$user->name,$message);
+            // $message=str_replace('{{payment_method}}','Stripe',$message);
+            // $total_amount=$currency->currency_icon. $package->price;
+            // $message=str_replace('{{amount}}',$total_amount,$message);
+            // $message=str_replace('{{order_details}}',$order_details,$message);
+            // Mail::to($user->email)->send(new OrderConfirmation($message,$subject));
 
             $notify_lang=NotificationText::all();
             $notification=$notify_lang->where('lang_key','order_success')->first()->custom_text;
-            $notification=array('messege'=>$notification,'status'=>'success');
-            return redirect()->route('user.my-order')->with($notification);
+            // $notification='Data found successfully';
+            return response()->json(['status'=>'success','message'=>$notification]);
+        
+            } catch (Stripe\Exception\CardException $e) {
+                return $e;
+            }
 
         }else{
             $notify_lang=NotificationText::all();
             $notification=$notify_lang->where('lang_key','something')->first()->custom_text;
-            $notification=array('messege'=>$notification,'status'=>'error');
-
-            return redirect()->route('pricing.plan')->with($notification);
+            return response()->json(['status'=>'error','message'=>$notification]);
         }
-
+        
     }
     public function faq(){
         $faqs=Faq::where('status',1)->get();
@@ -1778,6 +1761,31 @@ class Api extends Controller
         if($blogs){
             $notification='Data found successfully';
             return response()->json(['status'=>'success','message'=>$notification,'data'=>$blogs]);
+        }else{
+            $notification='Data Not found!';
+            return response()->json(['status'=>'error','message'=>$notification]);
+        }
+    }
+    public function practiceDialogue()
+    {
+        $practices=Practice::all();
+        if($practices){
+            $notification='Data found successfully';
+            return response()->json(['status'=>'success','message'=>$notification,'data'=>$practices]);
+        }else{
+            $notification='Data Not found!';
+            return response()->json(['status'=>'error','message'=>$notification]);
+        }
+    }
+    public function segments()
+    {
+        $segments=Segments::all();
+        foreach ($segments as $key => $value) {
+            $segments->practice  = $value->practice->title;
+        }
+        if($segments){
+            $notification='Data found successfully';
+            return response()->json(['status'=>'success','message'=>$notification,'data'=>$segments]);
         }else{
             $notification='Data Not found!';
             return response()->json(['status'=>'error','message'=>$notification]);

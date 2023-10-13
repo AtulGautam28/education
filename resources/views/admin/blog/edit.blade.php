@@ -54,6 +54,7 @@
                                 <div>
                                 <audio controls>
                                     <source src="{{ $blog->image ? url($blog->image) : "" }}" type="audio/mpeg">
+                                    <input name="old_image" value="{{ $blog->image }}" type="hidden"/>
                                 </audio></div>
                                 {{-- <div><img src="{{ $blog->image ? url($blog->image) : '' }}" alt="old blog image" class="w_200"></div> --}}
                             </div>
