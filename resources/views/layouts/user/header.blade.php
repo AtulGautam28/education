@@ -66,7 +66,7 @@
       <div class="row">
         <div class="col-xl-6 col-12 col-sm-8">
           <ul class="wsus__topbar_left d-flex align-items-center">
-            <li><a href="callto:{{ $topbar_contact->topbar_phone }}"><i class="fal fa-mobile"></i> {{ $topbar_contact->topbar_phone }}</a></li>
+            <li><a href="callto:{{ $topbar_contact->topbar_phone }}"><i class="fa fa-mobile"></i> {{ $topbar_contact->topbar_phone }}</a></li>
             <li><a href="maolto:{{ $topbar_contact->topbar_email }}"><i class="fas fa-envelope"></i> {{ $topbar_contact->topbar_email }}</a></li>
           </ul>
         </div>
@@ -99,14 +99,14 @@
   <nav class="navbar navbar-expand-lg main_menu">
     <div class="container">
       <a class="navbar-brand" href="{{ route('home') }}">
-        <img src="{{ url($setting->logo) }}" alt="logo" class="img-fluid w-100">
+        {{-- <img src="{{ url($setting->logo) }}" alt="logo" class="img-fluid w-50"> --}}
       </a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
         aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <i class="fal fa-align-right"></i>
       </button>
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav m-auto mb-2 mb-lg-0">
+        <ul class="navbar-nav m-auto mb-2 mb-lg-0 d-none">
 
             @php
                 $home_menu=$navigations->where('id',1)->first();
@@ -232,15 +232,7 @@
 
         </ul>
 
-        @php
-            $my_account =$navigations->where('id',22)->first();
-        @endphp
-        @if ($my_account ->status==1)
-            <ul class="login_icon ms-auto">
-                <li><a href="{{ route('user.dashboard') }}"><i class="fal fa-user-circle"></i> {{ $my_account->navbar }}</a>
-                </li>
-            </ul>
-        @endif
+        
       </div>
     </div>
   </nav>

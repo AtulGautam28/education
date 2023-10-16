@@ -38,10 +38,17 @@ window.addEventListener("load",function(){window.wpcc.init({"border":"{{ $modalC
 @endif
 
 
-
+<style>
+  .footer_des {
+    /* padding-top: 244px !important; */
+    position: absolute;
+    bottom: 10px;
+    width: 100%;
+}
+</style>
   <!--=====FOOTER START=====-->
-  <footer class="pt_45">
-    <div class="container">
+  <footer class=" footer_des">
+    <div class="container d-none">
       <div class="row justify-content-between">
         <div class="col-xl-4 col-sm-8 col-md-7 col-lg-4">
           <div class="wsus__footer_content">
