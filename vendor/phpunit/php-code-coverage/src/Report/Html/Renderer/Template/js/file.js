@@ -13,12 +13,12 @@
         }, 300);
      };
 
-   $top_link.hide().on("click", function(event) {
+   $top_link.hide().click(function(event) {
     event.preventDefault();
     $body.animate({scrollTop:0}, 800);
    });
 
-   $window.on("scroll", function() {
+   $window.scroll(function() {
     if($window.scrollTop() > offset) {
      $top_link.fadeIn();
     } else {

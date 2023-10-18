@@ -1309,8 +1309,7 @@ class Api extends Controller
              $message=$template->description;
              $subject=$template->subject;
              $message=str_replace('{{name}}',$user->name,$message);
-             Mail::to($user->email)->send(new ForgetPassword($user,$message,$subject));
- 
+             $res = Mail::to($user->email)->send(new ForgetPassword($user,$message,$subject));
              $notify_lang=NotificationText::all();
              $notification=$notify_lang->where('lang_key','forget_pass')->first()->custom_text;
              return response()->json(['status'=>'success','message'=>$notification]);

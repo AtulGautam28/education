@@ -8,7 +8,7 @@
 
 @section('user-content')
 <!--===BREADCRUMB PART START====-->
-<section class="wsus__breadcrumb" style="background: url({{ url($banner_image->image) }});">
+<section class="wsus__breadcrumb d-none" style="background: url({{ url($banner_image->image) }});">
     <div class="wsus_bread_overlay">
         <div class="container">
             <div class="row">
@@ -82,7 +82,7 @@
 
                         <button id="resetPassBtn" class="common_btn mt-1 mb-3" type="submit"> {{ $websiteLang->where('lang_key','reset_pass')->first()->custom_text }}</button>
 
-                        <div class="wsus__reg_forget">
+                        <div class="wsus__reg_forget d-none">
                             <a href="{{ route('login') }}">{{ $websiteLang->where('lang_key','login_here')->first()->custom_text }}</a>
                         </div>
 
@@ -109,15 +109,15 @@
                 data:$('#resetPassForm').serialize(),
                 success:function(response){
                     if(response.success){
-                        window.location.href = "{{ route('login')}}";
+                        // window.location.href = "{{ route('login')}}";
                         toastr.success(response.success)
 
                     }
                     if(response.error){
 
 
-                        var query_url='<?php echo $search_url; ?>';
-                        window.location.href = query_url;
+                        // var query_url='<?php echo $search_url; ?>';
+                        // window.location.href = query_url;
 
                         toastr.error(response.error)
 
