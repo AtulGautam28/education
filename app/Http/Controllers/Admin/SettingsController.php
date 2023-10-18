@@ -184,6 +184,37 @@ class SettingsController extends Controller
         $menus=Navigation::all();
         return view('admin.settings.blog-comment.index',compact('setting','websiteLang','menus'));
     }
+    public function serverkeySetting()
+    {
+        $setting=Setting::first();
+        $websiteLang=ManageText::all();
+        $menus=Navigation::all();
+        return view('admin.settings.serverkey.index',compact('setting','websiteLang','menus'));
+    }
+    public function updateserverkeySetting(Request $request){
+        if($request->push_notification_serverkey==0){
+            $valid_lang=ValidationText::all();
+            $rules = [
+                'facebook_comment_script'=>'required'
+            ];
+            $customMessages = [
+                'facebook_comment_script.required' => $valid_lang->where('lang_key','fb_comment')->first()->custom_text,
+            ];
+            $this->validate($request, $rules, $customMessages);
+
+        }
+
+        $setting=Setting::first();
+        $setting->push_notification_serverkey=$request->push_notification_serverkey;      
+        $setting->save();
+
+        $notify_lang=NotificationText::all();
+        $notification=$notify_lang->where('lang_key','update')->first()->custom_text;
+        $notification=array('messege'=>$notification,'alert-type'=>'success');
+
+        return redirect()->back()->with($notification);
+
+    }
 
     public function updateCommentSetting(Request $request){
 

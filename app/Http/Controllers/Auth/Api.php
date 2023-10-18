@@ -1797,7 +1797,6 @@ class Api extends Controller
     }
     public function pushNotification()
     {
-
         $data=[];
         $data['message']= "Some message";
 
@@ -1810,8 +1809,10 @@ class Api extends Controller
     }
     public function sendFirebasePush($tokens, $data)
     {
+        $setting=Setting::first();
 
-        $serverKey = 'YOUR_SERVER_KEY_HERE';
+        $serverKey = $setting->push_notification_serverkey;      
+        
         
         // prep the bundle
         $msg = array

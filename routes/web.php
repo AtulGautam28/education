@@ -153,7 +153,9 @@ Route::group(['as'=> 'admin.', 'prefix' => 'admin'],function (){
     // setting start
     Route::resource('settings',SettingsController::class);
     Route::get('comment-setting',[SettingsController::class,'blogCommentSetting'])->name('comment.setting');
+    Route::get('serverkey-setting',[SettingsController::class,'serverkeySetting'])->name('serverkey.setting');
     Route::post('update-comment-setting',[SettingsController::class,'updateCommentSetting'])->name('update.comment.setting');
+    Route::post('update-serverkey-setting',[SettingsController::class,'updateserverkeySetting'])->name('update.serverkey.setting');
     Route::get('cookie-consent-setting',[SettingsController::class,'cookieConsentSetting'])->name('cookie.consent.setting');
     Route::post('update-cookie-consent',[SettingsController::class,'updateCookieConsentSetting'])->name('update.cookie.consent.setting');
     Route::get('captcha-setting',[SettingsController::class,'captchaSetting'])->name('captcha.setting');
