@@ -46,16 +46,7 @@ class StaffController extends Controller
     public function store(Request $request)
     {
 
-        // project demo mode check
-        if(env('PROJECT_MODE')==0){
-            $notification=array(
-                'messege'=>env('NOTIFY_TEXT'),
-                'alert-type'=>'error'
-            );
-
-            return redirect()->back()->with($notification);
-        }
-        // end
+        
 
 
 
@@ -92,16 +83,7 @@ class StaffController extends Controller
 
     public function destroy($id){
 
-        // project demo mode check
-        if(env('PROJECT_MODE')==0){
-            $notification=array(
-                'messege'=>env('NOTIFY_TEXT'),
-                'alert-type'=>'error'
-            );
-
-            return redirect()->back()->with($notification);
-        }
-        // end
+        
         $isAdmin=Admin::find($id);
         if($isAdmin){
             $old_image=$isAdmin->image;

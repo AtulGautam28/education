@@ -67,6 +67,7 @@ class SettingsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
     public function index()
     {
         $setting=Setting::first();
@@ -83,14 +84,7 @@ class SettingsController extends Controller
     public function update(Request $request, Setting $setting)
     {
 
-        // project demo mode check
-        if(env('PROJECT_MODE')==0){
-            $notification=array('messege'=>env('NOTIFY_TEXT'),'alert-type'=>'error');
-            return redirect()->back()->with($notification);
-        }
-        // end
-
-
+       
         $valid_lang=ValidationText::all();
         $rules = [
             'email'=>'required',
@@ -205,7 +199,8 @@ class SettingsController extends Controller
         }
 
         $setting=Setting::first();
-        $setting->push_notification_serverkey=$request->push_notification_serverkey;      
+        $setting->push_notification_serverkey=$request->push_notification_serverkey;
+      
         $setting->save();
 
         $notify_lang=NotificationText::all();
@@ -218,12 +213,7 @@ class SettingsController extends Controller
 
     public function updateCommentSetting(Request $request){
 
-        // project demo mode check
-        if(env('PROJECT_MODE')==0){
-            $notification=array('messege'=>env('NOTIFY_TEXT'),'alert-type'=>'error');
-            return redirect()->back()->with($notification);
-        }
-        // end
+     
 
         if($request->comment_type==0){
             $valid_lang=ValidationText::all();
@@ -259,12 +249,7 @@ class SettingsController extends Controller
 
     public function updateCookieConsentSetting(Request $request){
 
-        // project demo mode check
-        if(env('PROJECT_MODE')==0){
-            $notification=array('messege'=>env('NOTIFY_TEXT'),'alert-type'=>'error');
-            return redirect()->back()->with($notification);
-        }
-        // end
+       
 
         if($request->allow==1){
 
@@ -326,12 +311,7 @@ class SettingsController extends Controller
     }
 
     public function updateCaptchaSetting(Request $request){
-        // project demo mode check
-        if(env('PROJECT_MODE')==0){
-            $notification=array('messege'=>env('NOTIFY_TEXT'),'alert-type'=>'error');
-            return redirect()->back()->with($notification);
-        }
-        // end
+       
         if($request->allow_captcha==1){
             $valid_lang=ValidationText::all();
             $rules = [
@@ -365,12 +345,7 @@ class SettingsController extends Controller
 
     public function destroyDatabase(){
 
-        // project demo mode check
-        if(env('PROJECT_MODE')==0){
-            $notification=array('messege'=>env('NOTIFY_TEXT'),'alert-type'=>'error');
-            return redirect()->back()->with($notification);
-        }
-        // end
+       
 
         Aminity::truncate();
         Award::truncate();
@@ -441,12 +416,7 @@ class SettingsController extends Controller
 
     public function updateLivechatSetting(Request $request){
 
-        // project demo mode check
-        if(env('PROJECT_MODE')==0){
-            $notification=array('messege'=>env('NOTIFY_TEXT'),'alert-type'=>'error');
-            return redirect()->back()->with($notification);
-        }
-        // end
+     
 
         if($request->live_chat==1){
 
@@ -482,12 +452,7 @@ class SettingsController extends Controller
     }
 
     public function preloaderUpdate(Request $request,$id){
-        // project demo mode check
-    if(env('PROJECT_MODE')==0){
-        $notification=array('messege'=>env('NOTIFY_TEXT'),'alert-type'=>'error');
-        return redirect()->back()->with($notification);
-    }
-    // end
+    
 
         $setting=Setting::find($id);
         if($request->preloader_image){
@@ -523,12 +488,7 @@ class SettingsController extends Controller
 
     public function googleAnalyticUpdate(Request $request){
 
-              // project demo mode check
-        if(env('PROJECT_MODE')==0){
-            $notification=array('messege'=>env('NOTIFY_TEXT'),'alert-type'=>'error');
-            return redirect()->back()->with($notification);
-        }
-        // end
+         
 
         if($request->google_analytic==1){
 
@@ -566,12 +526,7 @@ class SettingsController extends Controller
 
     public function themeColorUpdate(Request $request){
 
-              // project demo mode check
-        if(env('PROJECT_MODE')==0){
-            $notification=array('messege'=>env('NOTIFY_TEXT'),'alert-type'=>'error');
-            return redirect()->back()->with($notification);
-        }
-        // end
+        
 
         $setting=Setting::first();
         $setting->theme_one=$request->theme_one;
@@ -618,12 +573,7 @@ class SettingsController extends Controller
 
     public function updateEmail(Request $request,$id){
 
-              // project demo mode check
-        if(env('PROJECT_MODE')==0){
-            $notification=array('messege'=>env('NOTIFY_TEXT'),'alert-type'=>'error');
-            return redirect()->back()->with($notification);
-        }
-        // end
+       
 
         $valid_lang=ValidationText::all();
         $rules = [

@@ -116,16 +116,7 @@ class PracticeController extends Controller
     public function faqImage(Request $request){
 
 
-        // project demo mode check
-        if(env('PROJECT_MODE')==0){
-            $notification=array(
-                'messege'=>env('NOTIFY_TEXT'),
-                'alert-type'=>'error'
-            );
-
-            return redirect()->back()->with($notification);
-        }
-        // end
+        
 
         $this->validate($request,[
             'image'=>'required'

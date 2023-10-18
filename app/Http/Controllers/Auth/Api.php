@@ -1809,10 +1809,8 @@ class Api extends Controller
     }
     public function sendFirebasePush($tokens, $data)
     {
-        $setting=Setting::first();
-
-        $serverKey = $setting->push_notification_serverkey;      
-        
+        $setting=Setting::first();        
+        $serverKey = $setting->push_notification_serverkey;    
         
         // prep the bundle
         $msg = array
