@@ -72,7 +72,7 @@ textarea:focus-visible {
 
 .common_btn {
     background: #f02c2d;
-    color: #fff;
+    color: #000;
     text-transform: capitalize;
     font-size: 17px;
     padding: 10px 30px;
@@ -91,7 +91,7 @@ textarea:focus-visible {
 
 .common_btn:hover {
     background: #0A547A;
-    color: #fff;
+    color: #000;
 }
 
 .common_btn2 {
@@ -148,7 +148,7 @@ textarea:focus-visible {
 }
 
 .wsus__topbar_left li a {
-    color: #fff;
+    color: #212529;
     margin-right: 30px;
     font-size: 14px;
     line-height: 40px;
@@ -160,7 +160,7 @@ textarea:focus-visible {
 
 .wsus__topbar_right li a {
     font-size: 14px;
-    color: #fff;
+    color: #212529;
     border-right: 1px solid #ffffff57;
     line-height: 40px;
     width: 40px;
@@ -2199,7 +2199,7 @@ footer {
     margin-bottom: 20px;
     text-transform: capitalize;
     font-weight: 600;
-    color: #0A547A;
+    color: #000;
     text-align: center;
 }
 
@@ -2226,7 +2226,7 @@ footer {
     border: 1px solid #CCD6E7;
     font-size: 16px !important;
     font-weight: 400;
-    color: #0A547A;
+    color: #000;
 }
 
 .wsus__logon input::placeholder,

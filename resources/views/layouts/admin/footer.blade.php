@@ -4,7 +4,7 @@
 @endphp
 
   <!-- Modal -->
-  <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -21,7 +21,7 @@
                     @csrf
                     @method("DELETE")
                     <button type="button" class="btn btn-danger" data-dismiss="modal">{{ $websiteLang->where('lang_key','no')->first()->custom_text }}</button>
-                <button type="submit" class="btn btn-primary">{{ $websiteLang->where('lang_key','yes')->first()->custom_text }}</button>
+                    <button type="submit" class="btn btn-primary">{{ $websiteLang->where('lang_key','yes')->first()->custom_text }}</button>
                 </form>
 
             </div>

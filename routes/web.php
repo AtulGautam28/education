@@ -1,4 +1,5 @@
 <?php
+use App\Http\Controllers\Admin\SegmentsController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ContactController;
 
@@ -385,6 +386,14 @@ Route::group(['as'=> 'admin.', 'prefix' => 'admin'],function (){
     Route::post('store-practice',[PracticeController::class,'store'])->name('store.practice');
     Route::post('practice-update/{id}',[PracticeController::class,'update'])->name('practice.update');
     Route::get('practice-delete/{id}',[PracticeController::class,'destroy'])->name('practice.delete');
+
+    // Segments
+    // Route::resource('practice',PracticeController::class);
+    Route::get('segments',[SegmentsController::class,'index'])->name('segments');
+    Route::post('store-segments',[SegmentsController::class,'store'])->name('store.segments');
+    Route::post('segments-update/{id}',[SegmentsController::class,'update'])->name('segments.update');
+    Route::get('segments-delete/{id}',[SegmentsController::class,'destroy'])->name('segments.delete');
+    Route::get('segments-status/{id}', [SegmentsController::class,'changeStatus'])->name('segments.status');
 
 });
 

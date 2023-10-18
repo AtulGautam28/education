@@ -47,17 +47,27 @@
                                 <label for="seo_title">{{ $websiteLang->where('lang_key','seo_title')->first()->custom_text }}</label>
                                 <input type="text" name="seo_title" class="form-control" id="seo_title" value="{{ $blog->seo_title }}">
                             </div>
-                            {{-- <div class="form-group">
-                                <label for="">{{ $websiteLang->where('lang_key','exist_img')->first()->custom_text }}</label>
-                                <div><img src="{{ $blog->image ? url($blog->image) : '' }}" alt="old blog image" class="w_200"></div>
-                            </div> --}}
                         </div>
-                    </div>
-                    {{-- <div class="form-group">
-                        <label for="image">{{ $websiteLang->where('lang_key','img')->first()->custom_text }}</label>
-                        <div><input type="file" name="image" id="image"></div>
-                    </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label for="">Existing Audio</label>
+                                <div>
+                                <audio controls>
+                                    <source src="{{ $blog->image ? url($blog->image) : "" }}" type="audio/mpeg">
+                                    <input name="old_image" value="{{ $blog->image }}" type="hidden"/>
+                                </audio></div>
+                                {{-- <div><img src="{{ $blog->image ? url($blog->image) : '' }}" alt="old blog image" class="w_200"></div> --}}
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label for="image">Audio</label>
+                                <div><input type="file" name="image" id="image"></div>
+                            </div>
+                        </div>
 
+                    </div>
+                    {{--
                     <div class="form-group">
                         <label for="short_description">{{ $websiteLang->where('lang_key','short_des')->first()->custom_text }}</label>
                         <textarea class="form-control" cols="30" rows="5" id="short_description" name="short_description">{{ $blog->short_description }}</textarea>

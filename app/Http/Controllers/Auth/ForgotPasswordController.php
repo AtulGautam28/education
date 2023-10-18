@@ -61,7 +61,7 @@ class ForgotPasswordController extends Controller
             $notification=$notify_lang->where('lang_key','forget_pass')->first()->custom_text;
             return response()->json(['success'=>$notification]);
 
-        }else{
+        }else{ 
             $notify_lang=NotificationText::all();
             $notification=$notify_lang->where('lang_key','email_not_exist')->first()->custom_text;
             return response()->json(['error'=>$notification]);

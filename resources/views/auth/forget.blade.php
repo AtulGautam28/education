@@ -8,7 +8,7 @@
 
 @section('user-content')
     <!--===BREADCRUMB PART START====-->
-  <section class="wsus__breadcrumb" style="background: url({{ url($banner_image->image) }});">
+  {{-- <section class="wsus__breadcrumb" style="background: url({{ url($banner_image->image) }});">
     <div class="wsus_bread_overlay">
         <div class="container">
             <div class="row">
@@ -24,7 +24,7 @@
             </div>
         </div>
     </div>
-</section>
+</section> --}}
 <!--===BREADCRUMB PART END====-->
 
 <!--=======LOGON PART START=========-->
@@ -40,7 +40,7 @@
                             <div class="input-group input-group-lg">
                                 <div class="input-group-prepend">
                                     <span class="input-group-text">
-                                        <i class="fad fa-user-circle"></i>
+                                        <i class="fa fa-user-circle"></i>
                                     </span>
                                 </div>
                                 <input class="form-control form-control-lg" type="email" id="regEmail" name="email" placeholder="{{ $websiteLang->where('lang_key','email')->first()->custom_text }}">
@@ -58,7 +58,7 @@
                         <button id="forgBtn" class="common_btn mt-1 mb-3" type="submit"><i id="forg-spinner" class="loading-icon fa fa-spin fa-spinner d-none"></i> {{ $websiteLang->where('lang_key','send_mail')->first()->custom_text }}</button>
 
                         <div class="wsus__reg_forget">
-                            <a href="{{ route('login') }}">{{ $websiteLang->where('lang_key','login_here')->first()->custom_text }}</a>
+                            {{-- <a href="{{ route('login') }}">{{ $websiteLang->where('lang_key','login_here')->first()->custom_text }}</a> --}}
                         </div>
                     </form>
                 </div>

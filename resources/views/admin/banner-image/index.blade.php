@@ -28,9 +28,6 @@
 
                         @endforeach
 
-
-
-
                     </table>
 
                 </div>

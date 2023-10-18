@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Segments;
 use Illuminate\Http\Request;
 use App\BannerImage;
 use App\ManageText;
@@ -75,15 +76,23 @@ class PracticeController extends Controller
 
     public function destroy($id)
     {
+        $segments = Segments::where('practice_id',$id)->get();
+        foreach ($segments as $value) {
+            if(File::exists(public_path().'/'.$value->question_audio)) unlink(public_path().'/'.$value->question_audio);
+            if(File::exists(public_path().'/'.$value->answer_audio)) unlink(public_path().'/'.$value->answer_audio);
+        }
+        Segments::where('practice_id',$id)->delete();
         $practice=Practice::find($id);
         $practice->delete();
+
         $notify_lang=NotificationText::all();
         $notification=$notify_lang->where('lang_key','delete')->first()->custom_text;
         $notification=array('messege'=>$notification,'alert-type'=>'success');
 
         return redirect()->back()->with($notification);
     }
-
+     
+    
 
     public function changeStatus($id){
         $faq=Faq::find($id);

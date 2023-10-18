@@ -44,8 +44,8 @@ $setting=App\Setting::first();
 
     <!-- Custom styles for this template-->
     <link href="{{ asset('backend/vendor/datatables/dataTables.bootstrap4.min.css') }}" rel="stylesheet">
-    <link rel="stylesheet" href="{{ asset('patient/css/jquery-ui.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('patient/css/bootstrap-datepicker.min.css') }}">
+    {{-- <link rel="stylesheet" href="{{ asset('patient/css/jquery-ui.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('patient/css/bootstrap-datepicker.min.css') }}"> --}}
     <link rel="stylesheet" href="{{ asset('backend/css/select2.min.css') }}">
     <link rel="stylesheet" href="{{ asset('toastr/toastr.min.css') }}">
     <link rel="stylesheet" href="{{ asset('backend/css/bootstrap4-toggle.min.css') }}">
@@ -70,7 +70,7 @@ $setting=App\Setting::first();
 
 
 
-    <link rel="stylesheet" type="text/css" href="{{ asset('user/css/flaticon.min.css') }}">
+    {{-- <link rel="stylesheet" type="text/css" href="{{ asset('user/css/flaticon.min.css') }}"> --}}
 
 <style>
     .fade.in {

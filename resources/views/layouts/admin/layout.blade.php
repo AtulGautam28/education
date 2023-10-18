@@ -12,7 +12,7 @@
         <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
             <!-- Sidebar - Brand -->
-            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{{ route('home') }}">
+            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{{ route('dashboard') }}">
                 <div class="sidebar-brand-icon rotate-n-15">
                     <i class="{{ $app_setting->dashbaord_header_icon }}"></i>
                 </div>
@@ -39,15 +39,42 @@
                     <i class="fas fa-user"></i>
                     <span>{{ $websiteLang->where('lang_key','admin')->first()->custom_text }}</span></a>
             </li>
+            <li class="nav-item {{ Route::is('admin.package.*') ?'active':'' }}">
+                <a class="nav-link" href="{{ route('admin.package.index') }}">
+                    <i class="far fa-credit-card"></i>
+                    <span>{{ $websiteLang->where('lang_key','package')->first()->custom_text }}</span></a>
+            </li>
             <li class="nav-item {{ Route::is('admin.order') || Route::is('admin.order-show') ?'active':'' }}">
                 <a class="nav-link" href="{{ route('admin.order') }}">
                     <i class="far fa-credit-card"></i>
                     <span>{{ $websiteLang->where('lang_key','order')->first()->custom_text }}</span></a>
             </li>
-            <li class="nav-item {{ Route::is('admin.practice') ?'active':'' }}">
+            <li class="nav-item d-none {{ Route::is('admin.practice') ?'active':'' }}">
                 <a class="nav-link" href="{{ route('admin.practice') }}">
                     <i class="fas fa-comment-alt"></i>
                     <span>Practice Dialogues</span></a>
+            </li>
+            
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapge_location"
+                    aria-expanded="true" aria-controls="collapge_location">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <span>Practice Dialogues</span>
+                </a>
+                <div id="collapge_location" class="collapse {{
+                Route::is('admin.practice.*') || Route::is('admin.country-state')
+                 ? 'show':'' }}" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <a class="collapse-item {{ Route::is('admin.practice.*')?'active':'' }}" href="{{ route('admin.practice') }}">Practice Dialogues</a>
+
+                        <a class="collapse-item {{ Route::is('admin.segments.*')?'active':'' }}" href="{{ route('admin.segments') }}">Segments</a>
+
+
+                    </div>
+                </div>
+            </li>
+            
+
             <li class="nav-item {{ Route::is('admin.toturial')  ?'active':'' }}">
                 <a class="nav-link" href="{{ route('admin.toturial') }}">
                     <i class="fas fa-clock"></i>
@@ -57,43 +84,6 @@
                 <a class="nav-link" href="{{ route('admin.textformate') }}">
                     <i class="fa fa-file"></i>
                     <span>Text Formate</span></a>
-            </li>
-            <li class="nav-item d-none">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#real_estate"
-                    aria-expanded="true" aria-controls="real_estate">
-                    <i class="fas fa-user-alt"></i>
-                    User Management
-                </a>
-                <div id="real_estate" class="collapse {{ Route::is('admin.property.*') ||
-                Route::is('admin.property-purpose.*') || Route::is('admin.property-type.*') || Route::is('admin.nearest-location.*') || Route::is('admin.aminity.*') || Route::is('admin.package.*') || Route::is('admin.listing-review') || Route::is('admin.agents') ||  Route::is('admin.agents.show') || Route::is('admin.order') || Route::is('admin.order-show') || Route::is('admin.agent-property') || Route::is('admin.pending-order')
-                 ? 'show':'' }}" aria-labelledby="headingPages" data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-
-                        {{-- <a class="collapse-item {{ Route::is('admin.agent-property')?'active':'' }}" href="{{ route('admin.agent-property') }}">{{ $websiteLang->where('lang_key','agent_property')->first()->custom_text }}</a>
-                        <a class="collapse-item {{ Route::is('admin.property.*')?'active':'' }}" href="{{ route('admin.property.index') }}">{{ $websiteLang->where('lang_key','my_property')->first()->custom_text }}</a>
-
-
-                        <a class="collapse-item {{ Route::is('admin.property-purpose.*')?'active':'' }}" href="{{ route('admin.property-purpose.index') }}">{{ $websiteLang->where('lang_key','property_purpose')->first()->custom_text }}</a>
-
-                        <a class="collapse-item {{ Route::is('admin.property-type.*')?'active':'' }}" href="{{ route('admin.property-type.index') }}">{{ $websiteLang->where('lang_key','property_type')->first()->custom_text }}</a>
-                        <a class="collapse-item {{ Route::is('admin.nearest-location.*')?'active':'' }}" href="{{ route('admin.nearest-location.index') }}">{{ $websiteLang->where('lang_key','nearest_loc')->first()->custom_text }}</a>
-
-                        <a class="collapse-item {{ Route::is('admin.aminity.*')?'active':'' }}" href="{{ route('admin.aminity.index') }}">{{ $websiteLang->where('lang_key','aminities')->first()->custom_text }}</a>--}}
-                        <a class="collapse-item {{ Route::is('admin.package.*')?'active':'' }}" href="{{ route('admin.package.index') }}">{{ $websiteLang->where('lang_key','package')->first()->custom_text }}</a> 
-                        <a class="collapse-item {{ Route::is('admin.aminity.*')?'active':'' }}" href="{{ route('admin.aminity.index') }}">{{ $websiteLang->where('lang_key','aminities')->first()->custom_text }}</a>
-                        <a class="collapse-item {{ Route::is('admin.package.*')?'active':'' }}" href="{{ route('admin.package.index') }}">{{ $websiteLang->where('lang_key','package')->first()->custom_text }}</a> --}}
-
-                        <a class="collapse-item {{ Route::is('admin.agents') ||  Route::is('admin.agents.show')?'active':'' }}" href="{{ route('admin.agents') }}">{{ $websiteLang->where('lang_key','agent')->first()->custom_text }}</a>
-
-                         <a class="collapse-item {{ Route::is('admin.order') || Route::is('admin.order-show') ?'active':'' }}" href="{{ route('admin.order') }}">{{ $websiteLang->where('lang_key','order')->first()->custom_text }}</a>
-                         {{--
-
-                        <a class="collapse-item {{ Route::is('admin.pending-order') ?'active':'' }}" href="{{ route('admin.pending-order') }}">{{ $websiteLang->where('lang_key','pending_order')->first()->custom_text }}</a>
-
-                        <a class="collapse-item {{ Route::is('admin.listing-review')?'active':'' }}" href="{{ route('admin.listing-review') }}">{{ $websiteLang->where('lang_key','review')->first()->custom_text }}</a> --}}
-
-                    </div>
-                </div>
             </li>
                         <!-- Nav Item - Pages Collapse Menu -->
             <li class="nav-item">
@@ -357,7 +347,7 @@
             </li>
 
             <!-- Nav Item - Pages Collapse Menu -->
-            <li class="nav-item">
+            <li class="nav-item d-none">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#contact-2-pages"
                     aria-expanded="true" aria-controls="contact-2-pages">
                     <i class="fas fa-fa fa-envelope"></i>
