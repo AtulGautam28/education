@@ -96,6 +96,7 @@ class Api extends Controller
             if($user->status==1){
                 if(Hash::check($request->password,$user->password)){
                     if(Auth::guard('web')->attempt($credential,$request->remember)){
+                      
                         $notify_lang=NotificationText::all();
                         $notification=$notify_lang->where('lang_key','login')->first()->custom_text;
                         $notification=array('messege'=>$notification,'status'=>'success','data'=>$user);
@@ -126,6 +127,9 @@ class Api extends Controller
 
             return json_encode($notification);
         }
+
+           
+      
     }
 
     public function storeRegister(Request $request){
@@ -1791,4 +1795,75 @@ class Api extends Controller
             return response()->json(['status'=>'error','message'=>$notification]);
         }
     }
+    public function pushNotification()
+    {
+
+        $data=[];
+        $data['message']= "Some message";
+
+        $data['booking_id']="my booking booking_id";
+        
+        $tokens = [];
+        $tokens[] = 'YOUR_TOKEN';
+        $response = $this->sendFirebasePush($tokens,$data);
+
+    }
+    public function sendFirebasePush($tokens, $data)
+    {
+
+        $serverKey = 'YOUR_SERVER_KEY_HERE';
+        
+        // prep the bundle
+        $msg = array
+        (
+            'message'   => $data['message'],
+            'booking_id' => $data['booking_id'],
+        );
+
+        $notifyData = [
+                "body" => $data['message'],
+                "title"=> "Port App"
+        ];
+
+        $registrationIds = $tokens;
+        
+        if(count($tokens) > 1){
+            $fields = array
+            (
+                'registration_ids' => $registrationIds, //  for  multiple users
+                'notification'  => $notifyData,
+                'data'=> $msg,
+                'priority'=> 'High'
+            );
+        }
+        else{
+            
+            $fields = array
+            (
+                'to' => $registrationIds[0], //  for  only one users
+                'notification'  => $notifyData,
+                'data'=> $msg,
+                'priority'=> 'High'
+            );
+        }
+            
+        $headers[] = 'Content-Type: application/json';
+        $headers[] = 'Authorization: key='. $serverKey;
+
+        $ch = curl_init();
+        curl_setopt( $ch,CURLOPT_URL, 'https://fcm.googleapis.com/fcm/send' );
+        curl_setopt( $ch,CURLOPT_POST, true );
+        curl_setopt( $ch,CURLOPT_HTTPHEADER, $headers );
+        curl_setopt( $ch,CURLOPT_RETURNTRANSFER, true );
+        // curl_setopt( $ch,CURLOPT_SSL_VERIFYPEER, false );
+        curl_setopt( $ch,CURLOPT_POSTFIELDS, json_encode( $fields ) );
+        $result = curl_exec($ch );
+        if ($result === FALSE) 
+        {
+            die('FCM Send Error: ' . curl_error($ch));
+        }
+        curl_close( $ch );
+        return $result;
+    }
+
 }

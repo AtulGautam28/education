@@ -83,7 +83,7 @@
             <li class="nav-item {{ Route::is('admin.textformate')  ?'active':'' }}">
                 <a class="nav-link" href="{{ route('admin.textformate') }}">
                     <i class="fa fa-file"></i>
-                    <span>Text Formate</span></a>
+                    <span>Test Formate</span></a>
             </li>
                         <!-- Nav Item - Pages Collapse Menu -->
             <li class="nav-item">

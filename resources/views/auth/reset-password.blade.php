@@ -109,15 +109,15 @@
                 data:$('#resetPassForm').serialize(),
                 success:function(response){
                     if(response.success){
-                        window.location.href = "{{ route('login')}}";
+                        // window.location.href = "{{ route('login')}}";
                         toastr.success(response.success)
 
                     }
                     if(response.error){
 
 
-                        var query_url='<?php echo $search_url; ?>';
-                        window.location.href = query_url;
+                        // var query_url='<?php echo $search_url; ?>';
+                        // window.location.href = query_url;
 
                         toastr.error(response.error)
 

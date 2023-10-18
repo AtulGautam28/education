@@ -1,2 +1,7 @@
+<<<<<<< HEAD
 .env.example
 .env
+=======
+.env
+.env.example
+>>>>>>> 57b118abe9db4a6d3cf2c3627c39e2a3a7f50b9f

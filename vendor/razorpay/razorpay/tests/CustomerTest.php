@@ -5,10 +5,15 @@ namespace Razorpay\Tests;
 use Razorpay\Api\Request;
 
 class CustomerTest extends TestCase
-{
-    private $customerId = 'cust_IEfAt3ruD4OEzo';
+{   
+    /**
+     * Specify unique customer id
+     * for example cust_IEfAt3ruD4OEzo
+     */
+    
+    private $customerId = "cust_IEfAt3ruD4OEzo";
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
     }
@@ -45,6 +50,8 @@ class CustomerTest extends TestCase
         $data = $this->api->customer->all();
         
         $this->assertTrue(is_array($data->toArray()));
+
+        $this->assertTrue(is_numeric($data->count()));
 
         $this->assertTrue(is_array($data['items']));
     }
