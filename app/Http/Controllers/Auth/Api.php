@@ -1795,24 +1795,23 @@ class Api extends Controller
             return response()->json(['status'=>'error','message'=>$notification]);
         }
     }
-    public function pushNotification()
+    public function pushNotification(Request $request)
     {
 
         $data=[];
-        $data['message']= "Some message";
+        $data['message']= "Hello Rajkumar ji";
 
-        $data['booking_id']="my booking booking_id";
+        $data['booking_id']="Hy";
         
         $tokens = [];
-        $tokens[] = 'YOUR_TOKEN';
+        $tokens[] = $request->tokens;
         $response = $this->sendFirebasePush($tokens,$data);
 
     }
     public function sendFirebasePush($tokens, $data)
     {
 
-        $serverKey = 'YOUR_SERVER_KEY_HERE';
-        
+        $serverKey = 'AAAAuiun6Jw:APA91bGXTgUlIA11_MZ-F8KCHjd2UNBnXTB07Y9g_S-KBT_ELBzyIqig07J39Qs-kttD4X4HkjGd7lBk9dIdsOZO3y1NjAxWOE8Czv-lqRkUxPw-r-Z-fA1_bO_E1k1jxp2hrHnLNcbV';
         // prep the bundle
         $msg = array
         (
@@ -1837,7 +1836,6 @@ class Api extends Controller
             );
         }
         else{
-            
             $fields = array
             (
                 'to' => $registrationIds[0], //  for  only one users
@@ -1863,7 +1861,8 @@ class Api extends Controller
             die('FCM Send Error: ' . curl_error($ch));
         }
         curl_close( $ch );
-        return $result;
+        echo $result;
+        exit;
     }
 
 }

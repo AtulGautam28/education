@@ -84,5 +84,8 @@ Route::get('segments',[Api::class,'segments'])->name('segments');
 // Purchase a Plan
 Route::post('stripePayment',[Api::class,'stripePayment'])->name('stripePayment');
 
+//Push Notification
+Route::post('pushNotification',[Api::class,'pushNotification'])->name('pushNotification');
+
 
 
