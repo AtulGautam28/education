@@ -1606,7 +1606,7 @@ class Api extends Controller
             $notification='Data found Successfully';
             $notification=array('messege'=>$notification,'status'=>'success','data'=>$support);
             return response()->json($notification);
-        }{
+        }else{
             $notification='Data not found!';
             $notification=array('messege'=>$notification,'status'=>'error','data'=>[]);
             return response()->json($notification);
