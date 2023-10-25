@@ -15,6 +15,7 @@ use App\PrivacyPolicy;
 use App\Blog;
 use App\Mail\ForgetPassword;
 use App\Message;
+use App\Tutorial;
 use App\MessageComment;
 use App\BlogCategory;
 use Image;
@@ -58,6 +59,9 @@ use App\Practice;
 use App\Segments;
 use App\PaymentAccount;
 Use Stripe;
+use App\Mail\ContactMessageInformation;
+use App\ContactMessage;
+use App\TextFormate;
 use Stripe\Token;
 use App\Mail\OrderConfirmation;
 use Illuminate\Pagination\Paginator;
@@ -169,266 +173,6 @@ class Api extends Controller
         return response()->json(['status'=>'success','message'=>'Register Successfully.']);
 
     }
-
-        
-    public function getUserProperties(Request $request)
-    {
-        $user_id = $request->user_id;
-        $all = $request->property_type;
-        if($all == 'all'){
-            if(empty($request->filter)){
-
-                $properties = Property::where('properties.status',1)->orderBy('properties.id','desc')
-                ->select('properties.*', 'users.name as username','age_user.email as agentemail', 'age_user.name as agentname', 'users.image as userimage','cities.name as city_name','property_types.type as property_type_name','property_purposes.purpose as property_purpose_name')
-                ->join('users', 'users.id', '=', 'properties.user_id')
-                ->join('users as age_user', 'age_user.id', '=', 'properties.agent_id')
-                ->join('property_types', 'property_types.id', '=', 'properties.property_type_id')
-                ->join('property_purposes', 'property_purposes.id', '=', 'properties.property_purpose_id')
-                ->join('cities', 'cities.id', '=', 'properties.city_id')->get();
-            }else if($request->filter == 'yes'){ 
-                
-                $query = Property::where('properties.status',1)->orderBy('properties.id','desc')
-                ->select('properties.*', 'users.name as username','age_user.email as agentemail', 'age_user.name as agentname', 'users.image as userimage','cities.name as city_name','cities.lat as city_lat','cities.long as city_long','property_types.type as property_type_name','property_purposes.purpose as property_purpose_name')
-                ->join('users', 'users.id', '=', 'properties.user_id')
-                ->join('users as age_user', 'age_user.id', '=', 'properties.agent_id')
-                ->join('property_types', 'property_types.id', '=', 'properties.property_type_id')
-                ->join('property_aminities', 'property_aminities.property_id', '=', 'properties.id')
-                ->join('property_nearest_locations', 'property_nearest_locations.property_id', '=', 'properties.id')
-                ->join('property_purposes', 'property_purposes.id', '=', 'properties.property_purpose_id')
-                ->join('cities', 'cities.id', '=', 'properties.city_id');
-                if(!empty($request->property_type_id) && $request->property_type_id != 0){
-                    // print_r($request->property_type_id);die;
-                    $query->where('properties.property_type_id',$request->property_type_id);
-                }
-                if(!empty($request->city_id) && $request->city_id != 0){
-                    $query->where('properties.city_id',$request->city_id);
-                }
-                if(!empty($request->property_purpose_id) && $request->property_purpose_id != 0){
-                    $query->where('properties.property_purpose_id',$request->property_purpose_id);
-                }
-                if(!empty($request->number_of_bedroom) && $request->number_of_bedroom != 0){
-                    $query->where('properties.number_of_bedroom',$request->number_of_bedroom);
-                }
-                if(!empty($request->number_of_bathroom) && $request->number_of_bathroom != 0){
-                    $query->where('properties.number_of_bathroom',$request->number_of_bathroom);
-                }
-                if(!empty($request->aminity_id) && $request->aminity_id != 0){
-                    $query->where('property_aminities.aminity_id',$request->aminity_id);
-                }
-                if(!empty($request->price && $request->price != '0-10000')){
-                    $priceRange = explode('-', $request->price);
-                    $query->whereBetween('properties.price', [$priceRange[0], $priceRange[1]]);
-                }
-                if(!empty($request->area &&  $request->area != '0-2000')){
-                    $areaRange = explode('-', $request->area);
-                    $query->whereBetween('properties.area', [$areaRange[0], $areaRange[1]]);
-                }
-                if(!empty($request->nearest_location_id) && $request->nearest_location_id != 0){
-                    $query->where('property_nearest_locations.nearest_location_id',$request->nearest_location_id);
-                }
-                $properties= $query->get();
-                
-            }
-
-            $properties_count = $properties->count();
-            if($request->proeperty_search){
-                $properties=Property::where('title','LIKE','%'.$request->proeperty_search.'%')->where('properties.status',1)->select('properties.*', 'users.name as username','age_user.email as agentemail', 'age_user.name as agentname', 'users.image as userimage','cities.name as city_name','property_types.type as property_type_name','property_purposes.purpose as property_purpose_name')
-                ->join('users', 'users.id', '=', 'properties.user_id')
-                ->join('users as age_user', 'age_user.id', '=', 'properties.agent_id')
-                ->join('property_types', 'property_types.id', '=', 'properties.property_type_id')
-                ->join('property_purposes', 'property_purposes.id', '=', 'properties.property_purpose_id')
-                ->join('cities', 'cities.id', '=', 'properties.city_id')->get();
-
-                // print_r($search);die;
-                foreach($properties as $propertimage)
-                {
-                    foreach ($propertimage->propertyImages as $value) {
-                        $properties->prop_img = public_path().'/'.$value;
-                    }
-                }
-                foreach ($properties as $aminity_item)
-                {
-                    foreach ($aminity_item->propertyAminities as $value) {
-                        $properties->aminities = $value->aminity;
-                    }
-                }
-                foreach ($properties as $aminity_item)
-                {
-                    foreach ($aminity_item->propertyAminities as $value) {
-                        // $properties->aminities = $value->aminity;
-                    }
-                }
-                foreach ($properties as $nearestLocations){
-                    foreach ($nearestLocations->propertyNearestLocations as $property_item){
-                        $properties->locations = $property_item->nearestLocation;
-                    }
-                }
-                // print_r($properties->locations);die;
-            }else{
-                foreach($properties as $propertimage)
-                {
-                    foreach ($propertimage->propertyImages as $value) {
-                        $properties->prop_img = public_path().'/'.$value;
-                    }
-                }
-                foreach ($properties as $aminity_item)
-                {
-                    foreach ($aminity_item->propertyAminities as $value) {
-                        $properties->aminities = $value->aminity;
-                    }
-                }
-
-                foreach ($properties as $nearestLocations){
-                    foreach ($nearestLocations->propertyNearestLocations as $property_item){
-                        $properties->locations = $property_item->nearestLocation;
-                    }
-                }
-                foreach ($properties as $index => $value){
-                    $properties[$index]->agentname = $value['agentname'].'-'.$value['agentemail'];
-                }
-            }
-        }else if($request->is_assigned == 'assigned'){
-            $properties = Property::where('properties.agent_id',$user_id)->orderBy('properties.id','desc')
-            ->select('properties.*', 'users.name as username', 'age_user.name as agentname','age_user.email as agentemail', 'users.image as userimage','cities.name as city_name','property_types.type as property_type_name','property_purposes.purpose as property_purpose_name')
-            ->join('users', 'users.id', '=', 'properties.user_id')
-            ->join('users as age_user', 'age_user.id', '=', 'properties.agent_id')
-            ->join('property_types', 'property_types.id', '=', 'properties.property_type_id')
-            ->join('property_purposes', 'property_purposes.id', '=', 'properties.property_purpose_id')
-            ->join('cities', 'cities.id', '=', 'properties.city_id')
-            ->get();
-            foreach($properties as $propertimage)
-            {
-                foreach ($propertimage->propertyImages as $value) {
-                    $properties->prop_img = public_path().'/'.$value;
-                }
-            }
-            foreach ($properties as $aminity_item)
-            {
-                foreach ($aminity_item->propertyAminities as $value) {
-                    $properties->aminities = $value->aminity;
-                }
-            }
-            foreach ($properties as $nearestLocations){
-                foreach ($nearestLocations->propertyNearestLocations as $property_item){
-                    $properties->locations = $property_item->nearestLocation;
-                }
-            }
-            foreach ($properties as $index => $value){
-                $properties[$index]->agentname = $value['agentname'].'-'.$value['agentemail'];
-            }
-        }else{
-            $properties = Property::where('users.id',$user_id)->orderBy('properties.id','desc')
-            ->select('properties.*', 'users.name as username', 'age_user.name as agentname','age_user.email as agentemail', 'users.image as userimage','cities.name as city_name','property_types.type as property_type_name','property_purposes.purpose as property_purpose_name')
-            ->join('users', 'users.id', '=', 'properties.user_id')
-            ->join('users as age_user', 'age_user.id', '=', 'properties.agent_id')
-            ->join('property_types', 'property_types.id', '=', 'properties.property_type_id')
-            ->join('property_purposes', 'property_purposes.id', '=', 'properties.property_purpose_id')
-            ->join('cities', 'cities.id', '=', 'properties.city_id')
-            ->get();
-            
-            if($request->proeperty_search){
-                $properties=Property::where('title','LIKE','%'.$request->proeperty_search.'%')->where('properties.status',1)->select('properties.*', 'users.name as username', 'age_user.name as agentname','age_user.email as agentemail', 'users.image as userimage','cities.name as city_name','property_types.type as property_type_name','property_purposes.purpose as property_purpose_name')
-                ->join('users', 'users.id', '=', 'properties.user_id')
-                ->join('users as age_user', 'age_user.id', '=', 'properties.agent_id')
-                ->join('property_types', 'property_types.id', '=', 'properties.property_type_id')
-                ->join('property_purposes', 'property_purposes.id', '=', 'properties.property_purpose_id')
-                ->join('cities', 'cities.id', '=', 'properties.city_id')->get();
-
-                // print_r($search);die;
-                foreach($properties as $propertimage)
-                {
-                    foreach ($propertimage->propertyImages as $value) {
-                        $properties->prop_img = public_path().'/'.$value;
-                    }
-                }
-                foreach ($properties as $aminity_item)
-                {
-                    foreach ($aminity_item->propertyAminities as $value) {
-                        $properties->aminities = $value->aminity;
-                    }
-                }
-                foreach ($properties as $nearestLocations){
-                    foreach ($nearestLocations->propertyNearestLocations as $property_item){
-                        $properties->locations = $property_item->nearestLocation;
-                    }
-                }
-                foreach ($properties as $index => $value){
-                    $properties[$index]->agentname = $value['agentname'].'-'.$value['agentemail'];
-                }
-            }else{
-                foreach($properties as $propertimage)
-                {
-                    foreach ($propertimage->propertyImages as $value) {
-                        $properties->prop_img = public_path().'/'.$value;
-                    }
-                }
-                foreach ($properties as $aminity_item)
-                {
-                    foreach ($aminity_item->propertyAminities as $value) {
-                        $properties->aminities = $value->aminity;
-                    }
-                }
-                foreach ($properties as $nearestLocations){
-                    foreach ($nearestLocations->propertyNearestLocations as $property_item){
-                        $properties->locations = $property_item->nearestLocation;
-                    }
-                }
-                foreach ($properties as $index => $value){
-                    $properties[$index]->agentname = $value['agentname'].'-'.$value['agentemail'];
-                }
-            }
-        }
-
-        if(!blank($properties)){
-            return response()->json(['status'=>'success','message'=>'Data found successfully','data'=>$properties]);
-        }else{
-            return response()->json(['status'=>'error','message'=>'Data not found','data'=>[]]);
-        }
-    }
-
-    public function propertDetails(Request $request){
-       
-        $properties = Property::where(['properties.id'=>$request->property_id])
-        ->select('properties.*', 'users.name as username','age_user.email as agentemail', 'age_user.name as agentname', 'users.image as userimage','cities.name as city_name','property_types.type as property_type_name','property_purposes.purpose as property_purpose_name')
-        ->join('users', 'users.id', '=', 'properties.user_id')
-        ->join('users as age_user', 'age_user.id', '=', 'properties.agent_id')
-        ->join('property_types', 'property_types.id', '=', 'properties.property_type_id')
-        ->join('property_purposes', 'property_purposes.id', '=', 'properties.property_purpose_id')
-        ->join('cities', 'cities.id', '=', 'properties.city_id')->get();
-        
-        foreach($properties as $propertimage)
-        {
-            foreach ($propertimage->propertyImages as $value) {
-                $properties->prop_img = public_path().'/'.$value;
-            }
-        }
-        foreach ($properties as $aminity_item)
-        {
-            foreach ($aminity_item->propertyAminities as $value) {
-                $properties->aminities = $value->aminity;
-            }
-        }
-        foreach ($properties as $nearestLocations){
-            foreach ($nearestLocations->propertyNearestLocations as $property_item){
-                $properties->locations = $property_item->nearestLocation;
-            }
-        }
-        foreach ($properties as $index => $value){
-            $properties[$index]->agentname = $value['agentname'].'-'.$value['agentemail'];
-        }
-
-        if($properties){
-           
-            // $properties->views=$properties[0]->views +1;
-            // $properties->save();
-            if(!blank($properties)){
-                return response()->json(['status'=>'success','message'=>'Data found successfully','data'=>$properties]);
-            }else{
-                return response()->json(['status'=>'error','message'=>'Data not found','data'=>[]]);
-            }
-        }
-    }
-
     public function profile(Request $request)
     {
         $user_id = $request->user_id;
@@ -497,178 +241,6 @@ class Api extends Controller
         $notification=array('messege'=>$notification,'status'=>'success');
         return json_encode($notification);
     }
-    public function store(Request $request)
-    {
-        $validator = Validator::make($request->all(), [
-            'title'=>'required|unique:properties,title,',
-            'property_type'=>'required',
-            'city'=>'required',
-            'address'=>'required',
-            'email'=>'required|email',
-            'purpose'=>'required|numeric',
-            'price'=>'required|numeric',
-            'area'=>'required|numeric',
-            'unit'=>'required|numeric',
-            'room'=>'required|numeric',
-            'bedroom'=>'required|numeric',
-            'bathroom'=>'required|numeric',
-            'floor'=>'required|numeric',
-            'description'=>'required',
-            'banner_image'=>'required',
-            'thumbnail_image'=>'required',
-            'slider_images'=>'required',
-            'latitude'=>'required',
-            'longitude'=>'required',
-            'featured'=>'required|numeric',
-            'top_property'=>'required|numeric',
-            'urgent_property'=>'required|numeric',
-            // "pdf_file" => "required|mimes:pdf|max:10000"
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json(['status' => 'error', 'message' => $validator->messages()->first()]);
-        }
-  
-
-        $video_link='';
-        if(preg_match('/https:\/\/www\.youtube\.com\/watch\?v=[^&]+/', $request->video_link)) {
-            $video_link=$request->video_link;
-        }
-        $property=new Property();
-
-        $property->user_type=0; 
-        $property->user_id=$request->user_id;
-        $property->agent_id=$request->agent_id;
-        $property->title=$request->title;
-        $property->expired_date=$request->expired_date==-1 ? null : $request->expired_date;
-        $property->slug=$request->title;
-        $property->property_type_id=$request->property_type;
-        $property->city_id=$request->city;
-        $property->address=$request->address;
-        $property->phone=$request->phone;
-        $property->email=$request->email;
-        $property->website=$request->website;
-        $property->property_purpose_id=$request->purpose;
-        $property->price=$request->price;
-        $property->period=$request->period ? $request->period : null;
-        $property->area=$request->area;
-        $property->number_of_unit=$request->unit;
-        $property->number_of_room=$request->room;
-        $property->number_of_bedroom=$request->bedroom;
-        $property->number_of_bathroom=$request->bathroom;
-        $property->number_of_floor=$request->floor;
-        $property->number_of_kitchen=$request->kitchen;
-        $property->number_of_parking=$request->parking;
-        $property->furnishings=$request->furnishings;
-        $property->video_link=$video_link;
-        $property->google_map_embed_code=$request->google_map_embed_code;
-        $property->description=$request->description;
-        $property->status=0;
-        $property->is_featured=$request->featured ? $request->featured : 0;
-        $property->urgent_property=$request->urgent_property ? $request->urgent_property : 0;
-        $property->top_property=$request->top_property ? $request->top_property : 0;
-        $property->seo_title=$request->seo_title ? $request->seo_title : $request->title;
-        $property->seo_description=$request->seo_description ? $request->seo_description : $request->title;
-        //Lat and lang
-        $property->lat = $request->latitude;
-        $property->lang = $request->longitude;
-        
-        // pdf file
-        if($request->file('pdf_file')){
-            $file=$request->pdf_file;
-            $file_ext=$file->getClientOriginalExtension();
-            $file_name= 'property-file-'.date('Y-m-d-h-i-s-').rand(999,9999).'.'.$file_ext;
-            $file_path=$file_name;
-            $file->move(public_path().'/uploads/custom-images/',$file_path);
-
-            $property->file=$file_path;
-        }
-        // $property->save();
-        // return redirect()->back();
-        //thumbnail image
-        if($request->file('thumbnail_image')){
-            $thumbnail_image=$request->thumbnail_image;
-            $thumbnail_extention=$thumbnail_image->getClientOriginalExtension();
-            $thumb_name= 'property-thumb-'.date('Y-m-d-h-i-s-').rand(999,9999).'.'.$thumbnail_extention;
-            $thumb_path='uploads/custom-images/'.$thumb_name;
-
-            Image::make($thumbnail_image)
-                ->save(public_path().'/'.$thumb_path);
-                $property->thumbnail_image=$thumb_path;
-
-        }
-        // banner image image
-        if($request->file('banner_image')){
-            $banner_image=$request->banner_image;
-            $banner_ext=$banner_image->getClientOriginalExtension();
-            $banner_name= 'listing-banner-'.date('Y-m-d-h-i-s-').rand(999,9999).'.'.$banner_ext;
-            $banner_path='uploads/custom-images/'.$banner_name;
-            Image::make($banner_image)
-                ->save(public_path().'/'.$banner_path);
-                $property->banner_image=$banner_path;
-        }
-        $aminities = explode(',',$request->aminities);
-        $nearest_locations = explode(',',$request->nearest_locations);
-        $distances = explode(',',$request->distances);
-        $addProperty = $property->save();
-        
-         // insert aminity
-         if($aminities){
-            foreach($aminities as $amnty){
-                $aminity= new PropertyAminity();
-                $aminity->property_id=$property->id;
-                $aminity->aminity_id=$amnty;
-                $aminity->save();
-            }
-        }
-        // insert nearest place
-        $exist_location=[];
-        if($nearest_locations){
-            foreach($nearest_locations as $index => $location){
-                if($location){
-                    if($distances[$index]){
-                        if(!in_array($location, $exist_location)){
-                            $nearest_location= new PropertyNearestLocation();
-                            $nearest_location->property_id=$property->id;
-                            $nearest_location->nearest_location_id=$location;
-                            $nearest_location->distance=$distances[$index];
-                            $nearest_location->save();
-                        }
-                        $exist_location[]=$location;
-
-                    }
-                }
-            }
-        }
-        // slider image
-        if($request->file('slider_images')){
-            $images=$request->slider_images;
-            foreach($images as $image){
-                if($image != null){
-                    $propertyImage=new PropertyImage();
-                    $slider_ext=$image->getClientOriginalExtension();
-                    // for small image
-                    $slider_image= 'property-slide-'.date('Y-m-d-h-i-s-').rand(999,9999).'.'.$slider_ext;
-                    $slider_path='uploads/custom-images/'.$slider_image;
-
-                    Image::make($image)
-                        ->save(public_path().'/'.$slider_path);
-
-                    $propertyImage->image=$slider_path;
-                    $propertyImage->property_id=$property->id;
-                    $propertyImage->save();
-                }
-            }
-        }
-   
-        if(!blank($addProperty)){
-            return response()->json(['status'=>'success','message'=>'Property Added Successfully']);
-        }else{
-            return response()->json(['status'=>'error','message'=>'Property not Added!','data'=>[]]);
-        }
-
-    }
-
     
     public function addtowishlist(Request $request){
         // end
@@ -758,90 +330,6 @@ class Api extends Controller
 
         }
     }
-    public function getCity(){
-        $cities=City::where('status',1)->get();
-        $notify_lang=NotificationText::all();
-        if(!blank($cities)){
-            $notification="City Found Successfully";
-            $notification=array('messege'=>$notification,'status'=>'success','data'=>$cities);
-            return response()->json($notification);
-        }else{
-            $notification="City not Found!";
-            $notification=array('messege'=>$notification,'status'=>'error','data'=>[]);
-            return response()->json($notification);
-
-        }
-    }
-    public function getAminities(){
-        $aminities=Aminity::where('status',1)->get();
-        $notify_lang=NotificationText::all();
-        if(!blank($aminities)){
-            $notification="Aminities Found Successfully";
-            $notification=array('messege'=>$notification,'status'=>'success','data'=>$aminities);
-            return response()->json($notification);
-        }else{
-            $notification="Aminities not Found!";
-            $notification=array('messege'=>$notification,'status'=>'error','data'=>[]);
-            return response()->json($notification);
-
-        }
-    }
-    public function getNearestLocation(){
-        $nearest_locatoins=NearestLocation::where('status',1)->get();
-        $notify_lang=NotificationText::all();
-        if(!blank($nearest_locatoins)){
-            $notification="Nearest Location Found Successfully";
-            $notification=array('messege'=>$notification,'status'=>'success','data'=>$nearest_locatoins);
-            return response()->json($notification);
-        }else{
-            $notification="Nearest Location not Found!";
-            $notification=array('messege'=>$notification,'status'=>'error','data'=>[]);
-            return response()->json($notification);
-
-        }
-    }
-    public function getPropertyTypes(){
-        $propertyTypes=PropertyType::where('status',1)->get();
-        $notify_lang=NotificationText::all();
-        if(!blank($propertyTypes)){
-            $notification="Property Types Found Successfully";
-            $notification=array('messege'=>$notification,'status'=>'success','data'=>$propertyTypes);
-            return response()->json($notification);
-        }else{
-            $notification="Property Types not Found!";
-            $notification=array('messege'=>$notification,'status'=>'error','data'=>[]);
-            return response()->json($notification);
-
-        }
-    }
-    public function getAgent(){
-        $agent=User::where('usertype','Agent')->where('status',1)->get();
-        $notify_lang=NotificationText::all();
-        if(!blank($agent)){
-            $notification="Agent Found Successfully";
-            $notification=array('messege'=>$notification,'status'=>'success','data'=>$agent);
-            return response()->json($notification);
-        }else{
-            $notification="Agent not Found!";
-            $notification=array('messege'=>$notification,'status'=>'error','data'=>[]);
-            return response()->json($notification);
-
-        }
-    }
-    public function getPurpose(){
-        $purposes=PropertyPurpose::where('status',1)->get();
-        $notify_lang=NotificationText::all();
-        if(!blank($purposes)){
-            $notification="Property Purpose Found Successfully";
-            $notification=array('messege'=>$notification,'status'=>'success','data'=>$purposes);
-            return response()->json($notification);
-        }else{
-            $notification="Property Purpose not Found!";
-            $notification=array('messege'=>$notification,'status'=>'error','data'=>[]);
-            return response()->json($notification);
-
-        }
-    }
     public function updatePassword(Request $request){
         $validator = Validator::make($request->all(), [
             'current_password'=>'required',
@@ -874,254 +362,6 @@ class Api extends Controller
         }
 
 
-    }
-    
-    public function updateProperty(Request $request)
-    {
-        $property=Property::find($request->property_id);
-        $validator = Validator::make($request->all(), [
-            'title'=>'required',
-            // 'slug'=>'required|unique:properties,slug,'.$property->id,
-            'property_type'=>'required',
-            'city'=>'required',
-            'address'=>'required',
-            'email'=>'required|email',
-            'purpose'=>'required|numeric',
-            'price'=>'required|numeric',
-            'area'=>'required|numeric',
-            'unit'=>'required|numeric',
-            'room'=>'required|numeric',
-            'bedroom'=>'required|numeric',
-            'bathroom'=>'required|numeric',
-            'floor'=>'required|numeric',
-            'description'=>'required',
-            'latitude'=>'required',
-            'longitude'=>'required',
-            'featured'=>'required|numeric',
-            'top_property'=>'required|numeric',
-            'urgent_property'=>'required|numeric',
-            "pdf_file" => "mimes:pdf|max:10000"
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json(['status' => 'error', 'message' => $validator->messages()->first()]);
-        }
-        $video_link='';
-        if(preg_match('/https:\/\/www\.youtube\.com\/watch\?v=[^&]+/', $request->video_link)) {
-            $video_link=$request->video_link;
-        }
-        $user=Auth::guard('web')->user();
-        $property->title=$request->title;  
-        $property->agent_id=$request->agent_id;    
-        $property->property_type_id=$request->property_type;
-        $property->city_id=$request->city;
-        $property->address=$request->address;
-        $property->phone=$request->phone;
-        $property->email=$request->email;
-        $property->website=$request->website;
-        $property->property_purpose_id=$request->purpose;
-        $property->price=$request->price;
-        $property->period=$request->period ? $request->period : null;
-        $property->area=$request->area;
-        $property->number_of_unit=$request->unit;
-        $property->number_of_room=$request->room;
-        $property->number_of_bedroom=$request->bedroom;
-        $property->number_of_bathroom=$request->bathroom;
-        $property->number_of_floor=$request->floor;
-        $property->number_of_kitchen=$request->kitchen;
-        $property->number_of_parking=$request->parking;
-        $property->video_link=$video_link;
-        $property->google_map_embed_code=$request->google_map_embed_code;
-        $property->furnishings=$request->furnishings;
-        $property->description=$request->description;
-        $property->is_featured=$request->featured ? $request->featured : 0;
-        $property->urgent_property=$request->urgent_property ? $request->urgent_property : 0;
-        $property->top_property=$request->top_property ? $request->top_property : 0;
-        $property->seo_title=$request->seo_title ? $request->seo_title : $request->title;
-        $property->seo_description=$request->seo_description ? $request->seo_description : $request->title;
-
-        //Lat and lang
-        $property->lat = $request->latitude;
-        $property->lang = $request->longitude;
-
-        // pdf file
-        if($request->file('pdf_file')){
-            $file=$request->pdf_file;
-            $old_file=$property->file;
-            $file_ext=$file->getClientOriginalExtension();
-            $file_name= 'property-file-'.date('Y-m-d-h-i-s-').rand(999,9999).'.'.$file_ext;
-            $file_path=$file_name;
-            $file->move(public_path().'/uploads/custom-images/',$file_path);
-            $property->file=$file_path;
-            $property->save();
-
-            if($old_file){
-                if(File::exists(public_path().'/'."uploads/custom-images/".$old_file)) unlink(public_path().'/'."uploads/custom-images/".$old_file);
-            }
-        }
-
-
-        //thumbnail image
-        if($request->file('thumbnail_image')){
-            $old_thumbnail=$property->thumbnail_image;
-            $thumbnail_image=$request->thumbnail_image;
-            $thumbnail_extention=$thumbnail_image->getClientOriginalExtension();
-            $thumb_name= 'property-thumb-'.date('Y-m-d-h-i-s-').rand(999,9999).'.'.$thumbnail_extention;
-            $thumb_path='uploads/custom-images/'.$thumb_name;
-            Image::make($thumbnail_image)
-                ->save(public_path().'/'.$thumb_path);
-
-            $property->thumbnail_image=$thumb_path;
-            $property->save();
-            if(File::exists(public_path().'/'.$old_thumbnail)) unlink(public_path().'/'.$old_thumbnail);
-        }
-
-        // banner image image
-        if($request->file('banner_image')){
-            $old_banner=$property->banner_image;
-            $banner_image=$request->banner_image;
-            $banner_ext=$banner_image->getClientOriginalExtension();
-            $banner_name= 'listing-banner-'.date('Y-m-d-h-i-s-').rand(999,9999).'.'.$banner_ext;
-            $banner_path='uploads/custom-images/'.$banner_name;
-
-            Image::make($banner_image)
-            ->save(public_path().'/'.$banner_path);
-
-
-            $property->banner_image=$banner_path;
-            $property->save();
-            if(File::exists(public_path().'/'.$old_banner)) unlink(public_path().'/'.$old_banner);
-        }
-        $addProperty = $property->save();
-        // property end
-        $aminities = explode(',',$request->aminities);
-        $nearest_locations = explode(',',$request->nearest_locations);
-
-        // for aminity
-        $old_aminities=$property->propertyAminities;
-        if($aminities){
-            foreach($aminities as $amnty){
-                $aminity= new PropertyAminity();
-                $aminity->property_id=$property->id;
-                $aminity->aminity_id=$amnty;
-                $aminity->save();
-            }
-
-            if($old_aminities->count()>0){
-                foreach($old_aminities as $old_aminity){
-                    $old_aminity->delete();
-                }
-            }
-        }else{
-            if($old_aminities->count()>0){
-                foreach($old_aminities as $old_aminity){
-                    $old_aminity->delete();
-                }
-            }
-        }
-
-
-        
-        // insert nearest place
-        $distances = explode(',',$request->distances);
-        $old_nearest_locations=$property->propertyNearestLocations;
-        $exist_location=[];
-        $new_nearest_location=false;
-        if($request->nearest_locations){
-            foreach($nearest_locations as $index => $location){
-                if($location){
-                    if($distances[$index]){
-                        if(!in_array($location, $exist_location)){
-                            $nearest_location= new PropertyNearestLocation();
-                            $nearest_location->property_id=$property->id;
-                            $nearest_location->nearest_location_id=$location;
-                            $nearest_location->distance=$distances[$index];
-                            $nearest_location->save();
-                            $new_nearest_location=true;
-                        }
-                        $exist_location[]=$location;
-
-                    }
-                }
-            }
-
-            if($new_nearest_location){
-                if($old_nearest_locations->count() > 0){
-                    foreach($old_nearest_locations as $old_location){
-                        $old_location->delete();
-                    }
-                }
-            }
-        }else{
-            if($old_nearest_locations->count() > 0){
-                foreach($old_nearest_locations as $old_location){
-                    $old_location->delete();
-                }
-            }
-
-        }
-
-        // slider image
-        if($request->file('slider_images')){
-            $images=$request->slider_images;
-            foreach($images as $image){
-                if($image != null){
-                    $propertyImage=new PropertyImage();
-                    $slider_ext=$image->getClientOriginalExtension();
-                    // for small image
-                    $slider_image= 'property-slide-'.date('Y-m-d-h-i-s-').rand(999,9999).'.'.$slider_ext;
-                    $slider_path='uploads/custom-images/'.$slider_image;
-                    Image::make($image)
-                        ->save(public_path().'/'.$slider_path);
-
-                    $propertyImage->image=$slider_path;
-                    $propertyImage->property_id=$property->id;
-                    $propertyImage->save();
-
-                }
-            }
-        }
-
-        if(!blank($addProperty)){
-            return response()->json(['status'=>'success','message'=>'Property Updated Successfully']);
-        }else{
-            return response()->json(['status'=>'error','message'=>'Property not Updated!']);
-        }
-    }
-    public function propertyDestroy(Request $request)
-    {
-
-        $property=Property::find($request->property_id);
-        $old_thumbnail=$property->thumbnail_image;
-        $old_banner=$property->banner_image;
-        $old_pdf=$property->file;
-        PropertyAminity::where('property_id',$property->id)->delete();
-        Wishlist::where('property_id',$property->id)->delete();
-        PropertyReview::where('property_id',$property->id)->delete();
-        PropertyNearestLocation::where('property_id',$property->id)->delete();
-
-        foreach($property->propertyImages as $image){
-            if(File::exists(public_path().'/'.$image->image)) unlink(public_path().'/'.$image->image);
-        }
-        PropertyImage::where('property_id',$property->id)->delete();
-
-        if($old_pdf){
-            if(File::exists(public_path().'/'.'uploads/custom-images/'.$old_pdf)) unlink(public_path().'/'.'uploads/custom-images/'.$old_pdf);
-        }
-        if($old_thumbnail){
-            if(File::exists(public_path().'/'.$old_thumbnail)) unlink(public_path().'/'.$old_thumbnail);
-        }
-        if($old_banner){
-            if(File::exists(public_path().'/'.$old_banner)) unlink(public_path().'/'.$old_banner);
-        }
-
-        $delete = $property->delete();
-        
-        if(!blank($delete)){
-            return response()->json(['status'=>'success','message'=>'Property Deleted Successfully']);
-        }else{
-            return response()->json(['status'=>'error','message'=>'Property not Deleted!']);
-        }
     }
     public function contactUs(){
         $contact=ContactInformation::first();
@@ -1164,104 +404,6 @@ class Api extends Controller
             return response()->json(['status'=>'error','message'=>'Data not found!','data'=>[]]);
         }
     }
-    public function filterProperty(Request $request){
-        
-        $sortArry=[];
-        
-            $propertyAminities=PropertyAminity::whereHas('property',function($query) use ($request){
-                if($request->property_type != 0){
-                    $query->where(['property_type_id'=>$request->property_type,'status'=>1]);
-                }
-                if($request->city_id != 0){
-                    $query->where(['city_id'=>$request->city_id,'status'=>1]);
-                }
-                if($request->search != 0){
-                    $query->where('title','LIKE','%'.$request->search.'%')->where('status',1);
-                }
-    
-                if($request->purpose_type != 0){
-                    $query->where(['property_purpose_id'=>$request->purpose_type,'status'=>1]);
-                }
-                if($request->bedrooms != 0){
-                    $query->where(['number_of_bedroom'=>$request->bedrooms,'status'=>1]);
-                }
-                if($request->bathrooms != 0){
-                    $query->where(['number_of_bathroom'=>$request->bathrooms,'status'=>1]);
-                }
-                 if ($request->price != 0 && $request->price != '0-10000') {
-    
-                    $priceRange = explode('-', $request->price);            
-                  
-                    if (count($priceRange) === 2) {
-                      
-                      
-                        $query->whereBetween('price', [$priceRange[0], $priceRange[1]])->where('status',1);
-                    } 
-                }
-                if ($request->area != 0) {
-                 
-                    $areaRange = explode('-', $request->area);            
-                   
-                    if (count($areaRange) === 2) {
-                        $query->whereBetween('area', [$areaRange[0], $areaRange[1]])->where('status',1);
-                    } 
-                }
-                
-    
-                if($request->nearestLocations != 0){
-                    
-                    $nearlocations=PropertyNearestLocation::get();
-                 
-                    foreach($nearlocations as $nearlocation){               
-                        if($nearlocation->nearest_location_id == $request->nearestLocations){
-                          
-                            $query->where('id',$nearlocation->property_id);
-                           
-                        }
-                       
-                    }
-    
-                  
-                }
-                $query->where(['status'=>1]);
-            })->whereIn('aminity_id',$sortArry)
-            ->select('property_id')->groupBy('property_id')      
-            ->get();
-            $propertyAminities=$propertyAminities->append($request->all());
-            print_r($propertyAminities);die;
-        
-
-        $banner_image=BannerImage::find(1);
-        $default_image=BannerImage::find(15);
-        $menus=Navigation::all();
-        $currency=Setting::first();
-        $seo_text=SeoText::find(2);
-        $propertyTypes=PropertyType::where('status',1)->orderBy('type','asc')->get();
-        $cities=City::where('status',1)->orderBy('name','asc')->get();
-        $aminities=Aminity::where('status',1)->orderBy('aminity','asc')->get();
-        $websiteLang=ManageText::all();
-        
-        if($propertyAminities[0]){
-            return response()->json(['status'=>'success','message'=>'Data found Successfully','data'=>$propertyAminities]);
-        }else{
-            return response()->json(['status'=>'error','message'=>'Data not found!','data'=>[]]);
-        }
-    }
-    public function activity(Request $request){
-    
-        $allproperty = Property::where('user_id',$request->user_id)->count();
-        $activeproperty = Property::where('user_id',$request->user_id)->where('status',1)->where('report_status',0)->get()->count();      
-        $sellproperty = Property::where('user_id',$request->user_id)->where('status',0)->where('property_purpose_id',1)->get()->count();
-        $rentproperty = Property::where('user_id',$request->user_id)->where('status',0)->where('property_purpose_id',2)->get()->count();
-        $pro= ['allproperty'=>$allproperty , 'activeproperty'=>$activeproperty , 'sellproperty'=>$sellproperty,'rentproperty'=>$rentproperty];
-
-        if(!blank($pro)){
-            return response()->json(['status'=>'success','message'=>'Data found Successfully','data'=>$pro]);
-        }else{
-            return response()->json(['status'=>'error','message'=>'Data not found!','data'=>[]]);
-        }
-        
-    }    
     public function notification(Request $request)
     {
         $support = DB::table('property_notification_contact')->where('property_notification_contact.notify_status',1)
@@ -1313,8 +455,7 @@ class Api extends Controller
              $message=$template->description;
              $subject=$template->subject;
              $message=str_replace('{{name}}',$user->name,$message);
-             Mail::to($user->email)->send(new ForgetPassword($user,$message,$subject));
- 
+             $res = Mail::to($user->email)->send(new ForgetPassword($user,$message,$subject));
              $notify_lang=NotificationText::all();
              $notification=$notify_lang->where('lang_key','forget_pass')->first()->custom_text;
              return response()->json(['status'=>'success','message'=>$notification]);
@@ -1369,6 +510,7 @@ class Api extends Controller
 
 
     }
+<<<<<<< HEAD
     public function chatSupportRequest(Request $request)
     {
         if($request->usertype == 'User'){
@@ -1623,6 +765,8 @@ class Api extends Controller
         }
 
     }
+=======
+>>>>>>> cdfdc7f53efd5119e46bf0019bde81198d1ec892
     
     public function agentprofile(Request $request)
     {
@@ -1797,7 +941,10 @@ class Api extends Controller
     }
     public function pushNotification(Request $request)
     {
+<<<<<<< HEAD
+=======
 
+>>>>>>> 1216e48570cfc92a11e8fce289d6c6a3eb20f3aa
         $data=[];
         $data['message']= "Hello Rajkumar ji";
 
@@ -1811,7 +958,11 @@ class Api extends Controller
     public function sendFirebasePush($tokens, $data)
     {
 
+<<<<<<< HEAD
+        $serverKey = env("SSH_KEY");
+=======
         $serverKey = 'AAAAuiun6Jw:APA91bGXTgUlIA11_MZ-F8KCHjd2UNBnXTB07Y9g_S-KBT_ELBzyIqig07J39Qs-kttD4X4HkjGd7lBk9dIdsOZO3y1NjAxWOE8Czv-lqRkUxPw-r-Z-fA1_bO_E1k1jxp2hrHnLNcbV';
+>>>>>>> 1216e48570cfc92a11e8fce289d6c6a3eb20f3aa
         // prep the bundle
         $msg = array
         (
@@ -1865,4 +1016,82 @@ class Api extends Controller
         exit;
     }
 
+<<<<<<< HEAD
+    public function videoGallery(){
+       
+        $orders=Tutorial::orderBy('id','desc')->get();
+        if($orders){
+            $notification='Data found successfully';
+            return response()->json(['status'=>'success','message'=>$notification,'data'=>$orders]);
+        }else{
+            $notification='Data Not found!';
+            return response()->json(['status'=>'error','message'=>$notification]);
+        }
+    }
+    public function sendMessage(Request $request){
+
+        $validator = Validator::make($request->all(), [
+            'name'=>'required',
+            'email'=>'required|email',
+            'subject'=>'required',
+            'message'=>'required',
+            'g-recaptcha-response'=>new Captcha()
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['status' => 'error', 'message' => $validator->messages()->first()]);
+        }
+
+        $contact=[
+            'email'=>$request->email,
+            'phone'=>$request->phone,
+            'name'=>$request->name,
+            'subject'=>$request->subject,
+            'message'=>$request->message,
+        ];
+
+        $setting=Setting::first();
+        $notify=NotificationText::first();
+        if($setting->save_contact_message==1){
+            $sendMessage = ContactMessage::create($contact);
+        }
+
+        if($sendMessage){
+            MailHelper::setMailConfig();
+
+            $template=EmailTemplate::where('id',2)->first();
+            $message=$template->description;
+            $subject=$template->subject;
+            $message=str_replace('{{name}}',$contact['name'],$message);
+            $message=str_replace('{{email}}',$contact['email'],$message);
+            $message=str_replace('{{phone}}',$contact['phone'],$message);
+            $message=str_replace('{{subject}}',$contact['subject'],$message);
+            $message=str_replace('{{message}}',$contact['message'],$message);
+
+            Mail::to($setting->email)->send(new ContactMessageInformation($message,$subject));
+
+            $notification='Your request has been sent';
+            return response()->json(['status'=>'success','message'=>$notification]);
+        
+        }else{
+            $notification='Your request not sent please try again latter';
+            return response()->json(['status'=>'error','message'=>$notification]);
+                        
+        }
+
+    }
+    public function testFomate(){
+       
+        $testformate=TextFormate::orderBy('id','asc')->get();
+        if($testformate){
+            $notification='Data found successfully';
+            return response()->json(['status'=>'success','message'=>$notification,'data'=>$testformate]);
+        }else{
+            $notification='Data Not found!';
+            return response()->json(['status'=>'error','message'=>$notification]);
+        }
+    }
+
+=======
+>>>>>>> 1216e48570cfc92a11e8fce289d6c6a3eb20f3aa
 }
