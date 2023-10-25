@@ -22,7 +22,7 @@ class AdminTextFormateController extends Controller
 {
     public function index(){
        
-        $textformate=TextFormate::orderBy('id','desc')->get();
+        $textformate=TextFormate::orderBy('id','asc')->get();
         $websiteLang=ManageText::all();
         $currency=Setting::first();
         $confirmNotify=$websiteLang->where('lang_key','are_you_sure')->first()->custom_text;

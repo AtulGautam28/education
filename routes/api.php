@@ -84,5 +84,17 @@ Route::get('segments',[Api::class,'segments'])->name('segments');
 // Purchase a Plan
 Route::post('stripePayment',[Api::class,'stripePayment'])->name('stripePayment');
 
+//Push Notification
+Route::post('pushNotification',[Api::class,'pushNotification'])->name('pushNotification');
+
+//Video Gallery
+Route::get('videoGallery',[Api::class,'videoGallery'])->name('videoGallery');
+
+// Online Message
+Route::post('sendMessage',[Api::class,'sendMessage'])->name('sendMessage');
+
+// Test Formate
+Route::get('testFomate',[Api::class,'testFomate'])->name('testFomate');
+
 
 

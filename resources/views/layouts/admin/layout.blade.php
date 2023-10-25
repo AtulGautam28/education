@@ -83,7 +83,12 @@
             <li class="nav-item {{ Route::is('admin.textformate')  ?'active':'' }}">
                 <a class="nav-link" href="{{ route('admin.textformate') }}">
                     <i class="fa fa-file"></i>
-                    <span>Text Formate</span></a>
+                    <span>Test Formate</span></a>
+            </li>
+            <li class="nav-item {{ Route::is('admin.contact.message')?'active':'' }}">
+                <a class="nav-link" href="{{ route('admin.contact.message') }}">
+                    <i class="fas fa-fa fa-envelope"></i>
+                    <span>Online Coaching Requests</span></a>
             </li>
                         <!-- Nav Item - Pages Collapse Menu -->
             <li class="nav-item">
@@ -356,7 +361,7 @@
                 <div id="contact-2-pages" class="collapse {{ Route::is('admin.contact.message') || Route::is('admin.contact-information.index') ? 'show': '' }}" aria-labelledby="headingPages" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <a class="collapse-item {{ Route::is('admin.contact-information.index')?'active':'' }}" href="{{ route('admin.contact-information.index') }}">{{ $websiteLang->where('lang_key','contact_info')->first()->custom_text }}</a>
-                        <a class="collapse-item {{ Route::is('admin.contact.message')?'active':'' }}" href="{{ route('admin.contact.message') }}">{{ $websiteLang->where('lang_key','contact_msg')->first()->custom_text }}</a>
+                        {{-- <a class="collapse-item {{ Route::is('admin.contact.message')?'active':'' }}" href="{{ route('admin.contact.message') }}">{{ $websiteLang->where('lang_key','contact_msg')->first()->custom_text }}</a> --}}
                     </div>
                 </div>
             </li>
