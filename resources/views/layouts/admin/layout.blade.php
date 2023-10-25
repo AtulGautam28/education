@@ -84,14 +84,11 @@
                 <a class="nav-link" href="{{ route('admin.textformate') }}">
                     <i class="fa fa-file"></i>
                     <span>Test Formate</span></a>
-<<<<<<< HEAD
             </li>
             <li class="nav-item {{ Route::is('admin.contact.message')?'active':'' }}">
                 <a class="nav-link" href="{{ route('admin.contact.message') }}">
                     <i class="fas fa-fa fa-envelope"></i>
                     <span>Online Coaching Requests</span></a>
-=======
->>>>>>> 1216e48570cfc92a11e8fce289d6c6a3eb20f3aa
             </li>
                         <!-- Nav Item - Pages Collapse Menu -->
             <li class="nav-item">
