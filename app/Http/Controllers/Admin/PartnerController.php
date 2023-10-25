@@ -28,16 +28,7 @@ class PartnerController extends Controller
 
     public function store(Request $request)
     {
-        // project demo mode check
-        if(env('PROJECT_MODE')==0){
-            $notification=array(
-                'messege'=>env('NOTIFY_TEXT'),
-                'alert-type'=>'error'
-            );
-
-            return redirect()->back()->with($notification);
-        }
-        // end
+        
 
         $valid_lang=ValidationText::all();
         $rules = [
@@ -100,16 +91,7 @@ class PartnerController extends Controller
     public function update(Request $request, Partner $partner)
     {
 
-        // project demo mode check
-        if(env('PROJECT_MODE')==0){
-            $notification=array(
-                'messege'=>env('NOTIFY_TEXT'),
-                'alert-type'=>'error'
-            );
-
-            return redirect()->back()->with($notification);
-        }
-        // end
+        
 
 
         $valid_lang=ValidationText::all();
@@ -162,16 +144,7 @@ class PartnerController extends Controller
     public function destroy(Partner $partner)
     {
 
-        // project demo mode check
-        if(env('PROJECT_MODE')==0){
-            $notification=array(
-                'messege'=>env('NOTIFY_TEXT'),
-                'alert-type'=>'error'
-            );
-
-            return redirect()->back()->with($notification);
-        }
-        // end
+        
 
 
         $old_image=$partner->image;

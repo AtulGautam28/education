@@ -168,16 +168,7 @@ class BlogController extends Controller
 
     public function destroy(Blog $blog)
     {
-        // project demo mode check
-        if(env('PROJECT_MODE')==0){
-            $notification=array(
-                'messege'=>env('NOTIFY_TEXT'),
-                'alert-type'=>'error'
-            );
-
-            return redirect()->back()->with($notification);
-        }
-        // end
+        
 
         $old_image=$blog->image;
         BlogComment::where('blog_id',$blog->id)->delete();

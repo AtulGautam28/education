@@ -58,12 +58,7 @@ class UserController extends Controller
 
     public function destroy($id){
 
-        // project demo mode check
-        if(env('PROJECT_MODE')==0){
-            $notification=array('messege'=>env('NOTIFY_TEXT'),'alert-type'=>'error');
-            return redirect()->back()->with($notification);
-        }
-        // end
+         
 
         $user=User::where('id',$id)->first();
         $user_image=$user->image;

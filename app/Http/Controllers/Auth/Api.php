@@ -938,7 +938,6 @@ class Api extends Controller
     }
     public function pushNotification(Request $request)
     {
-
         $data=[];
         $data['message']= "Hello Rajkumar ji";
 
@@ -953,8 +952,7 @@ class Api extends Controller
     {
 
         $serverKey = env("SSH_KEY");
-        $serverKey = 'AAAAuiun6Jw:APA91bGXTgUlIA11_MZ-F8KCHjd2UNBnXTB07Y9g_S-KBT_ELBzyIqig07J39Qs-kttD4X4HkjGd7lBk9dIdsOZO3y1NjAxWOE8Czv-lqRkUxPw-r-Z-fA1_bO_E1k1jxp2hrHnLNcbV';
-        // prep the bundle
+        
         $msg = array
         (
             'message'   => $data['message'],
