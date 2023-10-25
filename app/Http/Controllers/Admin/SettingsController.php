@@ -418,7 +418,7 @@ class SettingsController extends Controller
 
      
 
-        if($request->live_chat==1){
+        if($request->live_chat==1){ 
 
             $valid_lang=ValidationText::all();
             $rules = [

@@ -83,7 +83,7 @@ class AdminToturialController extends Controller
     {
         $tutorial=Tutorial::find($id);
         if($tutorial){
-            
+         
             if(File::exists(public_path().'/'.$tutorial->video)) unlink(public_path().'/'.$tutorial->video);
             $tutorial->delete();
             $notify_lang=NotificationText::all();
@@ -112,9 +112,10 @@ class AdminToturialController extends Controller
         if($request->video){             
                       
             $video=$request->video;
-            $old_video=$request->video;
+            $old_video=$tutorial->video;
             if($old_video){
-             if(File::exists(public_path().'/'."uploads/video/".$old_video)) unlink(public_path().'/'."uploads/video/".$old_video);
+              
+                if(File::exists(public_path().'/'.$old_video)) unlink(public_path().'/'.$old_video);
             }
             $extention=$video->getClientOriginalExtension();
             $name= 'tutorial-'.date('Y-m-d-h-i-s-').rand(999,9999).'.'.$extention;
