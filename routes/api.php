@@ -87,7 +87,6 @@ Route::post('stripePayment',[Api::class,'stripePayment'])->name('stripePayment')
 //Push Notification
 Route::post('pushNotification',[Api::class,'pushNotification'])->name('pushNotification');
 
-<<<<<<< HEAD
 //Video Gallery
 Route::get('videoGallery',[Api::class,'videoGallery'])->name('videoGallery');
 
@@ -97,7 +96,5 @@ Route::post('sendMessage',[Api::class,'sendMessage'])->name('sendMessage');
 // Test Formate
 Route::get('testFomate',[Api::class,'testFomate'])->name('testFomate');
 
-=======
->>>>>>> 1216e48570cfc92a11e8fce289d6c6a3eb20f3aa
 
 
