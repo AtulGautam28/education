@@ -108,9 +108,11 @@ class AdminTextFormateController extends Controller
         if($request->image){             
                       
             $image=$request->image;
-            $old_image=$request->image;
+            $old_image=$tutorial->image;
             if($old_image){
-             if(File::exists(public_path().'/'."uploads/custom-images/".$old_image)) unlink(public_path().'/'."uploads/custom-images/".$old_image);
+               
+             if(File::exists(public_path().'/'.$old_image)) unlink(public_path().'/'.$old_image);
+
             }
             $extention=$image->getClientOriginalExtension();
             $name= 'textformate-'.date('Y-m-d-h-i-s-').rand(999,9999).'.'.$extention;

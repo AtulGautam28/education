@@ -100,6 +100,7 @@ class Api extends Controller
             if($user->status==1){
                 if(Hash::check($request->password,$user->password)){
                     if(Auth::guard('web')->attempt($credential,$request->remember)){
+                      
                         $notify_lang=NotificationText::all();
                         $notification=$notify_lang->where('lang_key','login')->first()->custom_text;
                         $notification=array('messege'=>$notification,'status'=>'success','data'=>$user);
@@ -130,6 +131,9 @@ class Api extends Controller
 
             return json_encode($notification);
         }
+
+           
+      
     }
 
     public function storeRegister(Request $request){
@@ -680,6 +684,10 @@ class Api extends Controller
     }
     public function pushNotification(Request $request)
     {
+<<<<<<< HEAD
+=======
+
+>>>>>>> 1216e48570cfc92a11e8fce289d6c6a3eb20f3aa
         $data=[];
         $data['message']= "Hello Rajkumar ji";
 
@@ -693,7 +701,11 @@ class Api extends Controller
     public function sendFirebasePush($tokens, $data)
     {
 
+<<<<<<< HEAD
         $serverKey = env("SSH_KEY");
+=======
+        $serverKey = 'AAAAuiun6Jw:APA91bGXTgUlIA11_MZ-F8KCHjd2UNBnXTB07Y9g_S-KBT_ELBzyIqig07J39Qs-kttD4X4HkjGd7lBk9dIdsOZO3y1NjAxWOE8Czv-lqRkUxPw-r-Z-fA1_bO_E1k1jxp2hrHnLNcbV';
+>>>>>>> 1216e48570cfc92a11e8fce289d6c6a3eb20f3aa
         // prep the bundle
         $msg = array
         (
@@ -747,6 +759,7 @@ class Api extends Controller
         exit;
     }
 
+<<<<<<< HEAD
     public function videoGallery(){
        
         $orders=Tutorial::orderBy('id','desc')->get();
@@ -822,4 +835,6 @@ class Api extends Controller
         }
     }
 
+=======
+>>>>>>> 1216e48570cfc92a11e8fce289d6c6a3eb20f3aa
 }

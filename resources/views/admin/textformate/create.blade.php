@@ -4,11 +4,11 @@
 @endsection
 @section('admin-content')
     <!-- Page Heading -->
-    <h1 class="h3 mb-2 text-gray-800"><a href="{{ route('admin.toturial') }}" class="btn btn-primary"><i class="fas fa-list" aria-hidden="true"></i> All Text Formate </a></h1>
+    <h1 class="h3 mb-2 text-gray-800"><a href="{{ route('admin.toturial') }}" class="btn btn-primary"><i class="fas fa-list" aria-hidden="true"></i> All Test Formate </a></h1>
     <!-- DataTales Example -->
     <div class="card shadow mb-4">
         <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">Text Formate Form</h6>
+            <h6 class="m-0 font-weight-bold text-primary">Test Format  Form</h6>
         </div>
         <div class="card-body">
             <form action="{{ route('admin.textformate-store') }}" method="post"  enctype="multipart/form-data">

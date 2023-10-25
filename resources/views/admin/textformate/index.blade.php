@@ -5,10 +5,10 @@
 @section('admin-content')
     <!-- DataTales Example -->
     <div class="container-fluid">
-        <h6 class="h3 mb-2 text-gray-800"><a href="{{ route('admin.textformate-create') }}" class="btn btn-primary"> New Text Formate </a></h6>
+        <h6 class="h3 mb-2 text-gray-800"><a href="{{ route('admin.textformate-create') }}" class="btn btn-primary"> New Test Formate </a></h6>
         <div class="card shadow mb-4">
             <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">Text Formate Table</h6>
+            <h6 class="m-0 font-weight-bold text-primary">Test Formate Table</h6>
             </div>
             <div class="card-body">
                 <div class="table-responsive">
