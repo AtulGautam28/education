@@ -29,16 +29,7 @@ class FaqController extends Controller
 
     public function store(Request $request)
     {
-        // project demo mode check
-        if(env('PROJECT_MODE')==0){
-            $notification=array(
-                'messege'=>env('NOTIFY_TEXT'),
-                'alert-type'=>'error'
-            );
-
-            return redirect()->back()->with($notification);
-        }
-        // end
+        
 
         $this->validate($request,[
             'question'=>'required',
@@ -60,16 +51,7 @@ class FaqController extends Controller
 
     public function update(Request $request, Faq $faq)
     {
-        // project demo mode check
-        if(env('PROJECT_MODE')==0){
-            $notification=array(
-                'messege'=>env('NOTIFY_TEXT'),
-                'alert-type'=>'error'
-            );
-
-            return redirect()->back()->with($notification);
-        }
-        // end
+        
 
         $this->validate($request,[
             'question'=>'required',
@@ -90,16 +72,7 @@ class FaqController extends Controller
 
     public function destroy(Faq $faq)
     {
-        // project demo mode check
-        if(env('PROJECT_MODE')==0){
-            $notification=array(
-                'messege'=>env('NOTIFY_TEXT'),
-                'alert-type'=>'error'
-            );
-
-            return redirect()->back()->with($notification);
-        }
-        // end
+        
         $faq->delete();
         $notify_lang=NotificationText::all();
         $notification=$notify_lang->where('lang_key','delete')->first()->custom_text;
@@ -131,16 +104,7 @@ class FaqController extends Controller
     public function faqImage(Request $request){
 
 
-        // project demo mode check
-        if(env('PROJECT_MODE')==0){
-            $notification=array(
-                'messege'=>env('NOTIFY_TEXT'),
-                'alert-type'=>'error'
-            );
-
-            return redirect()->back()->with($notification);
-        }
-        // end
+        
 
         $this->validate($request,[
             'image'=>'required'

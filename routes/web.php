@@ -59,6 +59,7 @@ use App\Http\Controllers\Admin\ServiceController;
 use App\Http\Controllers\Admin\OverviewController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\FileManagerController;
+use App\Http\Controllers\Admin\AdminLanguageController;
 
 use Illuminate\Support\Facades\Route;
 
@@ -149,11 +150,23 @@ Route::group(['as'=> 'admin.', 'prefix' => 'admin'],function (){
     Route::post('mollie-update/{id}',[PaymentAccountController::class,'updateMollie'])->name('mollie-update');
     Route::post('instamojo-update/{id}',[PaymentAccountController::class,'updateInstamojo'])->name('instamojo-update');
 
+    // language start
+   
+    Route::get('language-setting',[AdminLanguageController::class,'index'])->name('language.setting');
+    Route::get('language-create',[AdminLanguageController::class,'create'])->name('language-create');
+    Route::get('language-delete/{id}',[AdminLanguageController::class,'destroy'])->name('language-delete');
+    Route::get('language-edit/{id}',[AdminLanguageController::class,'edit'])->name('language-edit');
+    Route::post('language-update/{id}',[AdminLanguageController::class,'update'])->name('language-update');
+    Route::post('language-store',[AdminLanguageController::class,'store'])->name('language-store');
 
+
+    //Language end
     // setting start
     Route::resource('settings',SettingsController::class);
     Route::get('comment-setting',[SettingsController::class,'blogCommentSetting'])->name('comment.setting');
+    Route::get('serverkey-setting',[SettingsController::class,'serverkeySetting'])->name('serverkey.setting');
     Route::post('update-comment-setting',[SettingsController::class,'updateCommentSetting'])->name('update.comment.setting');
+    Route::post('update-serverkey-setting',[SettingsController::class,'updateserverkeySetting'])->name('update.serverkey.setting');
     Route::get('cookie-consent-setting',[SettingsController::class,'cookieConsentSetting'])->name('cookie.consent.setting');
     Route::post('update-cookie-consent',[SettingsController::class,'updateCookieConsentSetting'])->name('update.cookie.consent.setting');
     Route::get('captcha-setting',[SettingsController::class,'captchaSetting'])->name('captcha.setting');

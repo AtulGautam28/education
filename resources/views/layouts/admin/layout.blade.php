@@ -255,6 +255,24 @@
                 </div>
             </li>
 
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#setting-pages"
+                    aria-expanded="true" aria-controls="setting-pages">
+                    <i class="fas fa-cog"></i>
+                    <span> {{ $websiteLang->where('lang_key','setting')->first()->custom_text }}</span>
+                </a>
+                <div id="setting-pages" class="collapse {{               
+                Route::is('admin.comment.setting') ||               
+                Route::is('admin.email.template') || Route::is('admin.email-edit') || Route::is('admin.email-configuration') || Route::is('admin.login.image') || Route::is('admin.profile.image') || Route::is('admin.bg.image') || Route::is('admin.paginator') ? 'show' :'' }}" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <a class="collapse-item {{ Route::is('admin.serverkey.setting')?'active':'' }}" href="{{ route('admin.serverkey.setting') }}">Push notification</a>
+                        <a class="collapse-item {{ Route::is('admin.language.setting')?'active':'' }}" href="{{ route('admin.language.setting') }}">Language</a>
+
+                    </div>
+                   
+                </div>
+            </li>
+
             <li class="nav-item d-none">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#setting-pages"
                     aria-expanded="true" aria-controls="setting-pages">

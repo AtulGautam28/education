@@ -87,7 +87,6 @@ class PaymentAccountController extends Controller
         return redirect()->route('admin.payment-account.index')->with($notification);
     }
 
-
     public function razorpayUpdate(Request $request,$id){
         // project demo mode check
         if(env('PROJECT_MODE')==0){

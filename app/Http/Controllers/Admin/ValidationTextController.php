@@ -24,12 +24,7 @@ class ValidationTextController extends Controller
     }
 
     public function update(Request $request){
-        // project demo mode check
-        if(env('PROJECT_MODE')==0){
-            $notification=array('messege'=>env('NOTIFY_TEXT'),'alert-type'=>'error');
-            return redirect()->back()->with($notification);
-        }
-        // end
+         
 
 
         $valid_lang=ValidationText::all();
@@ -65,12 +60,7 @@ class ValidationTextController extends Controller
 
     public function updateNotification(Request $request){
 
-        // project demo mode check
-        if(env('PROJECT_MODE')==0){
-            $notification=array('messege'=>env('NOTIFY_TEXT'),'alert-type'=>'error');
-            return redirect()->back()->with($notification);
-        }
-        // end
+         
 
         $valid_lang=ValidationText::all();
         $error=$valid_lang->where('lang_key','every')->first()->custom_text;

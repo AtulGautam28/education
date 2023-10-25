@@ -58,16 +58,7 @@ class AdminController extends Controller
      */
     public function store(Request $request)
     {
-        // project demo mode check
-        if(env('PROJECT_MODE')==0){
-            $notification=array(
-                'messege'=>env('NOTIFY_TEXT'),
-                'alert-type'=>'error'
-            );
-
-            return redirect()->back()->with($notification);
-        }
-        // end
+       
         $valid_lang=ValidationText::all();
         $rules = [
             'name'=>'required',
@@ -99,16 +90,7 @@ class AdminController extends Controller
 
     public function destroy($id)
     {
-        // project demo mode check
-        if(env('PROJECT_MODE')==0){
-            $notification=array(
-                'messege'=>env('NOTIFY_TEXT'),
-                'alert-type'=>'error'
-            );
-
-            return redirect()->back()->with($notification);
-        }
-        // end
+        
         $admin=Admin::find($id);
         $old_image=$admin->image;
         $admin->delete();

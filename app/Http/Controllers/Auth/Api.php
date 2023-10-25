@@ -36,6 +36,7 @@ use App\PropertyType;
 use App\Property;
 use App\City;
 use App\Aminity;
+use App\Language;
 use App\NearestLocation;
 use Validator;
 use Str;
@@ -149,11 +150,12 @@ class Api extends Controller
         if ($validator->fails()) {
             return response()->json(['status' => 'error', 'message' => $validator->messages()->first()]);
         }
-
         $user=User::create([
             'name'=>$request->name,
             'slug'=>Str::slug($request->name),
             'email'=>$request->email,
+            'language'=>$request->language,
+            'exam_date'=>$request->exam_date,
             'usertype'=>$request->usertype,
             'password'=>Hash::make($request->password),
             'email_verified_token'=>Str::random(100)
@@ -176,7 +178,7 @@ class Api extends Controller
     public function profile(Request $request)
     {
         $user_id = $request->user_id;
-        $user=User::where('id',$user_id)->get();
+        $user=User::where('id',$user_id)->with('language')->get();
         if(!blank($user)){
             return response()->json(['status'=>'success','message'=>'Data found successfully','data'=>$user]);
         }else{
@@ -512,6 +514,260 @@ class Api extends Controller
 
 
     }
+    public function chatSupportRequest(Request $request)
+    {
+        if($request->usertype == 'User'){
+            if($request->form_status == 1){
+                $support = DB::table('property_notification_contact')->where('property_notification_contact.user_id',$request->user_id)->where('property_notification_contact.form_status',1)
+                ->join('properties', 'property_notification_contact.property_id', '=', 'properties.id')       
+                ->select('property_notification_contact.*','properties.title as properties_name')->get();  
+            }else if($request->form_status == 2){
+                $support = DB::table('property_notification_contact')->where('property_notification_contact.user_id',$request->user_id)->where('property_notification_contact.form_status',2)
+                ->join('properties', 'property_notification_contact.property_id', '=', 'properties.id')       
+                ->select('property_notification_contact.*','properties.title as properties_name')->get();  
+            }
+        }elseif($request->usertype == 'Agent'){
+            if($request->form_status == 1){
+                $support = DB::table('property_notification_contact')->where('property_notification_contact.user_id',$request->user_id)->where('property_notification_contact.form_status',1)
+                ->join('properties', 'property_notification_contact.property_id', '=', 'properties.id')       
+                ->select('property_notification_contact.*','properties.title as properties_name')->get();  
+            }else if($request->form_status == 2){
+                $support = DB::table('property_notification_contact')->where('property_notification_contact.agent_id',$request->user_id)->where('property_notification_contact.form_status',2)
+                ->join('properties', 'property_notification_contact.property_id', '=', 'properties.id')       
+                ->select('property_notification_contact.*','properties.title as properties_name')->get();  
+            }
+        }
+        
+        if($support){
+            $notification='Data found Successfully';
+            $notification=array('messege'=>$notification,'status'=>'success','data'=>$support);
+            return response()->json($notification);
+        }{
+            $notification='Data not found!';
+            $notification=array('messege'=>$notification,'status'=>'error','data'=>[]);
+            return response()->json($notification);
+        }
+    }
+    public function chatSupportRequestUpdate(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'request_id'=>'required',
+            'status'=>'required',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['status' => 'error', 'message' => $validator->messages()->first()]);
+        }
+
+        $update = DB::table('property_notification_contact')->where('id',$request->request_id)->update(array('status' => $request->status));
+        
+        if($update){
+            $notification='Status Updated Successfully';
+            $message=$notification;
+            return response()->json(['status'=>'success','message'=>$notification]);
+        }else{
+            $notification='Status Not Updated!';
+            $message=$notification;
+            return response()->json(['status'=>'error','message'=>$notification]);
+        }
+    }
+    public function getConversations(Request $request)
+   {
+        $validator = Validator::make($request->all(), [
+            'message_id'=>'required',
+            'propertyId'=>'required',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['status' => 'error', 'message' => $validator->messages()->first()]);
+        }
+
+        $conversations =  MessageComment::where(['message_id'=>$request->message_id, 'propertyId' => $request->propertyId])->with('user')->get();
+        if($conversations){
+            $notification='Data found Successfully';
+            $notification=array('messege'=>$notification,'status'=>'success','data'=>$conversations);
+            return response()->json($notification);
+        }{
+            $notification='Data not found!';
+            $notification=array('messege'=>$notification,'status'=>'error','data'=>[]);
+            return response()->json($notification);
+        }
+   }
+   public function storeConversations(Request $request)
+    {        
+        $validator = Validator::make($request->all(), [
+            'user_id'=>'required',
+            'message'=>'required',
+            'propertyId'=>'required',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['status' => 'error', 'message' => $validator->messages()->first()]);
+        }
+        if($request->message_id == ''){
+            $message_info = Message::create(
+                [
+                'sender_id' => $request->user_id,
+                'receiver_id' => $request->receiver_id,
+                'property_id' => $request->propertyId
+                ]
+            );
+            $request->message_id = $message_info->id;
+        }
+        $conversation = new MessageComment;
+        $conversation->user_id = $request->user_id;
+        $conversation->message = $request->message;
+        $conversation->message_id = !empty($request) ?  $request->message_id : '';
+        $conversation->propertyId = $request->propertyId;
+        $conversations = $conversation->save();
+        
+        if($conversations){
+            $notification='Message sent Successfully';
+            $notification=array('messege'=>$notification,'status'=>'success','data'=>$conversation);
+            return response()->json($notification);
+        }{
+            $notification='Message not sent!';
+            $notification=array('messege'=>$notification,'status'=>'error','data'=>[]);
+            return response()->json($notification);
+        }
+   }
+   public function supportSendmessage(Request $request)
+   {
+        $validator = Validator::make($request->all(), [
+            'support_id'=>'required',
+            'user_id'=>'required',
+            'message'=>'required',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['status' => 'error', 'message' => $validator->messages()->first()]);
+        }
+
+        $support['support_id'] = $request->support_id;
+        $support['sender_id'] = $request->user_id;
+        $support['receiver_id'] = '0';                
+        $support['message'] = $request->message;
+
+        $conversations = DB::table('support_message')->insert($support);
+        if($conversations){
+            $notification='Message sent Successfully';
+            $notification=array('messege'=>$notification,'status'=>'success','data'=>$support);
+            return response()->json($notification);
+        }{
+            $notification='Message not sent!';
+            $notification=array('messege'=>$notification,'status'=>'error','data'=>[]);
+            return response()->json($notification);
+        }
+   }
+   public function supportGetmessage(Request $request)
+   {
+        $validator = Validator::make($request->all(), [
+            'support_id'=>'required'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['status' => 'error', 'message' => $validator->messages()->first()]);
+        }
+        $support_message = DB::table('support_message')->where('support_id',$request->support_id)->get();
+
+        if($support_message){
+            $notification='Message found Successfully';
+            $notification=array('messege'=>$notification,'status'=>'success','data'=>$support_message);
+            return response()->json($notification);
+        }{
+            $notification='Message not found!';
+            $notification=array('messege'=>$notification,'status'=>'error','data'=>[]);
+            return response()->json($notification);
+        }
+   }
+   
+   public function getChatUser(Request $request)
+   {
+        $validator = Validator::make($request->all(), [
+            
+            'user_id'=>'required'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['status' => 'error', 'message' => $validator->messages()->first()]);
+        }
+        $user_messages = [];
+        if($request->usertype == 'Agent'){
+
+            $getIds = DB::table("messages")->select(DB::raw("GROUP_CONCAT(DISTINCT sender_id) as user_id"),DB::raw("GROUP_CONCAT(DISTINCT property_id) as property_id"))->where(['receiver_id'=>$request->user_id])->first();
+            if(isset($getIds) && !empty($getIds)){
+                $ids = explode(',', $getIds->user_id);
+                $user_messages = User::where('id','!=', $request->user_id)->whereIn('id', $ids)->get();
+                $property_ids = explode(',', $getIds->property_id);
+                $property_name = Property::select('title')->whereIn('id', $property_ids)->get();
+                foreach ($property_name as $index => $value) {
+                    $user_messages[$index]->property_names = $value['title'];
+                }
+            }
+        
+        }else if($request->usertype == 'User'){
+            $getIds = DB::table("messages")->select(DB::raw("GROUP_CONCAT(DISTINCT receiver_id) as agent_id"),DB::raw("GROUP_CONCAT(DISTINCT property_id) as property_id"))->where(['sender_id'=>$request->user_id])->first();
+            if(isset($getIds) && !empty($getIds)){
+                $ids = explode(',', $getIds->agent_id);
+                $user_messages = User::where('id','!=', $request->user_id)->whereIn('id', $ids)->get();
+                $property_ids = explode(',', $getIds->property_id);
+                $property_name = Property::select('title')->whereIn('id', $property_ids)->get();
+                foreach ($property_name as $index => $value) {
+                    $user_messages[$index]->property_names = $value['title'];
+                }
+            }
+        }
+        if($user_messages){
+            $notification='Data found Successfully';
+            $notification=array('messege'=>$notification,'status'=>'success','data'=>$user_messages);
+            return response()->json($notification);
+        }{
+            $notification='Data not found!';
+            $notification=array('messege'=>$notification,'status'=>'error','data'=>[]);
+            return response()->json($notification);
+        }
+   }
+  
+   public function getMessageId(Request $request)
+   {
+        $validator = Validator::make($request->all(), [
+            
+            'user_id'=>'required',
+            'receiver_id'=>'required'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['status' => 'error', 'message' => $validator->messages()->first()]);
+        }
+
+        $support = DB::table('messages')->where(['messages.sender_id'=>$request->user_id])->where('messages.receiver_id',$request->receiver_id)
+        ->select('messages.id as message_id','messages.property_id as property_id')->first();
+        if(empty($support)){
+            $support = DB::table('messages')->where(['messages.receiver_id'=>$request->user_id])->where('messages.sender_id',$request->receiver_id)
+            ->select('messages.id as message_id','messages.property_id as property_id')->first();
+        }  
+        
+        if($support){
+            $notification='Data found Successfully';
+            $notification=array('messege'=>$notification,'status'=>'success','data'=>$support);
+            return response()->json($notification);
+        }else{
+            $notification='Data not found!';
+            $notification=array('messege'=>$notification,'status'=>'error','data'=>[]);
+            return response()->json($notification);
+        }
+   }
+   public function property_status(Request $request){
+        $update = DB::table('properties')->where('id',$request->property_id)->update(array('status' => $request->status));
+        if($update){
+            $notification='Your Status Updated Successfully';
+            return response()->json(['status'=>'success','message'=>$notification]);
+        }else{
+            $notification='Your Status Not Updated!';
+            return response()->json(['status'=>'error','message'=>$notification]);
+        }
+
+    }
     
     public function agentprofile(Request $request)
     {
@@ -699,7 +955,7 @@ class Api extends Controller
     public function sendFirebasePush($tokens, $data)
     {
         $serverKey = env("SSH_KEY");
-        // prep the bundle
+        
         $msg = array
         (
             'message'   => $data['message'],
@@ -818,6 +1074,17 @@ class Api extends Controller
     public function testFomate(){
        
         $testformate=TextFormate::orderBy('id','asc')->get();
+        if($testformate){
+            $notification='Data found successfully';
+            return response()->json(['status'=>'success','message'=>$notification,'data'=>$testformate]);
+        }else{
+            $notification='Data Not found!';
+            return response()->json(['status'=>'error','message'=>$notification]);
+        }
+    }
+    public function language(){
+       
+        $testformate=Language::orderBy('id','asc')->get();
         if($testformate){
             $notification='Data found successfully';
             return response()->json(['status'=>'success','message'=>$notification,'data'=>$testformate]);
