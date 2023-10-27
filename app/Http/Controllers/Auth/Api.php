@@ -246,10 +246,10 @@ class Api extends Controller
         return json_encode($notification);
     }
     
-    public function addtowishlist(Request $request){
+    public function addtoFavorite(Request $request){
         // end
         $validator = Validator::make($request->all(), [
-            'property_id'=>'required',
+            'vocabulary_id'=>'required',
             'user_id'=>'required'
         ]);
 
@@ -257,36 +257,36 @@ class Api extends Controller
             return response()->json(['status' => 'error', 'message' => $validator->messages()->first()]);
         }
 
-        $isExist=Wishlist::where(['property_id'=>$request->property_id, 'user_id'=>$request->user_id])->first();
+        $isExist=Wishlist::where(['vocabulary_id'=>$request->vocabulary_id, 'user_id'=>$request->user_id])->first();
         if(!$isExist){
             $wishlist=new Wishlist();
             $wishlist->user_id=$request->user_id;
-            $wishlist->property_id=$request->property_id;
+            $wishlist->vocabulary_id=$request->vocabulary_id;
             $wishlist->save();
 
             $notify_lang=NotificationText::all();
-            $notification=$notify_lang->where('lang_key','wishlist')->first()->custom_text;
+            $notification='Favorite added successfully';
             $notification=array('messege'=>$notification,'status'=>'success');
             return response()->json($notification);
         }else{
             $notify_lang=NotificationText::all();
-            $notification=$notify_lang->where('lang_key','already_wishlist')->first()->custom_text;
+            $notification='Already added in Favorite';
             $notification=array('messege'=>$notification,'status'=>'error');
             return response()->json($notification);
         }
     }
     
-    public function deleteWishlist(Request $request){
+    public function deleteFavorite(Request $request){
 
         $validator = Validator::make($request->all(), [
-            'property_id'=>'required'
+            'vocabulary_id'=>'required'
         ]);
 
         if ($validator->fails()) {
             return response()->json(['status' => 'error', 'message' => $validator->messages()->first()]);
         }
 
-        $wishlist=Wishlist::where('property_id',$request->property_id)->delete();
+        $wishlist=Wishlist::where('vocabulary_id',$request->vocabulary_id)->delete();
         
         $notify_lang=NotificationText::all();
         if(!blank($wishlist)){
@@ -294,13 +294,13 @@ class Api extends Controller
             $notification=array('messege'=>$notification,'status'=>'success');
             return response()->json($notification);
         }else{
-            $notification="Your Property not remove in wishlist";
+            $notification="Your Vocabulary not remove in Favorite";
             $notification=array('messege'=>$notification,'status'=>'error');
             return response()->json($notification);
 
         }
     }
-    public function getwishlist(Request $request){
+    public function getFavorite(Request $request){
 
         $validator = Validator::make($request->all(), [
             'user_id'=>'required'
@@ -309,26 +309,14 @@ class Api extends Controller
         if ($validator->fails()) {
             return response()->json(['status' => 'error', 'message' => $validator->messages()->first()]);
         }
+        $wishlist=Wishlist::where('user_id',$request->user_id)->with('vocabulary')->get();
 
-        $properties = Property::where('properties.status',1)->where('wishlists.user_id',$request->user_id)->orderBy('properties.id','desc')
-        ->select('properties.*', 'users.name as username', 'users.image as userimage','cities.name as city_name')
-        ->join('wishlists', 'wishlists.property_id', '=', 'properties.id')
-        ->join('users', 'users.id', '=', 'properties.user_id')
-        ->join('cities', 'cities.id', '=', 'properties.city_id')
-        ->get();
-        foreach($properties as $propertimage)
-        {
-            foreach ($propertimage->propertyImages as $value) {
-                $properties->prop_img = public_path().'/'.$value;
-            }
-        }
-
-        if(!blank($properties)){
-            $notification='Wishlist Found Successfully';
-            $notification=array('messege'=>$notification,'status'=>'success','data'=>$properties);
+        if(!blank($wishlist)){
+            $notification='Favorite Found Successfully';
+            $notification=array('messege'=>$notification,'status'=>'success','data'=>$wishlist);
             return response()->json($notification);
         }else{
-            $notification="Wishlist not Found";
+            $notification="Favorite not Found";
             $notification=array('messege'=>$notification,'status'=>'error','data'=>[]);
             return response()->json($notification);
 

@@ -101,5 +101,10 @@ Route::get('testFomate',[Api::class,'testFomate'])->name('testFomate');
 // Language
 Route::get('language',[Api::class,'language'])->name('language');
 
+// Favorite
+Route::post('addtoFavorite',[Api::class,'addtoFavorite'])->name('addtoFavorite');
+Route::post('deleteFavorite',[Api::class,'deleteFavorite'])->name('deleteFavorite');
+Route::post('getFavorite',[Api::class,'getFavorite'])->name('getFavorite');
+
 
 
