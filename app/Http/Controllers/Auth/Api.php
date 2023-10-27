@@ -105,14 +105,14 @@ class Api extends Controller
                         $notify_lang=NotificationText::all();
                         $notification=$notify_lang->where('lang_key','login')->first()->custom_text;
                         $notification=array('messege'=>$notification,'status'=>'success','data'=>$user);
-                        return json_encode($notification);
+                        return response()->json($notification);
                     
                     }
                 }else{
                     $notify_lang=NotificationText::all();
                     $notification=$notify_lang->where('lang_key','invalid_login')->first()->custom_text;
                     $notification=array('messege'=>$notification,'status'=>'error');
-                    return json_encode($notification);
+                    return response()->json($notification);
                 
                 }
 
@@ -122,7 +122,7 @@ class Api extends Controller
                 $notification='Please Verify your account'; 
                 $notification=array('messege'=>$notification,'status'=>'error');              
                 
-                return json_encode($notification);
+                return response()->json($notification);
         
             }
         }else{
@@ -130,7 +130,7 @@ class Api extends Controller
             $notification=$notify_lang->where('lang_key','email_not_exist')->first()->custom_text;
             $notification=array('messege'=>$notification,'status'=>'error');
 
-            return json_encode($notification);
+            return response()->json($notification);
         }
 
            
@@ -142,6 +142,8 @@ class Api extends Controller
         $valid_lang=ValidationText::all();
         $validator = Validator::make($request->all(), [
             'name'=>'required',
+            'language'=>'required',
+            'exam_date'=>'required',
             'email'=>'required|unique:users|email',
             'password'=>'required|min:3',
             'g-recaptcha-response'=>new Captcha()
@@ -243,7 +245,7 @@ class Api extends Controller
         $notify_lang=NotificationText::all();
         $notification=$notify_lang->where('lang_key','update')->first()->custom_text;
         $notification=array('messege'=>$notification,'status'=>'success');
-        return json_encode($notification);
+        return response()->json($notification);
     }
     
     public function addtowishlist(Request $request){
