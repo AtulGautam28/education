@@ -13,4 +13,7 @@ class Wishlist extends Model
     public function property(){
         return $this->belongsTo(Property::class);
     }
+    public function vocabulary(){
+        return $this->belongsTo(Blog::class);
+    }
 }
