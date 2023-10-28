@@ -106,5 +106,8 @@ Route::post('addtoFavorite',[Api::class,'addtoFavorite'])->name('addtoFavorite')
 Route::post('deleteFavorite',[Api::class,'deleteFavorite'])->name('deleteFavorite');
 Route::post('getFavorite',[Api::class,'getFavorite'])->name('getFavorite');
 
+//Filter Vocabulary Category wise
+Route::post('filterVocabulary',[Api::class,'filterVocabulary'])->name('filterVocabulary');
+
 
 

@@ -105,14 +105,14 @@ class Api extends Controller
                         $notify_lang=NotificationText::all();
                         $notification=$notify_lang->where('lang_key','login')->first()->custom_text;
                         $notification=array('messege'=>$notification,'status'=>'success','data'=>$user);
-                        return json_encode($notification);
+                        return response()->json($notification);
                     
                     }
                 }else{
                     $notify_lang=NotificationText::all();
                     $notification=$notify_lang->where('lang_key','invalid_login')->first()->custom_text;
                     $notification=array('messege'=>$notification,'status'=>'error');
-                    return json_encode($notification);
+                    return response()->json($notification);
                 
                 }
 
@@ -122,7 +122,7 @@ class Api extends Controller
                 $notification='Please Verify your account'; 
                 $notification=array('messege'=>$notification,'status'=>'error');              
                 
-                return json_encode($notification);
+                return response()->json($notification);
         
             }
         }else{
@@ -130,7 +130,7 @@ class Api extends Controller
             $notification=$notify_lang->where('lang_key','email_not_exist')->first()->custom_text;
             $notification=array('messege'=>$notification,'status'=>'error');
 
-            return json_encode($notification);
+            return response()->json($notification);
         }
 
            
@@ -142,6 +142,8 @@ class Api extends Controller
         $valid_lang=ValidationText::all();
         $validator = Validator::make($request->all(), [
             'name'=>'required',
+            'language'=>'required',
+            'exam_date'=>'required',
             'email'=>'required|unique:users|email',
             'password'=>'required|min:3',
             'g-recaptcha-response'=>new Captcha()
@@ -243,7 +245,7 @@ class Api extends Controller
         $notify_lang=NotificationText::all();
         $notification=$notify_lang->where('lang_key','update')->first()->custom_text;
         $notification=array('messege'=>$notification,'status'=>'success');
-        return json_encode($notification);
+        return response()->json($notification);
     }
     
     public function addtoFavorite(Request $request){
@@ -279,14 +281,14 @@ class Api extends Controller
     public function deleteFavorite(Request $request){
 
         $validator = Validator::make($request->all(), [
-            'vocabulary_id'=>'required'
+            'favorite_id'=>'required'
         ]);
 
         if ($validator->fails()) {
             return response()->json(['status' => 'error', 'message' => $validator->messages()->first()]);
         }
 
-        $wishlist=Wishlist::where('vocabulary_id',$request->vocabulary_id)->delete();
+        $wishlist=Wishlist::where('id',$request->favorite_id)->delete();
         
         $notify_lang=NotificationText::all();
         if(!blank($wishlist)){
@@ -860,7 +862,8 @@ class Api extends Controller
             return response()->json(['status'=>'success','message'=>$notification]);
         
             } catch (Stripe\Exception\CardException $e) {
-                return $e;
+                // return $e;
+                return response()->json(['status' => 'error','message' => $e->getMessage()]);
             }
 
         }else{
@@ -1073,6 +1076,17 @@ class Api extends Controller
     public function language(){
        
         $testformate=Language::orderBy('id','asc')->get();
+        if($testformate){
+            $notification='Data found successfully';
+            return response()->json(['status'=>'success','message'=>$notification,'data'=>$testformate]);
+        }else{
+            $notification='Data Not found!';
+            return response()->json(['status'=>'error','message'=>$notification]);
+        }
+    }
+    public function filterVocabulary(Request $request){
+       
+        $testformate=Blog::where('blog_category_id',$request->vocabulary_category_id)->orderBy('id','asc')->get();
         if($testformate){
             $notification='Data found successfully';
             return response()->json(['status'=>'success','message'=>$notification,'data'=>$testformate]);
