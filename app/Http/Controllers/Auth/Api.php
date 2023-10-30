@@ -895,9 +895,15 @@ class Api extends Controller
             return response()->json(['status'=>'error','message'=>$notification]);
         }
     }
-    public function vocabulary()
+    public function vocabulary(Request $request)
     {
         $blogs=Blog::with('category')->get();
+        foreach ($blogs as $key => $value) {
+            if($value->id && $request->user_id){
+                $favorite_id = Wishlist::where(['vocabulary_id'=>$value->id, 'user_id'=>$request->user_id])->get();
+            }
+            $blogs[$key]->favorite_id = $favorite_id;
+        }
         if($blogs){
             $notification='Data found successfully';
             return response()->json(['status'=>'success','message'=>$notification,'data'=>$blogs]);
@@ -917,9 +923,9 @@ class Api extends Controller
             return response()->json(['status'=>'error','message'=>$notification]);
         }
     }
-    public function segments()
+    public function segments(Request $request)
     {
-        $segments=Segments::all();
+        $segments=Segments::where('practice_id',$request->practice_id)->get();
         foreach ($segments as $key => $value) {
             $segments->practice  = $value->practice->title;
         }

@@ -75,11 +75,11 @@ Route::post('agentprofile',[Api::class,'agentprofile'])->name('agentprofile');
 Route::get('faq',[Api::class,'faq'])->name('faq');
 
 Route::get('vocabulary_category',[Api::class,'vocabulary_category'])->name('vocabulary_category');
-Route::get('vocabulary',[Api::class,'vocabulary'])->name('vocabulary');
+Route::post('vocabulary',[Api::class,'vocabulary'])->name('vocabulary');
 //Practice Dialogue
 Route::get('practiceDialogue',[Api::class,'practiceDialogue'])->name('practiceDialogue');
 //Practice Dialogue Segments
-Route::get('segments',[Api::class,'segments'])->name('segments');
+Route::post('segments',[Api::class,'segments'])->name('segments');
 
 // Purchase a Plan
 Route::post('stripePayment',[Api::class,'stripePayment'])->name('stripePayment');
