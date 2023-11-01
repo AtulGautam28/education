@@ -77,7 +77,7 @@ Route::get('faq',[Api::class,'faq'])->name('faq');
 Route::get('vocabulary_category',[Api::class,'vocabulary_category'])->name('vocabulary_category');
 Route::post('vocabulary',[Api::class,'vocabulary'])->name('vocabulary');
 //Practice Dialogue
-Route::get('practiceDialogue',[Api::class,'practiceDialogue'])->name('practiceDialogue');
+Route::post('practiceDialogue',[Api::class,'practiceDialogue'])->name('practiceDialogue');
 //Practice Dialogue Segments
 Route::post('segments',[Api::class,'segments'])->name('segments');
 
@@ -108,6 +108,10 @@ Route::post('getFavorite',[Api::class,'getFavorite'])->name('getFavorite');
 
 //Filter Vocabulary Category wise
 Route::post('filterVocabulary',[Api::class,'filterVocabulary'])->name('filterVocabulary');
+
+//Plan Purchase History
+Route::post('planPurchaseHistory',[Api::class,'planPurchaseHistory'])->name('planPurchaseHistory');
+Route::get('lastMinutesPractice',[Api::class,'lastMinutesPractice'])->name('lastMinutesPractice');
 
 
 

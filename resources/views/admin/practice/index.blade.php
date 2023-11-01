@@ -89,7 +89,16 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-12">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="status">Is Last Minutes Practice</label>
+                                    <select name="is_lastminutes" id="status" class="form-control">
+                                        <option value="1">{{ $websiteLang->where('lang_key','yes')->first()->custom_text }}</option>
+                                        <option value="0">{{ $websiteLang->where('lang_key','no')->first()->custom_text }}</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="status">{{ $websiteLang->where('lang_key','status')->first()->custom_text }}</label>
                                     <select name="status" id="status" class="form-control">
@@ -149,7 +158,16 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-md-12">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="status">Is Last Minutes Practices</label>
+                                        <select name="is_lastminutes" id="status" class="form-control">
+                                            <option {{ $item->is_lastminutes==1 ? 'selected' : '' }} value="1">{{ $websiteLang->where('lang_key','yes')->first()->custom_text }}</option>
+                                            <option {{ $item->is_lastminutes==0 ? 'selected' : '' }} value="0">{{ $websiteLang->where('lang_key','no')->first()->custom_text }}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="status">{{ $websiteLang->where('lang_key','status')->first()->custom_text }}</label>
                                         <select name="status" id="status" class="form-control">

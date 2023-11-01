@@ -806,7 +806,7 @@ class Api extends Controller
             'card' => [
                 'number' => $request->number,
                 'exp_month' => $request->exp_month,
-                'exp_year' => $request->exp_year,
+                'exp_year' => '20'.$request->exp_year,
                 'cvc' => $request->cvc,
             ],
             ]);
@@ -912,9 +912,14 @@ class Api extends Controller
             return response()->json(['status'=>'error','message'=>$notification]);
         }
     }
-    public function practiceDialogue()
+    public function practiceDialogue(Request $request)
     {
-        $practices=Practice::all();
+        if($request->is_lastminutes == 1){
+            
+            $practices=Practice::where('is_lastminutes',$request->is_lastminutes)->get();
+        }else{
+            $practices=Practice::all();
+        }
         if($practices){
             $notification='Data found successfully';
             return response()->json(['status'=>'success','message'=>$notification,'data'=>$practices]);
@@ -1101,5 +1106,26 @@ class Api extends Controller
             return response()->json(['status'=>'error','message'=>$notification]);
         }
     }
-
+    public function planPurchaseHistory(Request $request)
+    {
+        $orders = Order::where(['payment_status'=> 1,'user_id'=>$request->user_id])->orderBy('id', 'desc')->get();
+        if(!blank($orders)){
+            $notification='Data found successfully';
+            return response()->json(['status'=>'success','message'=>$notification,'data'=>$orders]);
+        }else{
+            $notification='Data Not found!';
+            return response()->json(['status'=>'error','message'=>$notification]);
+        }
+    }
+        public function lastMinutesPractice()
+    {
+        $practices=Practice::with('segments')->get();
+        if($practices){
+            $notification='Data found successfully';
+            return response()->json(['status'=>'success','message'=>$notification,'data'=>$practices]);
+        }else{
+            $notification='Data Not found!';
+            return response()->json(['status'=>'error','message'=>$notification]);
+        }
+    }
 }

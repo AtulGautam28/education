@@ -39,6 +39,7 @@ class PracticeController extends Controller
         ]);
         $practice=new Practice();
         $practice->title=$request->title;
+        $practice->is_lastminutes=$request->is_lastminutes;
         $practice->description=$request->description;
         $practice->instructions=$request->instructions;
         $practice->status=$request->status;
@@ -64,6 +65,7 @@ class PracticeController extends Controller
         $practice->title=$request->title;
         $practice->description=$request->description;
         $practice->instructions=$request->instructions;
+        $practice->is_lastminutes=$request->is_lastminutes;
         $practice->status=$request->status;
         $practice->save();
 
