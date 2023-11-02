@@ -46,7 +46,7 @@ class BlogController extends Controller
             'title'=>'required|unique:blogs',
             'slug'=>'required|unique:blogs',
             'category'=>'required',
-            'image'=>'required',
+            // 'image'=>'required',
             // 'image'=>'required',
             // 'short_description'=>'required',
             // 'description'=>'required',
