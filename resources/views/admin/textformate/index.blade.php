@@ -3,6 +3,21 @@
 <title>Tutorial</title>
 @endsection
 @section('admin-content')
+<style>
+.block-ellipsis {
+    display: block;
+    display: -webkit-box;
+    max-width: 100%;
+    height: 100px;
+    margin: 0 auto;
+    font-size: 14px;
+    line-height: 1;
+    -webkit-line-clamp: 8;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+</style>
     <!-- DataTales Example -->
     <div class="container-fluid">
         <h6 class="h3 mb-2 text-gray-800"><a href="{{ route('admin.textformate-create') }}" class="btn btn-primary"> New Test Formate </a></h6>
@@ -30,7 +45,7 @@
                                 <td>{{ $textformates->title }}</td>
                                 <td> 
                                     <img src="{{ url($textformates->image) }}"  alt=""></td>                           
-                                    <td>{!! $textformates->discription !!}</td>                       
+                                    <td class="block-ellipsis">{!! $textformates->discription !!}</td>                       
                                 <td>
                                     <a onclick="return confirm('{{ $confirmNotify }}')" href="{{ route('admin.textformate-delete',$textformates->id) }}" class="btn btn-danger btn-sm"><i class="fas fa-trash" aria-hidden="true"></i></a>
                                     <a href="{{ route('admin.textformate-edit',$textformates->id) }}" class="btn btn-info btn-sm"><i class="fas fa-edit" aria-hidden="true"></i></a>

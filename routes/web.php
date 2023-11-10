@@ -110,6 +110,10 @@ Route::get('reset-password/{token}',[ForgotPasswordController::class,'resetPassw
 Route::post('store-reset-password/{token}',[ForgotPasswordController::class,'storeResetData'])->name('store.reset.password');
 
 
+// Route::group(['as'=> 'user.', 'prefix' => 'user'],function (){
+
+// Route::get('dashboard',[AdminDashboardController::class,'index'])->name('dashboard');
+// })
 // admin routes
 
 Route::group(['as'=> 'admin.', 'prefix' => 'admin'],function (){

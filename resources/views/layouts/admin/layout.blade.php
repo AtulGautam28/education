@@ -255,7 +255,7 @@
                 </div>
             </li>
 
-            <li class="nav-item">
+            <li class="nav-item d-none">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#setting-pages"
                     aria-expanded="true" aria-controls="setting-pages">
                     <i class="fas fa-cog"></i>
