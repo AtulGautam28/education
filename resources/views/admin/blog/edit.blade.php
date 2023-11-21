@@ -78,6 +78,22 @@
                         <textarea class="summernote" id="summernote" name="description">{{ $blog->description }}</textarea>
                     </div> --}}
                     <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="seo_description">{{ $websiteLang->where('lang_key','seo_des')->first()->custom_text }}</label>
+                                <textarea name="seo_description" id="seo_description" cols="30" rows="3" class="form-control" >{{ $blog->seo_description }}</textarea>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="status">Gender</label>
+                                <select name="gender" id="status" class="form-control">
+                                    <option >Select Gender</option>
+                                    <option {{ $blog->gender=='male' ? 'selected' : '' }} value="male">Male</option>
+                                    <option {{ $blog->gender=='female' ? 'selected' : '' }} value="female">Female</option>
+                                </select>
+                            </div>
+                        </div>
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="status">{{ $websiteLang->where('lang_key','status')->first()->custom_text }}</label>
@@ -96,12 +112,6 @@
                                 </select>
                             </div>
                         </div> --}}
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="seo_description">{{ $websiteLang->where('lang_key','seo_des')->first()->custom_text }}</label>
-                                <textarea name="seo_description" id="seo_description" cols="30" rows="3" class="form-control" >{{ $blog->seo_description }}</textarea>
-                            </div>
-                        </div>
                     </div>
 
                     

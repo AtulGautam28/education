@@ -154,7 +154,17 @@
                             </div> --}}
                         </div>
                         <div class="row">
-                            <div class="col-md-12">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="status">Gender</label>
+                                    <select name="gender" id="status" class="form-control">
+                                        <option >Select Gender</option>
+                                        <option value="male">Male</option>
+                                        <option value="female">Female</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="status">{{
                                         $websiteLang->where('lang_key','status')->first()->custom_text }}</label>
@@ -270,7 +280,17 @@
                             </div> --}}
                         </div>
                         <div class="row">
-                            <div class="col-md-12">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="status">Gender</label>
+                                    <select name="gender" id="status" class="form-control">
+                                        <option >Select Gender</option>
+                                        <option {{ $item->gender=='male' ? 'selected' : '' }} value="male">Male</option>
+                                        <option {{ $item->gender=='female' ? 'selected' : '' }} value="female">Female</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="status">{{
                                         $websiteLang->where('lang_key','status')->first()->custom_text }}</label>

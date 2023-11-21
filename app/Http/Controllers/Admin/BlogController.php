@@ -49,7 +49,7 @@ class BlogController extends Controller
             // 'image'=>'required',
             // 'image'=>'required',
             // 'short_description'=>'required',
-            // 'description'=>'required',
+            'gender'=>'required',
             'status'=>'required',
             // 'show_homepage'=>'required',
         ];
@@ -80,6 +80,7 @@ class BlogController extends Controller
         $blog->admin_id=$admin->id;
         $blog->title=$request->title;
         $blog->slug=$request->slug;
+        $blog->gender=$request->gender;
         // $blog->image=$audio_path;
         $blog->blog_category_id=$request->category;
         $blog->description=$request->description;
@@ -116,7 +117,7 @@ class BlogController extends Controller
             'slug'=>'required|unique:blogs,slug,'.$blog->id,
             'category'=>'required',
             // 'description'=>'required',
-            // 'short_description'=>'required',
+            'gender'=>'required',
             'status'=>'required',
             // 'show_homepage'=>'required',
         ];
@@ -147,6 +148,7 @@ class BlogController extends Controller
 
         $blog->title=$request->title;
         $blog->slug=$request->slug;
+        $blog->gender=$request->gender;
         $blog->description=$request->description;
         $blog->short_description=$request->short_description;
         $blog->blog_category_id=$request->category;

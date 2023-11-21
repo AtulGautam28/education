@@ -45,7 +45,7 @@ class SegmentsController extends Controller
             'question'=>'required',
             'answer'=>'required',
             // 'question_audio'=>'required',
-            // 'answer_audio'=>'required',
+            'gender'=>'required',
             'practice_id'=>'required',
         ]);
 
@@ -69,6 +69,7 @@ class SegmentsController extends Controller
         $segments=new Segments();
         $segments->practice_id=$request->practice_id;
         $segments->question=$request->question;
+        $segments->gender=$request->gender;
         $segments->answer=$request->answer;
         // $segments->answer_audio=$answer_audio_path;
         // $segments->question_audio=$question_audio_path;
@@ -87,6 +88,7 @@ class SegmentsController extends Controller
             'question'=>'required',
             'answer'=>'required',
             'practice_id'=>'required',
+            'gender'=>'required',
         ]);
         
         $segments=Segments::find($id);
@@ -94,6 +96,7 @@ class SegmentsController extends Controller
         $segments->practice_id=$request->practice_id;
         $segments->question=$request->question;
         $segments->answer=$request->answer;
+        $segments->gender=$request->gender;
 
         $segments->status=$request->status;
 

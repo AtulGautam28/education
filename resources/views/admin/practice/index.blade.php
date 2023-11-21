@@ -91,6 +91,16 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
+                                    <label for="status">Gender</label>
+                                    <select name="gender" id="status" class="form-control">
+                                        <option >Select Gender</option>
+                                        <option value="male">Male</option>
+                                        <option value="female">Female</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
                                     <label for="status">Is Last Minutes Practice</label>
                                     <select name="is_lastminutes" id="status" class="form-control">
                                         <option value="1">{{ $websiteLang->where('lang_key','yes')->first()->custom_text }}</option>
@@ -158,6 +168,16 @@
                                 </div>
                             </div>
                             <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="status">Gender</label>
+                                        <select name="gender" id="status" class="form-control">
+                                            <option >Select Gender</option>
+                                            <option {{ $item->gender=='male' ? 'selected' : '' }} value="male">Male</option>
+                                            <option {{ $item->gender=='female' ? 'selected' : '' }} value="female">Female</option>
+                                        </select>
+                                    </div>
+                                </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="status">Is Last Minutes Practices</label>

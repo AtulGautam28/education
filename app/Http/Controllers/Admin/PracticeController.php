@@ -36,11 +36,13 @@ class PracticeController extends Controller
             'title'=>'required',
             'description'=>'required',
             'instructions'=>'required',
+            'gender'=>'required',
         ]);
         $practice=new Practice();
         $practice->title=$request->title;
         $practice->is_lastminutes=$request->is_lastminutes;
         $practice->description=$request->description;
+        $practice->gender=$request->gender;
         $practice->instructions=$request->instructions;
         $practice->status=$request->status;
         $practice->save();
@@ -59,12 +61,14 @@ class PracticeController extends Controller
             'title'=>'required',
             'description'=>'required',
             'instructions'=>'required',
+            'gender'=>'required',
         ]);
         $practice=Practice::find($id);
 
         $practice->title=$request->title;
         $practice->description=$request->description;
         $practice->instructions=$request->instructions;
+        $practice->gender=$request->gender;
         $practice->is_lastminutes=$request->is_lastminutes;
         $practice->status=$request->status;
         $practice->save();

@@ -68,6 +68,22 @@
 
                         
                         <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="seo_description">Meaning Description</label>
+                                    <textarea name="seo_description" id="seo_description" cols="30" rows="3" class="form-control" >{{ old('seo_description') }}</textarea>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="status">Gender</label>
+                                    <select name="gender" id="status" class="form-control">
+                                        <option >Select Gender</option>
+                                        <option value="male">Male</option>
+                                        <option value="female">Female</option>
+                                    </select>
+                                </div>
+                            </div>
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="status">{{ $websiteLang->where('lang_key','status')->first()->custom_text }}</label>
@@ -75,12 +91,6 @@
                                         <option  value="1">{{ $websiteLang->where('lang_key','active')->first()->custom_text }}</option>
                                         <option  value="0">{{ $websiteLang->where('lang_key','inactive')->first()->custom_text }}</option>
                                     </select>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="seo_description">Meaning Description</label>
-                                    <textarea name="seo_description" id="seo_description" cols="30" rows="3" class="form-control" >{{ old('seo_description') }}</textarea>
                                 </div>
                             </div>
                             {{-- <div class="col-md-6">
