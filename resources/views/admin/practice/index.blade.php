@@ -113,7 +113,51 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-12">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="status">Gender</label>
+                                    <select name="gender" id="status" class="form-control">
+                                        <option >Select Gender</option>
+                                        <option value="male">Male</option>
+                                        <option value="female">Female</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="status">Is Last Minutes Practice</label>
+                                    <select name="is_lastminutes" id="status" class="form-control">
+                                        <option value="1">{{ $websiteLang->where('lang_key','yes')->first()->custom_text }}</option>
+                                        <option value="0">{{ $websiteLang->where('lang_key','no')->first()->custom_text }}</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="subjects">Subjects</label>
+                                    <select name="subject_id" id="subjects" class="form-control">
+                                        <option value="">{{
+                                            $websiteLang->where('lang_key','select_cat')->first()->custom_text }}
+                                        </option>
+                                        @foreach ($subjects as $item)
+                                        <option {{ old('subjects')==$item->id ? 'selected' : '' }} value="{{ $item->id
+                                            }}">{{ $item->title }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="status">Is Last Minutes Practice</label>
+                                    <select name="is_lastminutes" id="status" class="form-control ">
+                                        <option value="1">{{ $websiteLang->where('lang_key','yes')->first()->custom_text
+                                            }}</option>
+                                        <option value="0">{{ $websiteLang->where('lang_key','no')->first()->custom_text
+                                            }}</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="status">{{
                                         $websiteLang->where('lang_key','status')->first()->custom_text }}</label>
@@ -198,8 +242,28 @@
                                     </select>
                                 </div>
                             </div>
+<<<<<<< HEAD
                             <div class="row">
-                                <div class="col-md-12">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="status">Gender</label>
+                                        <select name="gender" id="status" class="form-control">
+                                            <option >Select Gender</option>
+                                            <option {{ $item->gender=='male' ? 'selected' : '' }} value="male">Male</option>
+                                            <option {{ $item->gender=='female' ? 'selected' : '' }} value="female">Female</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="status">Is Last Minutes Practices</label>
+                                        <select name="is_lastminutes" id="status" class="form-control">
+                                            <option {{ $item->is_lastminutes==1 ? 'selected' : '' }} value="1">{{ $websiteLang->where('lang_key','yes')->first()->custom_text }}</option>
+                                            <option {{ $item->is_lastminutes==0 ? 'selected' : '' }} value="0">{{ $websiteLang->where('lang_key','no')->first()->custom_text }}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="status">{{ $websiteLang->where('lang_key','status')->first()->custom_text }}</label>
                                         <select name="status" id="status" class="form-control">
@@ -207,8 +271,32 @@
                                             <option {{ $item->status==0 ? 'selected' : '' }} value="0">{{ $websiteLang->where('lang_key','inactive')->first()->custom_text }}</option>
                                         </select>
                                     </div>
+=======
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="status">Is Last Minutes Practices</label>
+                                    <select name="is_lastminutes" id="status" class="form-control">
+                                        <option {{ $item->is_lastminutes==1 ? 'selected' : '' }} value="1">{{
+                                            $websiteLang->where('lang_key','yes')->first()->custom_text }}</option>
+                                        <option {{ $item->is_lastminutes==0 ? 'selected' : '' }} value="0">{{
+                                            $websiteLang->where('lang_key','no')->first()->custom_text }}</option>
+                                    </select>
+>>>>>>> b4dc6dd54144fdb2b739fff0c856cda4136bf3e7
                                 </div>
                             </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="status">{{
+                                        $websiteLang->where('lang_key','status')->first()->custom_text }}</label>
+                                    <select name="status" id="status" class="form-control">
+                                        <option {{ $item->status==1 ? 'selected' : '' }} value="1">{{
+                                            $websiteLang->where('lang_key','active')->first()->custom_text }}</option>
+                                        <option {{ $item->status==0 ? 'selected' : '' }} value="0">{{
+                                            $websiteLang->where('lang_key','inactive')->first()->custom_text }}</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
 
 
                         <button type="button" class="btn btn-danger" data-dismiss="modal">{{

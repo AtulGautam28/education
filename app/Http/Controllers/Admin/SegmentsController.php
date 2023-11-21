@@ -44,8 +44,8 @@ class SegmentsController extends Controller
         $this->validate($request,[
             'question'=>'required',
             'answer'=>'required',
-            'question_audio'=>'required',
-            'answer_audio'=>'required',
+            // 'question_audio'=>'required',
+            // 'answer_audio'=>'required',
             'practice_id'=>'required',
         ]);
 
