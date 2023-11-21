@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\BannerImage;
 use App\ManageText;
 use App\Practice;
+use App\Subject;
 use App\NotificationText;
 use Image;
 use File;
@@ -23,10 +24,15 @@ class PracticeController extends Controller
 
     public function index()
     {
-        $practices=Practice::all();
+        $practices = Practice::select('practices.*', 'subjects.title as subject_name')
+        ->join('subjects', 'subjects.id', '=', 'practices.subject_id')
+        ->get();
+    
+        // $practices=Practice::all();
+        $subjects=Subject::all();
         $websiteLang=ManageText::all();
         $confirmNotify=$websiteLang->where('lang_key','are_you_sure')->first()->custom_text;
-        return view('admin.practice.index',compact('practices','websiteLang','confirmNotify'));
+        return view('admin.practice.index',compact('practices','subjects', 'websiteLang','confirmNotify'));
     }
 
 
@@ -36,11 +42,14 @@ class PracticeController extends Controller
             'title'=>'required',
             'description'=>'required',
             'instructions'=>'required',
+            'subject_id'=>'required',
         ]);
         $practice=new Practice();
         $practice->title=$request->title;
+        $practice->is_lastminutes=$request->is_lastminutes;
         $practice->description=$request->description;
         $practice->instructions=$request->instructions;
+        $practice->subject_id=$request->subject_id;
         $practice->status=$request->status;
         $practice->save();
 
@@ -58,12 +67,15 @@ class PracticeController extends Controller
             'title'=>'required',
             'description'=>'required',
             'instructions'=>'required',
+            'subject_id'=>'required',
         ]);
         $practice=Practice::find($id);
 
         $practice->title=$request->title;
         $practice->description=$request->description;
         $practice->instructions=$request->instructions;
+        $practice->subject_id=$request->subject_id;
+        $practice->is_lastminutes=$request->is_lastminutes;
         $practice->status=$request->status;
         $practice->save();
 

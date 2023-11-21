@@ -33,7 +33,7 @@ class UserController extends Controller
     }
 
     public function index(){
-        $users=User::all();
+        $users=User::orderBy('id','desc')->get();
         $websiteLang=ManageText::all();
         $confirmNotify=$websiteLang->where('lang_key','are_you_sure')->first()->custom_text;
         return view('admin.user.index',compact('users','websiteLang','confirmNotify'));

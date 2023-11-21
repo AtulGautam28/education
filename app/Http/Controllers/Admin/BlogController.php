@@ -46,7 +46,7 @@ class BlogController extends Controller
             'title'=>'required|unique:blogs',
             'slug'=>'required|unique:blogs',
             'category'=>'required',
-            'image'=>'required',
+            // 'image'=>'required',
             // 'image'=>'required',
             // 'short_description'=>'required',
             // 'description'=>'required',
@@ -80,7 +80,7 @@ class BlogController extends Controller
         $blog->admin_id=$admin->id;
         $blog->title=$request->title;
         $blog->slug=$request->slug;
-        $blog->image=$audio_path;
+        // $blog->image=$audio_path;
         $blog->blog_category_id=$request->category;
         $blog->description=$request->description;
         $blog->short_description=$request->short_description;
@@ -95,7 +95,7 @@ class BlogController extends Controller
         $notification=$notify_lang->where('lang_key','create')->first()->custom_text;
         $notification=array('messege'=>$notification,'alert-type'=>'success');
 
-        return redirect()->back()->with($notification);
+        return redirect()->route('admin.blog.index')->with($notification);
     }
 
 
@@ -173,7 +173,7 @@ class BlogController extends Controller
         $old_image=$blog->image;
         BlogComment::where('blog_id',$blog->id)->delete();
         $blog->delete();
-        if(File::exists(public_path().'/'.$old_image))unlink(public_path().'/'.$old_image);
+        // if(File::exists(public_path().'/'.$old_image))unlink(public_path().'/'.$old_image);
 
         $notify_lang=NotificationText::all();
         $notification=$notify_lang->where('lang_key','delete')->first()->custom_text;

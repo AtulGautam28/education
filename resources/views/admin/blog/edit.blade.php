@@ -48,7 +48,7 @@
                                 <input type="text" name="seo_title" class="form-control" id="seo_title" value="{{ $blog->seo_title }}">
                             </div>
                         </div>
-                        <div class="col-md-3">
+                        <!-- <div class="col-md-3">
                             <div class="form-group">
                                 <label for="">Existing Audio</label>
                                 <div>
@@ -64,7 +64,7 @@
                                 <label for="image">Audio</label>
                                 <div><input type="file" name="image" id="image"></div>
                             </div>
-                        </div>
+                        </div> -->
 
                     </div>
                     {{--

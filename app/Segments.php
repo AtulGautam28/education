@@ -14,4 +14,7 @@ class Segments extends Model
     public function practice(){
         return $this->belongsTo(Practice::class);
     }
+    public function practices(){
+        return $this->hasMany(Segments::class);
+    }
 }

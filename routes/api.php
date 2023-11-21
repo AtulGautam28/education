@@ -1,5 +1,5 @@
 <?php
-use App\Http\Controllers\Auth\Api;
+use App\Http\Controllers\Auth\Apis;
 use Illuminate\Support\Facades\Route;
 
 
@@ -14,77 +14,105 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::post('login',[Api::class,'storeLogin'])->name('login');
-Route::post('register',[Api::class,'storeRegister'])->name('register');
+Route::post('login',[Apis::class,'storeLogin'])->name('login');
+Route::post('register',[Apis::class,'storeRegister'])->name('register');
 
-Route::post('property',[Api::class,'getUserProperties'])->name('property');
-Route::post('propertDetails',[Api::class,'propertDetails'])->name('propertDetails');
-Route::post('profile',[Api::class,'profile'])->name('profile');
-Route::post('updateProfile',[Api::class,'updateProfile'])->name('updateProfile');
+Route::post('property',[Apis::class,'getUserProperties'])->name('property');
+Route::post('propertDetails',[Apis::class,'propertDetails'])->name('propertDetails');
+Route::post('profile',[Apis::class,'profile'])->name('profile');
+Route::post('updateProfile',[Apis::class,'updateProfile'])->name('updateProfile');
 
-Route::post('propertyStore',[Api::class,'store'])->name('propertyStore');
-Route::post('updateProperty',[Api::class,'updateProperty'])->name('updateProperty');
-Route::post('propertyDestroy',[Api::class,'propertyDestroy'])->name('propertyDestroy');
+Route::post('propertyStore',[Apis::class,'store'])->name('propertyStore');
+Route::post('updateProperty',[Apis::class,'updateProperty'])->name('updateProperty');
+Route::post('propertyDestroy',[Apis::class,'propertyDestroy'])->name('propertyDestroy');
 
-Route::post('getwishlist',[Api::class,'getwishlist'])->name('getwishlist');
-Route::post('addtowishlist',[Api::class,'addtowishlist'])->name('addtowishlist');
-Route::post('deleteWishlist',[Api::class,'deleteWishlist'])->name('deleteWishlist');
+Route::post('getwishlist',[Apis::class,'getwishlist'])->name('getwishlist');
+Route::post('addtowishlist',[Apis::class,'addtowishlist'])->name('addtowishlist');
+Route::post('deleteWishlist',[Apis::class,'deleteWishlist'])->name('deleteWishlist');
 
-Route::get('getCity',[Api::class,'getCity'])->name('getCity');
-Route::get('getAminities',[Api::class,'getAminities'])->name('getAminities');
-Route::get('getNearestLocation',[Api::class,'getNearestLocation'])->name('getNearestLocation');
-Route::get('getPropertyTypes',[Api::class,'getPropertyTypes'])->name('getPropertyTypes');
-Route::get('getAgent',[Api::class,'getAgent'])->name('getAgent');
-Route::get('getPurpose',[Api::class,'getPurpose'])->name('getPurpose');
+Route::get('getCity',[Apis::class,'getCity'])->name('getCity');
+Route::get('getAminities',[Apis::class,'getAminities'])->name('getAminities');
+Route::get('getNearestLocation',[Apis::class,'getNearestLocation'])->name('getNearestLocation');
+Route::get('getPropertyTypes',[Apis::class,'getPropertyTypes'])->name('getPropertyTypes');
+Route::get('getAgent',[Apis::class,'getAgent'])->name('getAgent');
+Route::get('getPurpose',[Apis::class,'getPurpose'])->name('getPurpose');
 
-Route::post('updatePassword',[Api::class,'updatePassword'])->name('updatePassword');
+Route::post('updatePassword',[Apis::class,'updatePassword'])->name('updatePassword');
 
-Route::get('contactUs',[Api::class,'contactUs'])->name('contactUs');
-Route::get('aboutUs',[Api::class,'aboutUs'])->name('aboutUs');
-Route::get('privacyPolicy',[Api::class,'privacyPolicy'])->name('privacyPolicy');
-Route::get('termsCondition',[Api::class,'termsCondition'])->name('termsCondition');
-Route::get('pricingPlan',[Api::class,'pricingPlan'])->name('pricingPlan');
+Route::get('contactUs',[Apis::class,'contactUs'])->name('contactUs');
+Route::get('aboutUs',[Apis::class,'aboutUs'])->name('aboutUs');
+Route::get('privacyPolicy',[Apis::class,'privacyPolicy'])->name('privacyPolicy');
+Route::get('termsCondition',[Apis::class,'termsCondition'])->name('termsCondition');
+Route::get('pricingPlan',[Apis::class,'pricingPlan'])->name('pricingPlan');
 
-Route::post('filterProperty',[Api::class,'filterProperty'])->name('filterProperty');
-Route::post('activity',[Api::class,'activity'])->name('activity');
-Route::post('notification',[Api::class,'notification'])->name('notification');
+Route::post('filterProperty',[Apis::class,'filterProperty'])->name('filterProperty');
+Route::post('activity',[Apis::class,'activity'])->name('activity');
+Route::post('notification',[Apis::class,'notification'])->name('notification');
 
-Route::post('sendForgetEmail',[Api::class,'sendForgetEmail'])->name('sendForgetEmail');
+Route::post('sendForgetEmail',[Apis::class,'sendForgetEmail'])->name('sendForgetEmail');
 
 //support and chat request
-Route::post('sendRequest',[Api::class,'sendRequest'])->name('sendRequest');
+Route::post('sendRequest',[Apis::class,'sendRequest'])->name('sendRequest');
 //support and chat request list
-Route::post('chatSupportRequest',[Api::class,'chatSupportRequest'])->name('chatSupportRequest');
-Route::post('chatSupportRequestUpdate',[Api::class,'chatSupportRequestUpdate'])->name('chatSupportRequestUpdate');
+Route::post('chatSupportRequest',[Apis::class,'chatSupportRequest'])->name('chatSupportRequest');
+Route::post('chatSupportRequestUpdate',[Apis::class,'chatSupportRequestUpdate'])->name('chatSupportRequestUpdate');
 
 // Chat send and get 
-Route::post('getConversations',[Api::class,'getConversations'])->name('getConversations');
-Route::post('storeConversations',[Api::class,'storeConversations'])->name('storeConversations');
+Route::post('getConversations',[Apis::class,'getConversations'])->name('getConversations');
+Route::post('storeConversations',[Apis::class,'storeConversations'])->name('storeConversations');
 
 //Support send and get message
-Route::post('supportSendmessage',[Api::class,'supportSendmessage'])->name('supportSendmessage');
-Route::post('supportGetmessage',[Api::class,'supportGetmessage'])->name('supportGetmessage');
+Route::post('supportSendmessage',[Apis::class,'supportSendmessage'])->name('supportSendmessage');
+Route::post('supportGetmessage',[Apis::class,'supportGetmessage'])->name('supportGetmessage');
 
 //Chat user listing
-Route::post('getChatUser',[Api::class,'getChatUser'])->name('getChatUser');
-Route::post('getMessageId',[Api::class,'getMessageId'])->name('getMessageId');
-Route::post('property_status',[Api::class,'property_status'])->name('property_status');
+Route::post('getChatUser',[Apis::class,'getChatUser'])->name('getChatUser');
+Route::post('getMessageId',[Apis::class,'getMessageId'])->name('getMessageId');
+Route::post('property_status',[Apis::class,'property_status'])->name('property_status');
 
-Route::post('agentprofile',[Api::class,'agentprofile'])->name('agentprofile');
+Route::post('agentprofile',[Apis::class,'agentprofile'])->name('agentprofile');
 
-Route::get('faq',[Api::class,'faq'])->name('faq');
+Route::get('faq',[Apis::class,'faq'])->name('faq');
 
-Route::get('vocabulary_category',[Api::class,'vocabulary_category'])->name('vocabulary_category');
-Route::get('vocabulary',[Api::class,'vocabulary'])->name('vocabulary');
+Route::get('vocabulary_category',[Apis::class,'vocabulary_category'])->name('vocabulary_category');
+Route::post('vocabulary',[Apis::class,'vocabulary'])->name('vocabulary');
 //Practice Dialogue
-Route::get('practiceDialogue',[Api::class,'practiceDialogue'])->name('practiceDialogue');
+Route::post('practiceDialogue',[Apis::class,'practiceDialogue'])->name('practiceDialogue');
 //Practice Dialogue Segments
-Route::get('segments',[Api::class,'segments'])->name('segments');
+Route::post('segments',[Apis::class,'segments'])->name('segments');
 
 // Purchase a Plan
-Route::post('stripePayment',[Api::class,'stripePayment'])->name('stripePayment');
-Route::post('pushNotification',[Api::class,'pushNotification'])->name('pushNotification');
+Route::post('stripePayment',[Apis::class,'stripePayment'])->name('stripePayment');
+Route::post('razorPay',[Apis::class,'razorPay'])->name('razorPay');
+Route::post('pushNotification',[Apis::class,'pushNotification'])->name('pushNotification');
 
+
+//Push Notification
+Route::post('pushNotification',[Apis::class,'pushNotification'])->name('pushNotification');
+
+//Video Gallery
+Route::get('videoGallery',[Apis::class,'videoGallery'])->name('videoGallery');
+
+// Online Message
+Route::post('sendMessage',[Apis::class,'sendMessage'])->name('sendMessage');
+
+// Test Formate
+Route::get('testFomate',[Apis::class,'testFomate'])->name('testFomate');
+
+// Language
+Route::get('language',[Apis::class,'language'])->name('language');
+
+// Favorite
+Route::post('addtoFavorite',[Apis::class,'addtoFavorite'])->name('addtoFavorite');
+Route::post('deleteFavorite',[Apis::class,'deleteFavorite'])->name('deleteFavorite');
+Route::post('getFavorite',[Apis::class,'getFavorite'])->name('getFavorite');
+
+//Filter Vocabulary Category wise
+Route::post('filterVocabulary',[Apis::class,'filterVocabulary'])->name('filterVocabulary');
+
+//Plan Purchase History
+Route::post('planPurchaseHistory',[Apis::class,'planPurchaseHistory'])->name('planPurchaseHistory');
+Route::get('lastMinutesPractice',[Apis::class,'lastMinutesPractice'])->name('lastMinutesPractice');
 
 
 

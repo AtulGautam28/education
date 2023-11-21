@@ -51,17 +51,17 @@ class PackageController extends Controller
             'package_name'=>'required',
             'price'=> $request->package_type==1 ? 'required' :'',
             'number_of_days'=>'required',
-            'number_of_property'=>'required',
-            'number_of_aminities'=>'required',
-            'number_of_nearest_place'=>'required',
-            'number_of_photo'=>'required',
-            'package_order'=>'required',
-            'feature'=>'required',
-            'top_property'=>'required',
-            'urgent'=>'required',
-            'number_of_feature_property'=>$request->feature==1 ? 'required' :'',
-            'number_of_top_property'=>$request->top_property==1 ? 'required' :'',
-            'number_of_urgent_property'=>$request->urgent==1 ? 'required' :'',
+            // 'number_of_property'=>'required',
+            // 'number_of_aminities'=>'required',
+            // 'number_of_nearest_place'=>'required',
+            // 'number_of_photo'=>'required',
+            // 'package_order'=>'required',
+            // 'feature'=>'required',
+            // 'top_property'=>'required',
+            // 'urgent'=>'required',
+            // 'number_of_feature_property'=>$request->feature==1 ? 'required' :'',
+            // 'number_of_top_property'=>$request->top_property==1 ? 'required' :'',
+            // 'number_of_urgent_property'=>$request->urgent==1 ? 'required' :'',
             'status'=>'required',
 
         ];
@@ -70,14 +70,14 @@ class PackageController extends Controller
             'package_name.required' => $valid_lang->where('lang_key','package_name')->first()->custom_text,
             'price.required' => $valid_lang->where('lang_key','price')->first()->custom_text,
             'number_of_days.required' => $valid_lang->where('lang_key','number_of_day')->first()->custom_text,
-            'number_of_property.required' => $valid_lang->where('lang_key','number_of_property')->first()->custom_text,
-            'number_of_aminities.required' => $valid_lang->where('lang_key','number_of_aminity')->first()->custom_text,
-            'number_of_nearest_place.required' => $valid_lang->where('lang_key','number_of_nearest_place')->first()->custom_text,
-            'number_of_photo.required' => $valid_lang->where('lang_key','number_of_photo')->first()->custom_text,
-            'package_order.required' => $valid_lang->where('lang_key','package_order')->first()->custom_text,
-            'number_of_feature_property.required' => $valid_lang->where('lang_key','number_of_feature_property')->first()->custom_text,
-            'number_of_top_property.required' => $valid_lang->where('lang_key','number_of_top_property')->first()->custom_text,
-            'number_of_urgent_property.required' => $valid_lang->where('lang_key','number_of_urgent_property')->first()->custom_text,
+            // 'number_of_property.required' => $valid_lang->where('lang_key','number_of_property')->first()->custom_text,
+            // 'number_of_aminities.required' => $valid_lang->where('lang_key','number_of_aminity')->first()->custom_text,
+            // 'number_of_nearest_place.required' => $valid_lang->where('lang_key','number_of_nearest_place')->first()->custom_text,
+            // 'number_of_photo.required' => $valid_lang->where('lang_key','number_of_photo')->first()->custom_text,
+            // 'package_order.required' => $valid_lang->where('lang_key','package_order')->first()->custom_text,
+            // 'number_of_feature_property.required' => $valid_lang->where('lang_key','number_of_feature_property')->first()->custom_text,
+            // 'number_of_top_property.required' => $valid_lang->where('lang_key','number_of_top_property')->first()->custom_text,
+            // 'number_of_urgent_property.required' => $valid_lang->where('lang_key','number_of_urgent_property')->first()->custom_text,
         ];
         $this->validate($request, $rules, $customMessages);
 
@@ -98,7 +98,8 @@ class PackageController extends Controller
         $package->number_of_top_property=$request->number_of_top_property ? $request->number_of_top_property : 0;
         $package->number_of_urgent_property=$request->number_of_urgent_property ? $request->number_of_urgent_property : 0;
         $package->status=$request->status;
-        $package->package_order=$request->package_order;
+        // $package->package_order=$request->package_order;
+        $package->package_order='0';
         $package->save();
 
         $notify_lang=NotificationText::all();

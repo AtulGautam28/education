@@ -15,6 +15,7 @@ class CreatePracticesTable extends Migration
     {
         Schema::create('practices', function (Blueprint $table) {
             $table->id();
+            $table->bigInteger('subject_id');
             $table->string('title');
             $table->text('description')->nullable();
             $table->text('instructions')->nullable();

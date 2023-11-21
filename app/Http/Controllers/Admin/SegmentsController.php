@@ -29,6 +29,14 @@ class SegmentsController extends Controller
         $confirmNotify=$websiteLang->where('lang_key','are_you_sure')->first()->custom_text;
         return view('admin.segments.index',compact('segments','practices','websiteLang','confirmNotify'));
     }
+    public function practice_filter($id)
+    {
+        $segments=Segments::where('practice_id',$id)->get();
+        $practices=Practice::all();
+        $websiteLang=ManageText::all();
+        $confirmNotify=$websiteLang->where('lang_key','are_you_sure')->first()->custom_text;
+        return view('admin.segments.index',compact('segments','practices','websiteLang','confirmNotify'));
+    }
 
 
     public function store(Request $request)
@@ -36,8 +44,8 @@ class SegmentsController extends Controller
         $this->validate($request,[
             'question'=>'required',
             'answer'=>'required',
-            'question_audio'=>'required',
-            'answer_audio'=>'required',
+            // 'question_audio'=>'required',
+            // 'answer_audio'=>'required',
             'practice_id'=>'required',
         ]);
 
@@ -62,8 +70,8 @@ class SegmentsController extends Controller
         $segments->practice_id=$request->practice_id;
         $segments->question=$request->question;
         $segments->answer=$request->answer;
-        $segments->answer_audio=$answer_audio_path;
-        $segments->question_audio=$question_audio_path;
+        // $segments->answer_audio=$answer_audio_path;
+        // $segments->question_audio=$question_audio_path;
         $segments->status=$request->status;
         $segments->save();
 

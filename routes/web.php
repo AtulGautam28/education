@@ -1,5 +1,6 @@
 <?php
 use App\Http\Controllers\Admin\SegmentsController;
+use App\Http\Controllers\Admin\SubjectsController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ContactController;
 
@@ -110,6 +111,10 @@ Route::get('reset-password/{token}',[ForgotPasswordController::class,'resetPassw
 Route::post('store-reset-password/{token}',[ForgotPasswordController::class,'storeResetData'])->name('store.reset.password');
 
 
+// Route::group(['as'=> 'user.', 'prefix' => 'user'],function (){
+
+// Route::get('dashboard',[AdminDashboardController::class,'index'])->name('dashboard');
+// })
 // admin routes
 
 Route::group(['as'=> 'admin.', 'prefix' => 'admin'],function (){
@@ -393,6 +398,16 @@ Route::group(['as'=> 'admin.', 'prefix' => 'admin'],function (){
     Route::post('textformate-update/{id}',[AdminTextFormateController::class,'update'])->name('textformate-update');
     Route::post('textformate-store',[AdminTextFormateController::class,'store'])->name('textformate-store');
 
+ //subject
+ 
+ Route::get('subjects',[SubjectsController::class,'index'])->name('subjects');
+ Route::post('store-subjects',[SubjectsController::class,'store'])->name('store.subjects');
+ Route::post('subjects-update/{id}',[SubjectsController::class,'update'])->name('subjects.update');
+ Route::get('subjects-delete/{id}',[SubjectsController::class,'destroy'])->name('subjects.delete');
+
+
+
+
     // Practice Dialogue
     // Route::resource('practice',PracticeController::class);
     Route::get('practice',[PracticeController::class,'index'])->name('practice');
@@ -407,6 +422,7 @@ Route::group(['as'=> 'admin.', 'prefix' => 'admin'],function (){
     Route::post('segments-update/{id}',[SegmentsController::class,'update'])->name('segments.update');
     Route::get('segments-delete/{id}',[SegmentsController::class,'destroy'])->name('segments.delete');
     Route::get('segments-status/{id}', [SegmentsController::class,'changeStatus'])->name('segments.status');
-
+    
+    Route::get('practice-filter/{id}',[SegmentsController::class,'practice_filter'])->name('practice.filter');
 });
 

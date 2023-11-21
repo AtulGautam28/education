@@ -16,6 +16,7 @@ class Kernel extends ConsoleKernel
         'App\Console\Commands\InActiveSubscriber',
         'App\Console\Commands\PreNotification',
         'App\Console\Commands\InActiveListingUnderExpiredOrder',
+        'App\Console\Commands\Test',
     ];
 
     /**
@@ -26,9 +27,10 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command('inactive:subscriber')->everyDay();
-        $schedule->command('order:expired')->everyDay();
-        $schedule->command('inactive:listing')->everyDay();
+        // $schedule->command('inactive:subscriber')->everyDay();
+        $schedule->command('update:mobile')->everyMinute();
+        // $schedule->command('order:expired')->everyDay();
+        // $schedule->command('inactive:listing')->everyDay();
     }
 
     /**
