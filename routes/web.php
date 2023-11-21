@@ -1,5 +1,6 @@
 <?php
 use App\Http\Controllers\Admin\SegmentsController;
+use App\Http\Controllers\Admin\SubjectsController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ContactController;
 
@@ -396,6 +397,16 @@ Route::group(['as'=> 'admin.', 'prefix' => 'admin'],function (){
     Route::get('textformate-edit/{id}',[AdminTextFormateController::class,'edit'])->name('textformate-edit');
     Route::post('textformate-update/{id}',[AdminTextFormateController::class,'update'])->name('textformate-update');
     Route::post('textformate-store',[AdminTextFormateController::class,'store'])->name('textformate-store');
+
+ //subject
+ 
+ Route::get('subjects',[SubjectsController::class,'index'])->name('subjects');
+ Route::post('store-subjects',[SubjectsController::class,'store'])->name('store.subjects');
+ Route::post('subjects-update/{id}',[SubjectsController::class,'update'])->name('subjects.update');
+ Route::get('subjects-delete/{id}',[SubjectsController::class,'destroy'])->name('subjects.delete');
+
+
+
 
     // Practice Dialogue
     // Route::resource('practice',PracticeController::class);

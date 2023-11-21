@@ -9,7 +9,7 @@ class Practice extends Model
 {
     use HasFactory;
     protected $fillable=[
-        'title','description','instructions','slug','status'
+        'title','description','instructions','slug','status','subject_id'
     ];
 
     public function segments(){

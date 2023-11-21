@@ -7,51 +7,43 @@ use App\Segments;
 use Illuminate\Http\Request;
 use App\BannerImage;
 use App\ManageText;
-use App\Practice;
 use App\Subject;
 use App\NotificationText;
 use Image;
 use File;
 
-class PracticeController extends Controller
+class SubjectsController extends Controller
 {
     
     public function __construct()
     {
         $this->middleware('auth:admin');
+        
     }
 
 
     public function index()
     {
-        $practices = Practice::select('practices.*', 'subjects.title as subject_name')
-        ->join('subjects', 'subjects.id', '=', 'practices.subject_id')
-        ->get();
-    
-        // $practices=Practice::all();
         $subjects=Subject::all();
         $websiteLang=ManageText::all();
         $confirmNotify=$websiteLang->where('lang_key','are_you_sure')->first()->custom_text;
-        return view('admin.practice.index',compact('practices','subjects', 'websiteLang','confirmNotify'));
+        return view('admin.subjects.index',compact('subjects','websiteLang','confirmNotify'));
     }
 
 
     public function store(Request $request)
     {
+        
         $this->validate($request,[
             'title'=>'required',
             'description'=>'required',
-            'instructions'=>'required',
+            
         ]);
-        $practice=new Practice();
-        $practice->title=$request->title;
-        $practice->is_lastminutes=$request->is_lastminutes;
-        $practice->description=$request->description;
-        $practice->gender=$request->gender;
-        $practice->instructions=$request->instructions;
-        $practice->subject_id=$request->subject_id;
-        $practice->status=$request->status;
-        $practice->save();
+        $subject=new Subject();
+        $subject->title=$request->title;       
+        $subject->description=$request->description;
+        $subject->status=$request->status;
+        $subject->save();
 
         $notify_lang=NotificationText::all();
         $notification=$notify_lang->where('lang_key','create')->first()->custom_text;
@@ -66,16 +58,13 @@ class PracticeController extends Controller
         $this->validate($request,[
             'title'=>'required',
             'description'=>'required',
-            'instructions'=>'required',
         ]);
-        $practice=Practice::find($id);
+        $subject=Subject::find($id);
 
-        $practice->title=$request->title;
-        $practice->description=$request->description;
-        $practice->instructions=$request->instructions;
-        $practice->status=$request->status;
-        $practice->save();
-
+        $subject->title=$request->title;
+        $subject->description=$request->description;
+        $subject->status=$request->status;
+        $subject->save();
         $notify_lang=NotificationText::all();
         $notification=$notify_lang->where('lang_key','update')->first()->custom_text;
         $notification=array('messege'=>$notification,'alert-type'=>'success');
@@ -84,15 +73,10 @@ class PracticeController extends Controller
     }
 
     public function destroy($id)
-    {
-        $segments = Segments::where('practice_id',$id)->get();
-        foreach ($segments as $value) {
-            if(File::exists(public_path().'/'.$value->question_audio)) unlink(public_path().'/'.$value->question_audio);
-            if(File::exists(public_path().'/'.$value->answer_audio)) unlink(public_path().'/'.$value->answer_audio);
-        }
-        Segments::where('practice_id',$id)->delete();
-        $practice=Practice::find($id);
-        $practice->delete();
+    { 
+        
+        $subject=Subject::find($id);
+        $subject->delete();
 
         $notify_lang=NotificationText::all();
         $notification=$notify_lang->where('lang_key','delete')->first()->custom_text;

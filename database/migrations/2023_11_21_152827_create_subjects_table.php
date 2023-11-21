@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreatePracticesTable extends Migration
+class CreateSubjectsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,10 @@ class CreatePracticesTable extends Migration
      */
     public function up()
     {
-        Schema::create('practices', function (Blueprint $table) {
+        Schema::create('subjects', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('subject_id');
             $table->string('title');
-            $table->text('description')->nullable();
-            $table->text('instructions')->nullable();
-            $table->string('slug')->nullable();
+            $table->text('description')->nullable();           
             $table->integer('status')->default(1);
             $table->timestamps();
         });
@@ -32,6 +29,6 @@ class CreatePracticesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('practices');
+        Schema::dropIfExists('subjects');
     }
 }
