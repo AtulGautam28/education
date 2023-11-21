@@ -67,7 +67,7 @@
                     <div class="bg-white py-2 collapse-inner rounded">
                         <a class="collapse-item {{ Route::is('admin.practice.*')?'active':'' }}" href="{{ route('admin.practice') }}">Practice Dialogues</a>
 
-                        <a class="collapse-item {{ Route::is('admin.segments.*')?'active':'' }}" href="{{ route('admin.segments') }}">Segments</a>
+                        <a class="collapse-item {{ Route::is('admin.segments.*')?'active':'' }}" href="{{ route('admin.segments') }}">Segments frddf</a>
 
 
                     </div>
