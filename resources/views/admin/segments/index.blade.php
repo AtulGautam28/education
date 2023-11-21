@@ -49,16 +49,6 @@
                         <td>{{ ++$index }}</td>
                         <td>{{ $item->question }}</td>
                         <td>{{ $item->answer }}</td>
-                        {{-- <td><audio controls>
-                                <source src="{{ $item->question_audio ? url($item->question_audio) : "" }}"
-                                    type="audio/mpeg">
-                            </audio>
-                        </td>
-                        <td><audio controls>
-                                <source src="{{ $item->answer_audio ? url($item->answer_audio) : "" }}"
-                                    type="audio/mpeg">
-                            </audio>
-                        </td> --}}
                         <td>{{ $item->practice->title }}</td>
                         <td>
                             @if ($item->status==1)
@@ -116,9 +106,9 @@
                                     <label>Practice Dialogues</label>
                                     <select name="practice_id" class="form-control" id="">
                                         <option value="">Select Practice</option>
-                                        @foreach ($practices as $item)
-                                        <option {{ old('country')==$item->id ? 'selected' : '' }} value="{{ $item->id
-                                            }}">{{ $item->title }}</option>
+                                        @foreach ($practices as $items)
+                                        <option value="{{ $items->id
+                                            }}">{{ $items->title }}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -231,26 +221,6 @@
                                         value="{{ $item->question }}">
                                 </div>
                             </div>
-                            {{-- <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="">Existing Question Audio</label>
-                                    <div>
-                                        <audio controls>
-                                            <source src="{{ $item->question_audio ? url($item->question_audio) : "" }}"
-                                                type="audio/mpeg">
-                                            <input type="hidden" name="old_question_audio"
-                                                value="{{$item->question_audio}}">
-                                        </audio>
-                                    </div>
-                                </div>
-                            </div> --}}
-                            {{-- <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="image">Question Audio</label>
-                                    <div><input type="file" name="question_audio" id="image"
-                                            value="{{$item->question_audio ? $item->question_audio : ''}}"></div>
-                                </div>
-                            </div> --}}
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <label for="answer">{{ $websiteLang->where('lang_key','ans')->first()->custom_text
@@ -259,25 +229,6 @@
                                         cols="30">{{ $item->answer }}</textarea>
                                 </div>
                             </div>
-                            {{-- <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="">Existing Answer Audio</label>
-                                    <div>
-                                        <audio controls>
-                                            <source src="{{ $item->answer_audio ? url($item->answer_audio) : "" }}"
-                                                type="audio/mpeg">
-                                            <input type="hidden" name="old_answer_audio"
-                                                value="{{$item->answer_audio}}">
-                                        </audio>
-                                    </div>
-                                </div>
-                            </div> --}}
-                            {{-- <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="image">Answer Audio</label>
-                                    <div><input type="file" name="answer_audio" id="image"></div>
-                                </div>
-                            </div> --}}
                         </div>
                         <div class="row">
                             <div class="col-md-6">
@@ -291,7 +242,6 @@
                                 </div>
                             </div>
                             <div class="col-md-6">
-                            <div class="col-md-12">
                                 <div class="form-group">
                                     <label for="status">{{
                                         $websiteLang->where('lang_key','status')->first()->custom_text }}</label>
@@ -356,22 +306,6 @@
             type: 'get',
             url: "{{url('/admin/practice-filter/')}}" + "/" + selectedValue,
             success: function (response) {
-                // console.log(data.answer);
-                // $.each(response, function(key, value) {
-                //     //For example
-                //     console.log(value.status.title)
-                //         $('#dataTable tbody').prepend( "<tr class='data" + value.id + "'>" +
-                //         "<td>" + value.id + "</td>" +
-                //         "<td>" + value.question + "</td>" +
-                //         "<td>" + value.answer+ "</td>" +
-                //         "<td>" + value.practice.title+ "</td>" +
-                //         "<td>" + if (value.status==1) +
-                //                 '<a href="" onclick="testimonialStatus({{ '+value.id+' }})"><input type="checkbox" checked data-toggle="toggle" data-on="{{ $websiteLang->where('lang_key','active')->first()->custom_text }}" data-off="{{ $websiteLang->where('lang_key','inactive')->first()->custom_text }}" data-onstyle="success" data-offstyle="danger"></a>'+
-                //                 else+ '<a href="" onclick="testimonialStatus({{  '+value.id+'  }})"><input type="checkbox" data-toggle="toggle" data-on="{{ $websiteLang->where('lang_key','active')->first()->custom_text }}" data-off="{{ $websiteLang->where('lang_key','inactive')->first()->custom_text }}" data-onstyle="success" data-offstyle="danger"></a>'+ endif + "</td>"
-                //         "<td>" + value.answer+ "</td>" +
-                //         "<td>" + value.answer+ "</td>" +
-                //          "</tr>" ); 
-                // })
 
             }
         });
