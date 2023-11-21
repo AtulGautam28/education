@@ -63,7 +63,7 @@
                                 </div>
                             </div>
 
-                            <div class="col-md-4">
+                            <!-- <div class="col-md-4">
                                 <div class="form-group">
                                     <label for="number_of_property">{{ $websiteLang->where('lang_key','number_of_property')->first()->custom_text }} <span class="text-danger">*</span></label>
                                     <input type="number" name="number_of_property" class="form-control" id="number_of_property" value="{{ $package->number_of_property }}">
@@ -190,7 +190,7 @@
                                     <input type="text" value="{{ $package->package_order }}" id="package_order" name="package_order" class="form-control">
                                     <span class="text-danger d-none" id="order-error"></span>
                                 </div>
-                            </div>
+                            </div> -->
 
                             <div class="col-md-4">
                                 <div class="form-group">

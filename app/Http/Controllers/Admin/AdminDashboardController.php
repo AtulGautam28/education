@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use Auth;
 use App\User;
 use App\Subscribe;
+use App\Practice;
+use App\Blog;
 use App\ManageText;
 use Carbon\Carbon;
 use App\Order;
@@ -51,6 +53,8 @@ class AdminDashboardController extends Controller
         $users=User::all();
 
         $subscriberQty=Subscribe::where('status',1)->count();
+        $practice=Practice::where('status',1)->count();
+        $vocab=Blog::where('status',1)->count();
 
 
         $lastDayofMonth = \Carbon\Carbon::now()->endOfMonth()->toDateString();
@@ -61,6 +65,6 @@ class AdminDashboardController extends Controller
 
         $websiteLang=ManageText::all();
         $currency=Setting::first();
-        return view('admin.dashboard',compact('orders','properties','users','subscriberQty','websiteLang','data','currency','monthlyEarning','totalEarning'));
+        return view('admin.dashboard',compact('orders','properties','users','subscriberQty','practice','vocab','websiteLang','data','currency','monthlyEarning','totalEarning'));
     }
 }

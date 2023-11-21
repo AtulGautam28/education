@@ -159,6 +159,7 @@ class Apis extends Controller
             'slug'=>Str::slug($request->name),
             'email'=>$request->email,
             'language'=>$request->language,
+            'phone'=>$request->mobile,
             'exam_date'=>$request->exam_date,
             'usertype'=>$request->usertype,
             'password'=>Hash::make($request->password),
@@ -1028,7 +1029,7 @@ class Apis extends Controller
         $validator = Validator::make($request->all(), [
             'name'=>'required',
             'email'=>'required|email',
-            'subject'=>'required',
+            'language'=>'required',
             'message'=>'required',
             'g-recaptcha-response'=>new Captcha()
         ]);
@@ -1041,7 +1042,7 @@ class Apis extends Controller
             'email'=>$request->email,
             'phone'=>$request->phone,
             'name'=>$request->name,
-            'subject'=>$request->subject,
+            'subject'=>$request->language,
             'message'=>$request->message,
         ];
 
@@ -1099,10 +1100,20 @@ class Apis extends Controller
     }
     public function filterVocabulary(Request $request){
        
-        $testformate=Blog::where('blog_category_id',$request->vocabulary_category_id)->orderBy('id','asc')->get();
-        if($testformate){
+        // $testformate=Blog::where('blog_category_id',$request->vocabulary_category_id)->orderBy('id','asc')->get();
+
+
+        $blogs=Blog::where('blog_category_id',$request->vocabulary_category_id)->with('category')->get();
+        // print_r($blogs);die;
+        foreach ($blogs as $key => $value) {
+            if($value->id && $request->user_id){
+                $favorite_id = Wishlist::where(['vocabulary_id'=>$value->id, 'user_id'=>$request->user_id])->get();
+            }
+            $blogs[$key]->favorite_id = $favorite_id;
+        }
+        if($blogs){
             $notification='Data found successfully';
-            return response()->json(['status'=>'success','message'=>$notification,'data'=>$testformate]);
+            return response()->json(['status'=>'success','message'=>$notification,'data'=>$blogs]);
         }else{
             $notification='Data Not found!';
             return response()->json(['status'=>'error','message'=>$notification]);

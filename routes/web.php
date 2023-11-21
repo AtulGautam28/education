@@ -411,6 +411,7 @@ Route::group(['as'=> 'admin.', 'prefix' => 'admin'],function (){
     Route::post('segments-update/{id}',[SegmentsController::class,'update'])->name('segments.update');
     Route::get('segments-delete/{id}',[SegmentsController::class,'destroy'])->name('segments.delete');
     Route::get('segments-status/{id}', [SegmentsController::class,'changeStatus'])->name('segments.status');
-
+    
+    Route::get('practice-filter/{id}',[SegmentsController::class,'practice_filter'])->name('practice.filter');
 });
 
