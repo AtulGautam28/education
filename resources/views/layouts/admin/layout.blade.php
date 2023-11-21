@@ -66,7 +66,7 @@
                  ? 'show':'' }}" aria-labelledby="headingPages" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <a class="collapse-item {{ Route::is('admin.subjects.*')?'active':'' }}" href="{{ route('admin.subjects') }}">Subjects</a>
-                        <a class="collapse-item {{ Route::is('admin.practice.*')?'active':'' }}" href="{{ route('admin.practice') }}">Practice Dialogues</a>
+                        <a class="collapse-item {{ Route::is('admin.practice.*')?'active':'' }}" href="{{ route('admin.practice') }}">Practice Dialogue</a>
 
                         <a class="collapse-item {{ Route::is('admin.segments.*')?'active':'' }}" href="{{ route('admin.segments') }}">Segments</a>
 
