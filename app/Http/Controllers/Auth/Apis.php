@@ -36,6 +36,7 @@ use App\PropertyType;
 use App\Property;
 use App\City;
 use App\Aminity;
+use App\Language;
 use App\NearestLocation;
 use Validator;
 use Str;
@@ -68,7 +69,7 @@ use Illuminate\Pagination\Paginator;
 
 
 
-class Api extends Controller
+class Apis extends Controller
 {
     use AuthenticatesUsers;
 
@@ -104,14 +105,14 @@ class Api extends Controller
                         $notify_lang=NotificationText::all();
                         $notification=$notify_lang->where('lang_key','login')->first()->custom_text;
                         $notification=array('messege'=>$notification,'status'=>'success','data'=>$user);
-                        return json_encode($notification);
+                        return response()->json($notification);
                     
                     }
                 }else{
                     $notify_lang=NotificationText::all();
                     $notification=$notify_lang->where('lang_key','invalid_login')->first()->custom_text;
                     $notification=array('messege'=>$notification,'status'=>'error');
-                    return json_encode($notification);
+                    return response()->json($notification);
                 
                 }
 
@@ -121,7 +122,7 @@ class Api extends Controller
                 $notification='Please Verify your account'; 
                 $notification=array('messege'=>$notification,'status'=>'error');              
                 
-                return json_encode($notification);
+                return response()->json($notification);
         
             }
         }else{
@@ -129,7 +130,7 @@ class Api extends Controller
             $notification=$notify_lang->where('lang_key','email_not_exist')->first()->custom_text;
             $notification=array('messege'=>$notification,'status'=>'error');
 
-            return json_encode($notification);
+            return response()->json($notification);
         }
 
            
@@ -141,6 +142,8 @@ class Api extends Controller
         $valid_lang=ValidationText::all();
         $validator = Validator::make($request->all(), [
             'name'=>'required',
+            'language'=>'required',
+            'exam_date'=>'required',
             'email'=>'required|unique:users|email',
             'password'=>'required|min:3',
             'g-recaptcha-response'=>new Captcha()
@@ -149,11 +152,12 @@ class Api extends Controller
         if ($validator->fails()) {
             return response()->json(['status' => 'error', 'message' => $validator->messages()->first()]);
         }
-
         $user=User::create([
             'name'=>$request->name,
             'slug'=>Str::slug($request->name),
             'email'=>$request->email,
+            'language'=>$request->language,
+            'exam_date'=>$request->exam_date,
             'usertype'=>$request->usertype,
             'password'=>Hash::make($request->password),
             'email_verified_token'=>Str::random(100)
@@ -176,7 +180,7 @@ class Api extends Controller
     public function profile(Request $request)
     {
         $user_id = $request->user_id;
-        $user=User::where('id',$user_id)->get();
+        $user=User::where('id',$user_id)->with('language')->get();
         if(!blank($user)){
             return response()->json(['status'=>'success','message'=>'Data found successfully','data'=>$user]);
         }else{
@@ -227,6 +231,8 @@ class Api extends Controller
             'name'=>$request->name,
             'slug'=>Str::slug($request->name),
             'phone'=>$request->phone,
+            'language'=>$request->language,
+            'exam_date'=>$request->exam_date,
             'about'=>$request->about,
             'link_one'=>$request->link_one,
             'link_two'=>$request->link_two,
@@ -239,13 +245,13 @@ class Api extends Controller
         $notify_lang=NotificationText::all();
         $notification=$notify_lang->where('lang_key','update')->first()->custom_text;
         $notification=array('messege'=>$notification,'status'=>'success');
-        return json_encode($notification);
+        return response()->json($notification);
     }
     
-    public function addtowishlist(Request $request){
+    public function addtoFavorite(Request $request){
         // end
         $validator = Validator::make($request->all(), [
-            'property_id'=>'required',
+            'vocabulary_id'=>'required',
             'user_id'=>'required'
         ]);
 
@@ -253,36 +259,36 @@ class Api extends Controller
             return response()->json(['status' => 'error', 'message' => $validator->messages()->first()]);
         }
 
-        $isExist=Wishlist::where(['property_id'=>$request->property_id, 'user_id'=>$request->user_id])->first();
+        $isExist=Wishlist::where(['vocabulary_id'=>$request->vocabulary_id, 'user_id'=>$request->user_id])->first();
         if(!$isExist){
             $wishlist=new Wishlist();
             $wishlist->user_id=$request->user_id;
-            $wishlist->property_id=$request->property_id;
+            $wishlist->vocabulary_id=$request->vocabulary_id;
             $wishlist->save();
 
             $notify_lang=NotificationText::all();
-            $notification=$notify_lang->where('lang_key','wishlist')->first()->custom_text;
+            $notification='Favorite added successfully';
             $notification=array('messege'=>$notification,'status'=>'success');
             return response()->json($notification);
         }else{
             $notify_lang=NotificationText::all();
-            $notification=$notify_lang->where('lang_key','already_wishlist')->first()->custom_text;
+            $notification='Already added in Favorite';
             $notification=array('messege'=>$notification,'status'=>'error');
             return response()->json($notification);
         }
     }
     
-    public function deleteWishlist(Request $request){
+    public function deleteFavorite(Request $request){
 
         $validator = Validator::make($request->all(), [
-            'property_id'=>'required'
+            'favorite_id'=>'required'
         ]);
 
         if ($validator->fails()) {
             return response()->json(['status' => 'error', 'message' => $validator->messages()->first()]);
         }
 
-        $wishlist=Wishlist::where('property_id',$request->property_id)->delete();
+        $wishlist=Wishlist::where('id',$request->favorite_id)->delete();
         
         $notify_lang=NotificationText::all();
         if(!blank($wishlist)){
@@ -290,13 +296,13 @@ class Api extends Controller
             $notification=array('messege'=>$notification,'status'=>'success');
             return response()->json($notification);
         }else{
-            $notification="Your Property not remove in wishlist";
+            $notification="Your Vocabulary not remove in Favorite";
             $notification=array('messege'=>$notification,'status'=>'error');
             return response()->json($notification);
 
         }
     }
-    public function getwishlist(Request $request){
+    public function getFavorite(Request $request){
 
         $validator = Validator::make($request->all(), [
             'user_id'=>'required'
@@ -305,26 +311,14 @@ class Api extends Controller
         if ($validator->fails()) {
             return response()->json(['status' => 'error', 'message' => $validator->messages()->first()]);
         }
+        $wishlist=Wishlist::where('user_id',$request->user_id)->with('vocabulary')->get();
 
-        $properties = Property::where('properties.status',1)->where('wishlists.user_id',$request->user_id)->orderBy('properties.id','desc')
-        ->select('properties.*', 'users.name as username', 'users.image as userimage','cities.name as city_name')
-        ->join('wishlists', 'wishlists.property_id', '=', 'properties.id')
-        ->join('users', 'users.id', '=', 'properties.user_id')
-        ->join('cities', 'cities.id', '=', 'properties.city_id')
-        ->get();
-        foreach($properties as $propertimage)
-        {
-            foreach ($propertimage->propertyImages as $value) {
-                $properties->prop_img = public_path().'/'.$value;
-            }
-        }
-
-        if(!blank($properties)){
-            $notification='Wishlist Found Successfully';
-            $notification=array('messege'=>$notification,'status'=>'success','data'=>$properties);
+        if(!blank($wishlist)){
+            $notification='Favorite Found Successfully';
+            $notification=array('messege'=>$notification,'status'=>'success','data'=>$wishlist);
             return response()->json($notification);
         }else{
-            $notification="Wishlist not Found";
+            $notification="Favorite not Found";
             $notification=array('messege'=>$notification,'status'=>'error','data'=>[]);
             return response()->json($notification);
 
@@ -868,7 +862,8 @@ class Api extends Controller
             return response()->json(['status'=>'success','message'=>$notification]);
         
             } catch (Stripe\Exception\CardException $e) {
-                return $e;
+                // return $e;
+                return response()->json(['status' => 'error','message' => $e->getMessage()]);
             }
 
         }else{
@@ -938,7 +933,6 @@ class Api extends Controller
     }
     public function pushNotification(Request $request)
     {
-
         $data=[];
         $data['message']= "Hello Rajkumar ji";
 
@@ -951,10 +945,8 @@ class Api extends Controller
     }
     public function sendFirebasePush($tokens, $data)
     {
-
         $serverKey = env("SSH_KEY");
-        $serverKey = 'AAAAuiun6Jw:APA91bGXTgUlIA11_MZ-F8KCHjd2UNBnXTB07Y9g_S-KBT_ELBzyIqig07J39Qs-kttD4X4HkjGd7lBk9dIdsOZO3y1NjAxWOE8Czv-lqRkUxPw-r-Z-fA1_bO_E1k1jxp2hrHnLNcbV';
-        // prep the bundle
+        
         $msg = array
         (
             'message'   => $data['message'],
@@ -1073,6 +1065,28 @@ class Api extends Controller
     public function testFomate(){
        
         $testformate=TextFormate::orderBy('id','asc')->get();
+        if($testformate){
+            $notification='Data found successfully';
+            return response()->json(['status'=>'success','message'=>$notification,'data'=>$testformate]);
+        }else{
+            $notification='Data Not found!';
+            return response()->json(['status'=>'error','message'=>$notification]);
+        }
+    }
+    public function language(){
+       
+        $testformate=Language::orderBy('id','asc')->get();
+        if($testformate){
+            $notification='Data found successfully';
+            return response()->json(['status'=>'success','message'=>$notification,'data'=>$testformate]);
+        }else{
+            $notification='Data Not found!';
+            return response()->json(['status'=>'error','message'=>$notification]);
+        }
+    }
+    public function filterVocabulary(Request $request){
+       
+        $testformate=Blog::where('blog_category_id',$request->vocabulary_category_id)->orderBy('id','asc')->get();
         if($testformate){
             $notification='Data found successfully';
             return response()->json(['status'=>'success','message'=>$notification,'data'=>$testformate]);
