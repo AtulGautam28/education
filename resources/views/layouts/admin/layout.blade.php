@@ -126,6 +126,8 @@
 
                         <a class="collapse-item {{ Route::is('admin.privacy-policy')?'active':'' }}" href="{{ route('admin.privacy-policy') }}">{{ $websiteLang->where('lang_key','privacy_policy')->first()->custom_text }}</a>
 
+                        <a class="collapse-item {{ Route::is('admin.dashboardslider')?'active':'' }}" href="{{ route('admin.dashboardslider') }}">Dashboard Slider</a>
+
 
 
                         {{-- <a class="collapse-item {{ Route::is('admin.custom-page.*')?'active':'' }}" href="{{ route('admin.custom-page.index') }}">{{ $websiteLang->where('lang_key','custom_page')->first()->custom_text }}</a> --}}

@@ -47,6 +47,7 @@ use App\Http\Controllers\Admin\CustomPageController;
 use App\Http\Controllers\Admin\PaginatorController;
 use App\Http\Controllers\Admin\EmailConfigurationController;
 use App\Http\Controllers\Admin\CountryController;
+use App\Http\Controllers\Admin\DashboardsliderController;
 use App\Http\Controllers\Admin\CountryStateController;
 use App\Http\Controllers\Admin\CityController;
 use App\Http\Controllers\Admin\PropertyPurposeController;
@@ -131,6 +132,13 @@ Route::group(['as'=> 'admin.', 'prefix' => 'admin'],function (){
     // manage admin profile
     Route::get('profile',[ProfileController::class,'profile'])->name('profile');
     Route::post('update-profile',[ProfileController::class,'updateProfile'])->name('update.profile');
+    
+    //Dashboard Slider
+    Route::get('dashboardslider',[DashboardsliderController::class,'index'])->name('dashboardslider');
+    Route::post('store-dashboardslider',[DashboardsliderController::class,'store'])->name('dashboardslider.store');
+    Route::post('dashboardslider-update/{id}',[DashboardsliderController::class,'update'])->name('dashboardslider.update');
+    Route::get('dashboardslider-delete/{id}',[DashboardsliderController::class,'destroy'])->name('dashboardslider.delete');
+    Route::get('dashboardslider-status/{id}', [DashboardsliderController::class,'changeStatus'])->name('dashboardslider.status');
 
     //  admin
     Route::resource('admin-list',AdminController::class);

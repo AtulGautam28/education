@@ -17,6 +17,7 @@ use App\Mail\ForgetPassword;
 use App\Message;
 use App\Tutorial;
 use App\MessageComment;
+use App\Dashboardslider;
 use App\BlogCategory;
 use Razorpay\Api\Api;
 use App\Razorpay;
@@ -1250,5 +1251,17 @@ class Apis extends Controller
             }
         }
         return "payment success";
+    }
+
+    public function dashboard()
+    {
+        $dashboard = Dashboardslider::all();
+        if($dashboard){
+            $notification='Data found successfully';
+            return response()->json(['status'=>'success','message'=>$notification,'data'=>$dashboard]);
+        }else{
+            $notification='Data Not found!';
+            return response()->json(['status'=>'error','message'=>$notification]);
+        }
     }
 }
