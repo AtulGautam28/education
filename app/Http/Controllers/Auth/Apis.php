@@ -17,7 +17,10 @@ use App\Mail\ForgetPassword;
 use App\Message;
 use App\Tutorial;
 use App\MessageComment;
+use App\Dashboardslider;
 use App\BlogCategory;
+use Razorpay\Api\Api;
+use App\Razorpay;
 use Image;
 use File;
 use App\SeoText;
@@ -104,14 +107,14 @@ class Apis extends Controller
                       
                         $notify_lang=NotificationText::all();
                         $notification=$notify_lang->where('lang_key','login')->first()->custom_text;
-                        $notification=array('messege'=>$notification,'status'=>'success','data'=>$user);
+                        $notification=array('message'=>$notification,'status'=>'success','data'=>$user);
                         return response()->json($notification);
                     
                     }
                 }else{
                     $notify_lang=NotificationText::all();
                     $notification=$notify_lang->where('lang_key','invalid_login')->first()->custom_text;
-                    $notification=array('messege'=>$notification,'status'=>'error');
+                    $notification=array('message'=>$notification,'status'=>'error');
                     return response()->json($notification);
                 
                 }
@@ -120,7 +123,7 @@ class Apis extends Controller
                
                 $notify_lang=NotificationText::all();
                 $notification='Please Verify your account'; 
-                $notification=array('messege'=>$notification,'status'=>'error');              
+                $notification=array('message'=>$notification,'status'=>'error');              
                 
                 return response()->json($notification);
         
@@ -128,7 +131,7 @@ class Apis extends Controller
         }else{
             $notify_lang=NotificationText::all();
             $notification=$notify_lang->where('lang_key','email_not_exist')->first()->custom_text;
-            $notification=array('messege'=>$notification,'status'=>'error');
+            $notification=array('message'=>$notification,'status'=>'error');
 
             return response()->json($notification);
         }
@@ -157,6 +160,7 @@ class Apis extends Controller
             'slug'=>Str::slug($request->name),
             'email'=>$request->email,
             'language'=>$request->language,
+            'phone'=>$request->mobile,
             'exam_date'=>$request->exam_date,
             'usertype'=>$request->usertype,
             'password'=>Hash::make($request->password),
@@ -244,7 +248,7 @@ class Apis extends Controller
 
         $notify_lang=NotificationText::all();
         $notification=$notify_lang->where('lang_key','update')->first()->custom_text;
-        $notification=array('messege'=>$notification,'status'=>'success');
+        $notification=array('message'=>$notification,'status'=>'success');
         return response()->json($notification);
     }
     
@@ -268,12 +272,12 @@ class Apis extends Controller
 
             $notify_lang=NotificationText::all();
             $notification='Favorite added successfully';
-            $notification=array('messege'=>$notification,'status'=>'success');
+            $notification=array('message'=>$notification,'status'=>'success');
             return response()->json($notification);
         }else{
             $notify_lang=NotificationText::all();
             $notification='Already added in Favorite';
-            $notification=array('messege'=>$notification,'status'=>'error');
+            $notification=array('message'=>$notification,'status'=>'error');
             return response()->json($notification);
         }
     }
@@ -293,11 +297,11 @@ class Apis extends Controller
         $notify_lang=NotificationText::all();
         if(!blank($wishlist)){
             $notification=$notify_lang->where('lang_key','delete')->first()->custom_text;
-            $notification=array('messege'=>$notification,'status'=>'success');
+            $notification=array('message'=>$notification,'status'=>'success');
             return response()->json($notification);
         }else{
             $notification="Your Vocabulary not remove in Favorite";
-            $notification=array('messege'=>$notification,'status'=>'error');
+            $notification=array('message'=>$notification,'status'=>'error');
             return response()->json($notification);
 
         }
@@ -315,11 +319,11 @@ class Apis extends Controller
 
         if(!blank($wishlist)){
             $notification='Favorite Found Successfully';
-            $notification=array('messege'=>$notification,'status'=>'success','data'=>$wishlist);
+            $notification=array('message'=>$notification,'status'=>'success','data'=>$wishlist);
             return response()->json($notification);
         }else{
             $notification="Favorite not Found";
-            $notification=array('messege'=>$notification,'status'=>'error','data'=>[]);
+            $notification=array('message'=>$notification,'status'=>'error','data'=>[]);
             return response()->json($notification);
 
         }
@@ -345,13 +349,13 @@ class Apis extends Controller
 
             $notify_lang=NotificationText::all();
             $notification=$notify_lang->where('lang_key','pass')->first()->custom_text;
-            $notification=array('messege'=>$notification,'status'=>'success');
+            $notification=array('message'=>$notification,'status'=>'success');
 
             return response()->json($notification);
         }else{
             $notify_lang=NotificationText::all();
             $notification=$notify_lang->where('lang_key','old_pass')->first()->custom_text;
-            $notification=array('messege'=>$notification,'status'=>'error');
+            $notification=array('message'=>$notification,'status'=>'error');
             return response()->json($notification);
         }
 
@@ -494,11 +498,11 @@ class Apis extends Controller
 
         if($result){
             $notification='Your request has been sent successfully';
-            $notification=array('messege'=>$notification,'status'=>'success');
+            $notification=array('message'=>$notification,'status'=>'success');
             return response()->json($notification);
         }{
             $notification='Please Tyr Again!';
-            $notification=array('messege'=>$notification,'status'=>'error');
+            $notification=array('message'=>$notification,'status'=>'error');
             return response()->json($notification);
         }
 
@@ -530,11 +534,11 @@ class Apis extends Controller
         
         if($support){
             $notification='Data found Successfully';
-            $notification=array('messege'=>$notification,'status'=>'success','data'=>$support);
+            $notification=array('message'=>$notification,'status'=>'success','data'=>$support);
             return response()->json($notification);
         }{
             $notification='Data not found!';
-            $notification=array('messege'=>$notification,'status'=>'error','data'=>[]);
+            $notification=array('message'=>$notification,'status'=>'error','data'=>[]);
             return response()->json($notification);
         }
     }
@@ -575,11 +579,11 @@ class Apis extends Controller
         $conversations =  MessageComment::where(['message_id'=>$request->message_id, 'propertyId' => $request->propertyId])->with('user')->get();
         if($conversations){
             $notification='Data found Successfully';
-            $notification=array('messege'=>$notification,'status'=>'success','data'=>$conversations);
+            $notification=array('message'=>$notification,'status'=>'success','data'=>$conversations);
             return response()->json($notification);
         }{
             $notification='Data not found!';
-            $notification=array('messege'=>$notification,'status'=>'error','data'=>[]);
+            $notification=array('message'=>$notification,'status'=>'error','data'=>[]);
             return response()->json($notification);
         }
    }
@@ -613,11 +617,11 @@ class Apis extends Controller
         
         if($conversations){
             $notification='Message sent Successfully';
-            $notification=array('messege'=>$notification,'status'=>'success','data'=>$conversation);
+            $notification=array('message'=>$notification,'status'=>'success','data'=>$conversation);
             return response()->json($notification);
         }{
             $notification='Message not sent!';
-            $notification=array('messege'=>$notification,'status'=>'error','data'=>[]);
+            $notification=array('message'=>$notification,'status'=>'error','data'=>[]);
             return response()->json($notification);
         }
    }
@@ -641,11 +645,11 @@ class Apis extends Controller
         $conversations = DB::table('support_message')->insert($support);
         if($conversations){
             $notification='Message sent Successfully';
-            $notification=array('messege'=>$notification,'status'=>'success','data'=>$support);
+            $notification=array('message'=>$notification,'status'=>'success','data'=>$support);
             return response()->json($notification);
         }{
             $notification='Message not sent!';
-            $notification=array('messege'=>$notification,'status'=>'error','data'=>[]);
+            $notification=array('message'=>$notification,'status'=>'error','data'=>[]);
             return response()->json($notification);
         }
    }
@@ -662,11 +666,11 @@ class Apis extends Controller
 
         if($support_message){
             $notification='Message found Successfully';
-            $notification=array('messege'=>$notification,'status'=>'success','data'=>$support_message);
+            $notification=array('message'=>$notification,'status'=>'success','data'=>$support_message);
             return response()->json($notification);
         }{
             $notification='Message not found!';
-            $notification=array('messege'=>$notification,'status'=>'error','data'=>[]);
+            $notification=array('message'=>$notification,'status'=>'error','data'=>[]);
             return response()->json($notification);
         }
    }
@@ -709,11 +713,11 @@ class Apis extends Controller
         }
         if($user_messages){
             $notification='Data found Successfully';
-            $notification=array('messege'=>$notification,'status'=>'success','data'=>$user_messages);
+            $notification=array('message'=>$notification,'status'=>'success','data'=>$user_messages);
             return response()->json($notification);
         }{
             $notification='Data not found!';
-            $notification=array('messege'=>$notification,'status'=>'error','data'=>[]);
+            $notification=array('message'=>$notification,'status'=>'error','data'=>[]);
             return response()->json($notification);
         }
    }
@@ -739,11 +743,11 @@ class Apis extends Controller
         
         if($support){
             $notification='Data found Successfully';
-            $notification=array('messege'=>$notification,'status'=>'success','data'=>$support);
+            $notification=array('message'=>$notification,'status'=>'success','data'=>$support);
             return response()->json($notification);
         }else{
             $notification='Data not found!';
-            $notification=array('messege'=>$notification,'status'=>'error','data'=>[]);
+            $notification=array('message'=>$notification,'status'=>'error','data'=>[]);
             return response()->json($notification);
         }
    }
@@ -806,7 +810,7 @@ class Apis extends Controller
             'card' => [
                 'number' => $request->number,
                 'exp_month' => $request->exp_month,
-                'exp_year' => $request->exp_year,
+                'exp_year' => '20'.$request->exp_year,
                 'cvc' => $request->cvc,
             ],
             ]);
@@ -895,9 +899,15 @@ class Apis extends Controller
             return response()->json(['status'=>'error','message'=>$notification]);
         }
     }
-    public function vocabulary()
+    public function vocabulary(Request $request)
     {
         $blogs=Blog::with('category')->get();
+        foreach ($blogs as $key => $value) {
+            if($value->id && $request->user_id){
+                $favorite_id = Wishlist::where(['vocabulary_id'=>$value->id, 'user_id'=>$request->user_id])->get();
+            }
+            $blogs[$key]->favorite_id = $favorite_id;
+        }
         if($blogs){
             $notification='Data found successfully';
             return response()->json(['status'=>'success','message'=>$notification,'data'=>$blogs]);
@@ -906,9 +916,14 @@ class Apis extends Controller
             return response()->json(['status'=>'error','message'=>$notification]);
         }
     }
-    public function practiceDialogue()
+    public function practiceDialogue(Request $request)
     {
-        $practices=Practice::all();
+        if($request->is_lastminutes == 1){
+            
+            $practices=Practice::where('is_lastminutes',$request->is_lastminutes)->get();
+        }else{
+            $practices=Practice::all();
+        }
         if($practices){
             $notification='Data found successfully';
             return response()->json(['status'=>'success','message'=>$notification,'data'=>$practices]);
@@ -917,9 +932,9 @@ class Apis extends Controller
             return response()->json(['status'=>'error','message'=>$notification]);
         }
     }
-    public function segments()
+    public function segments(Request $request)
     {
-        $segments=Segments::all();
+        $segments=Segments::where('practice_id',$request->practice_id)->get();
         foreach ($segments as $key => $value) {
             $segments->practice  = $value->practice->title;
         }
@@ -1015,7 +1030,7 @@ class Apis extends Controller
         $validator = Validator::make($request->all(), [
             'name'=>'required',
             'email'=>'required|email',
-            'subject'=>'required',
+            'language'=>'required',
             'message'=>'required',
             'g-recaptcha-response'=>new Captcha()
         ]);
@@ -1028,7 +1043,7 @@ class Apis extends Controller
             'email'=>$request->email,
             'phone'=>$request->phone,
             'name'=>$request->name,
-            'subject'=>$request->subject,
+            'subject'=>$request->language,
             'message'=>$request->message,
         ];
 
@@ -1086,13 +1101,189 @@ class Apis extends Controller
     }
     public function filterVocabulary(Request $request){
        
-        $testformate=Blog::where('blog_category_id',$request->vocabulary_category_id)->orderBy('id','asc')->get();
-        if($testformate){
+        // $testformate=Blog::where('blog_category_id',$request->vocabulary_category_id)->orderBy('id','asc')->get();
+
+
+        $blogs=Blog::where('blog_category_id',$request->vocabulary_category_id)->with('category')->get();
+        // print_r($blogs);die;
+        foreach ($blogs as $key => $value) {
+            if($value->id && $request->user_id){
+                $favorite_id = Wishlist::where(['vocabulary_id'=>$value->id, 'user_id'=>$request->user_id])->get();
+            }
+            $blogs[$key]->favorite_id = $favorite_id;
+        }
+        if($blogs){
             $notification='Data found successfully';
-            return response()->json(['status'=>'success','message'=>$notification,'data'=>$testformate]);
+            return response()->json(['status'=>'success','message'=>$notification,'data'=>$blogs]);
         }else{
             $notification='Data Not found!';
             return response()->json(['status'=>'error','message'=>$notification]);
+        }
+    }
+    public function planPurchaseHistory(Request $request)
+    {
+        $orders = Order::where(['payment_status'=> 1,'user_id'=>$request->user_id])->orderBy('id', 'desc')->get();
+        if(!blank($orders)){
+            $notification='Data found successfully';
+            return response()->json(['status'=>'success','message'=>$notification,'data'=>$orders]);
+        }else{
+            $notification='Data Not found!';
+            return response()->json(['status'=>'error','message'=>$notification]);
+        }
+    }
+        public function lastMinutesPractice()
+    {
+        $practices=Practice::with('segments')->get();
+        if($practices){
+            $notification='Data found successfully';
+            return response()->json(['status'=>'success','message'=>$notification,'data'=>$practices]);
+        }else{
+            $notification='Data Not found!';
+            return response()->json(['status'=>'error','message'=>$notification]);
+        }
+    }
+
+    public function razorPay(Request $request){
+
+        $razorpay=Razorpay::first();
+        $input = $request->all();
+        $razorpay_key = 'rzp_test_ZWEfccsvuGrZM7';
+        $secret_key = 'yn4k9h1MYdcfzDJ8vEc8yytR';
+        $api = new Api($razorpay_key,$secret_key);
+        print_r($api);die;
+        $payment = $api->payment->fetch($input['razorpay_payment_id']);
+        if(count($input)  && !empty($input['razorpay_payment_id'])) {
+            try {
+                $response = $api->payment->fetch($input['razorpay_payment_id'])->capture(array('amount'=>$payment['amount']));
+                $payId=$response->id;
+                $currency=Setting::first();
+                $package=Package::find($request->id);
+                $user=Auth::guard('web')->user();
+                if($package){
+
+                    $setting=Setting::first();
+                    $amount_usd = round($package->price * $razorpay->currency_rate,2);
+
+                    $activeOrder=Order::where(['user_id'=>$user->id,'status'=>1])->count();
+                    $oldOrders=Order::where('user_id',$user->id)->update(['status'=>0]);
+
+                    $order=new Order();
+                    $order->user_id=$user->id;
+                    $order->order_id='#'.rand(22,44).date('Ydmis');
+                    $order->package_id=$package->id;
+                    $order->purchase_date=date('Y-m-d');
+                    $order->expired_day=$package->number_of_days;
+                    $order->expired_date=$package->number_of_days ==-1 ? null : date('Y-m-d', strtotime($package->number_of_days.' days'));
+                    $order->payment_method="RazorPay";
+                    $order->transaction_id=$payId;
+                    $order->payment_status=1;
+                    $order->amount_usd=$amount_usd;
+                    $order->amount_real_currency=$package->price;
+                    $order->currency_type=$setting->currency_name;
+                    $order->currency_icon=$setting->currency_icon;
+                    $order->status=1;
+                    $order->save();
+
+                    // active and  in-active minimum limit listing
+                    $userProperties=Property::where('user_id',$user->id)->orderBy('id','desc')->get();
+                    if($userProperties->count() !=0){
+                        if($package->number_of_property !=-1){
+                            foreach($userProperties as $index => $listing){
+                                if(++$index <= $package->number_of_property){
+                                    $listing->status=1;
+                                    $listing->save();
+                                }else{
+                                    $listing->status=0;
+                                    $listing->save();
+                                }
+                            }
+                        }elseif($package->number_of_property ==-1){
+                            foreach($userProperties as $index => $listing){
+                                $listing->status=1;
+                                $listing->save();
+                            }
+                        }
+                    }
+                    // end inactive
+
+                    // setup expired date
+                    if($userProperties->count() != 0){
+                        foreach($userProperties as $index => $listing){
+                            $listing->expired_date=$order->expired_date;
+                            $listing->save();
+                        }
+                    }
+
+                    MailHelper::setMailConfig();
+
+                    $order_details='Purchase Date: '.$order->purchase_date.'<br>';
+                    $order_details .='Expired Date: '.$order->expired_date;
+
+                    // send email
+                    $template=EmailTemplate::where('id',6)->first();
+                    $message=$template->description;
+                    $subject=$template->subject;
+                    $message=str_replace('{{user_name}}',$user->name,$message);
+                    $message=str_replace('{{payment_method}}','RazorPay',$message);
+                    $total_amount=$currency->currency_icon. $package->price;
+                    $message=str_replace('{{amount}}',$total_amount,$message);
+                    $message=str_replace('{{order_details}}',$order_details,$message);
+                    Mail::to($user->email)->send(new OrderConfirmation($message,$subject));
+
+                    $notify_lang=NotificationText::all();
+                    $notification=$notify_lang->where('lang_key','order_success')->first()->custom_text;
+                    $notification=array('message'=>$notification,'alert-type'=>'success');
+                    return redirect()->route('user.my-order')->with($notification);
+
+                }else{
+                    $notify_lang=NotificationText::all();
+                    $notification=$notify_lang->where('lang_key','something')->first()->custom_text;
+                    $notification=array('message'=>$notification,'alert-type'=>'error');
+
+                    return redirect()->route('pricing.plan')->with($notification);
+                }
+
+            } catch (Exception $e) {
+                $notify_lang=NotificationText::all();
+                $notification=$notify_lang->where('lang_key','something')->first()->custom_text;
+                $notification=array('message'=>$notification,'alert-type'=>'error');
+                return redirect()->back()->with($notification);
+            }
+        }
+        return "payment success";
+    }
+
+    public function dashboard()
+    {
+        $dashboard = Dashboardslider::all();
+        if($dashboard){
+            $notification='Data found successfully';
+            return response()->json(['status'=>'success','message'=>$notification,'data'=>$dashboard]);
+        }else{
+            $notification='Data Not found!';
+            return response()->json(['status'=>'error','message'=>$notification]);
+        }
+    }
+
+    public function searchVocabulary(Request $request)
+    {
+        if($request->title){
+            
+            $blogs=Blog::where('title','LIKE','%'.$request->title.'%')->with('category')->get();
+
+            foreach ($blogs as $key => $value) {
+                if($value->id && $request->user_id){
+                    $favorite_id = Wishlist::where(['vocabulary_id'=>$value->id, 'user_id'=>$request->user_id])->get();
+                }
+                $blogs[$key]->favorite_id = $favorite_id;
+            }
+            if($blogs){
+                $notification='Data found successfully';
+                return response()->json(['status'=>'success','message'=>$notification,'data'=>$blogs]);
+            }else{
+                $notification='Data Not found!';
+                return response()->json(['status'=>'error','message'=>$notification]);
+            }
         }
     }
 

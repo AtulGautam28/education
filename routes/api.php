@@ -114,5 +114,12 @@ Route::post('filterVocabulary',[Apis::class,'filterVocabulary'])->name('filterVo
 Route::post('planPurchaseHistory',[Apis::class,'planPurchaseHistory'])->name('planPurchaseHistory');
 Route::get('lastMinutesPractice',[Apis::class,'lastMinutesPractice'])->name('lastMinutesPractice');
 
+//Dashboard
+Route::get('dashboard',[Apis::class,'dashboard'])->name('dashboard');
+
+//Search Vocabulary 
+Route::post('searchVocabulary',[Apis::class,'searchVocabulary'])->name('searchVocabulary');
+
+
 
 

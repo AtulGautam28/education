@@ -38,6 +38,48 @@ class SegmentsController extends Controller
         return view('admin.segments.index',compact('segments','practices','websiteLang','confirmNotify'));
     }
 
+    public function segments_order()
+    {
+        if ($_GET['cat_id'] == 0) {
+            $data = "";
+        } else {
+            $segments=Segments::where('practice_id',$_GET['cat_id'])->orderBy('row_order', 'desc')->get();
+        }
+        $product_data = json_encode($segments);
+        print_r($product_data);
+    }
+    public function update_product_order()
+    {
+
+        $i = 0;
+        $temp = array();
+        foreach ($_GET['product_id'] as $row) {
+            $temp[$row] = $i;
+            $data = [
+                'row_order' => $i
+            ];
+            $data = array_map($data);
+            print_r($data);die;
+            $segments = Segments::where(['id' => $row]);
+            $segments->save();
+            // $this->db->where(['id' => $row])->update('products', $data);
+            $i++;
+        }
+
+        $response['error'] = false;
+        $response['message'] = 'Product Order Saved !';
+
+        print_r(json_encode($response));
+    }
+    function escape_array(array $array)
+    {
+        // Implement your escaping logic here
+        // For example, you can use array_map with a custom escaping function
+
+        return array_map(function ($value) {
+            return htmlspecialchars($value, ENT_QUOTES, 'UTF-8');
+        }, $array);
+    }
 
     public function store(Request $request)
     {

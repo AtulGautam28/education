@@ -43,4 +43,7 @@ class User extends Authenticatable
     public function language(){
         return $this->belongsTo(Language::class,'language');
     }
+    public function dashboardsliders(){
+        return $this->belongsTo(Dashboardslider::class);
+    }
 }

@@ -5,6 +5,23 @@
 @endsection
 @section('admin-content')
 <!-- Page Heading -->
+<style>
+    .order-container {
+    overflow: scroll;
+    max-height: 500px;
+}
+.move {
+    cursor: move;
+}
+.list-group {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    padding-left: 0;
+    margin-bottom: 0;
+}
+</style>
 <h1 class="h3 mb-2 text-gray-800"><a href="#" data-toggle="modal" data-target="#addTestimonial"
         class="btn btn-success"><i class="fas fa-plus" aria-hidden="true"></i> {{
         $websiteLang->where('lang_key','create')->first()->custom_text }}</a></h1>
@@ -36,8 +53,8 @@
                         <th width="5%">{{ $websiteLang->where('lang_key','serial')->first()->custom_text }}</th>
                         <th width="25%">{{ $websiteLang->where('lang_key','qus')->first()->custom_text }}</th>
                         <th width="50%">{{ $websiteLang->where('lang_key','ans')->first()->custom_text }}</th>
-                        {{-- <th width="50%">Question Audio</th>
-                        <th width="50%">Answer Audio</th> --}}
+                        {{-- <th width="50%">Question Audio</th>--}}
+                        <th width="50%">Row Order</th> 
                         <th width="50%">Practice Dialogues</th>
                         <th width="10%">{{ $websiteLang->where('lang_key','status')->first()->custom_text }}</th>
                         <th width="10%">{{ $websiteLang->where('lang_key','action')->first()->custom_text }}</th>
@@ -49,6 +66,9 @@
                         <td>{{ ++$index }}</td>
                         <td>{{ $item->question }}</td>
                         <td>{{ $item->answer }}</td>
+                        <td><h1 class="h3 mb-2 text-gray-800"><a href="#" data-toggle="modal" data-target="#addTestimonial1"
+                            class="btn btn-success"><i class="fas fa-plus" aria-hidden="true"></i> {{
+                            $websiteLang->where('lang_key','create')->first()->custom_text }}</a></h1></td>
                         <td>{{ $item->practice->title }}</td>
                         <td>
                             @if ($item->status==1)
@@ -180,6 +200,98 @@
         </div>
     </div>
 </div>
+<div class="modal fade" id="addTestimonial1" tabindex="-1" role="dialog" aria-labelledby="modelTitleId"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Segments IOrder</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="container-fluid">
+
+                    <form action="{{ route('admin.store.segments') }}" method="POST" enctype="multipart/form-data">
+                        @csrf
+            <div class="row">
+                <div class="col-md-12 main-content">
+                    <div class="card content-area p-4">
+                        <div class="card-header border-0">
+                        </div>
+                        <div class="card-innr">
+                            <div class="card-head ">
+                                <h4 class="card-title float-none mb-2">Filter By Segments Category</h4>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class=" col-md-4">
+                                        <label for="subcategory_id" class="col-form-label">Category</label>
+                                        <select name="category_parent" id="category_parent" class="form-control col-12">
+                                            <option value="0">--Select Category--</option>
+                                            <?php
+                                                foreach ($practices as $row) {?>
+                                                    <option value="{{$row->id}}" selected="">{{$row->title}}</option>
+                                            <?php } ?>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4 d-flex align-items-center pt-4">
+                                        <button type="button" class="btn btn-outline-primary btn-sm" id="row_order_search" onclick="search_category_wise_products()">Search</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div><!-- .card-innr -->
+                    </div><!-- .card -->
+                </div>
+
+                <div class="col-md-12 main-content">
+                    <div class="card content-area p-4">
+                        <div class="card-header border-0">
+                        </div>
+                        <div class="card-innr">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <label for="subcategory_id" class="col-form-label">Segments List</label>
+                                        <div class="row font-weight-bold">
+                                            <div class="col-4">No.</div>
+                                            <div class="col-4">Row Order Id</div>
+                                            <div class="col-4">Title</div>
+                                        </div>
+                                        <ul class="list-group bg-grey move order-container" id="sortable">
+                                            <?php
+                                            $i = 0;
+                                            foreach ($segments as $item) {
+                                            ?>
+                                                <li class="list-group-item d-flex bg-gray-light align-items-center h-25" id="product_id-<?= $item->id ?>">
+                                                    <div class="col-md-2"><span> <?= $i ?> </span></div>
+                                                    <div class="col-md-2"><span> <?= $item->row_order ?> </span></div>
+                                                    <div class="col-md-6"><span><?= $item->question ?></span></div>
+                                                </li>
+                                            <?php
+                                                $i++;
+                                            }
+                                            ?>
+                                        </ul>
+                                        <button type="button" class="btn btn-block btn-success btn-lg mt-3" id="save_product_order">Save</button>
+                                    </div>
+                                </div>
+                            </div><!-- .card-innr -->
+                        </div><!-- .card -->
+                    </div>
+
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">{{
+                        $websiteLang->where('lang_key','close')->first()->custom_text }}</button>
+                    <button type="submit" class="btn btn-success">{{
+                        $websiteLang->where('lang_key','save')->first()->custom_text }}</button>
+                </form>
+            </div>
+        </div>
+
+    </div>
+</div>
+</div>
 
 <!-- update testimonial Modal -->
 @foreach ($segments as $item)
@@ -269,9 +381,21 @@
 </div>
 
 @endforeach
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
 
+<script>
+$('#sortable').sortable({
+    axis: 'y',
+    opacity: 0.6,
+    cursor: 'grab'
+});
 
-
+// $('#sortable').sortableJS({
+//     axis: 'y',
+//     opacity: 0.6,
+//     cursor: 'grab'
+// });
+</script>
 <script>
     function deleteData(id) {
         $("#deleteForm").attr("action", '{{ url("/admin/practice/") }}' + "/" + id)
@@ -310,5 +434,69 @@
             }
         });
     });
+
+
+    function search_category_wise_products() {
+    var category_id = $('#category_parent').val();
+    if (category_id != '') {
+        $.ajax({
+            data: {
+                'cat_id': category_id,
+            },
+            type: 'GET',
+            url: "{{url('/admin/segments-order/')}}",
+            dataType: 'json',
+            success: function (result) {
+                console.log(result);
+                var html = "";
+                var i = 0;
+                if (!$.isEmptyObject(result)) {
+                    $.each(result, function (index, value) {
+                        html += '<li class="list-group-item d-flex bg-gray-light align-items-center h-25 ui-sortable-handle" id="product_id-' + value['id'] + '">';
+                        html += '<div class="col-md-1"><span> ' + i + ' </span></div>';
+                        html += '<div class="col-md-3"><span> ' + value['row_order'] + ' </span></div>';
+                        html += '<div class="col-md-4"><span>' + value['question'] + '</span></div>';
+                        i++;
+                    });
+                    $('#sortable').html(html);
+                } else {
+
+                    iziToast.error({
+                        message: 'No Products Are Available',
+                    });
+
+                    html += '<li class="list-group-item d-flex justify-content-center bg-gray-light align-items-center h-25 ui-sortable-handle" id="product_id-3"><div class="col-md-12 d-flex justify-content-center"><span>No Products  Are  Available</span></div></li>';
+                    $('#sortable').html(html);
+                }
+            }
+        });
+    } else {
+        iziToast.error({
+            message: 'Category Field Should Be Selected',
+        });
+    }
+}
+
+$(document).on('click', '#save_product_order', function () {
+    var data = $('#sortable').sortable('serialize');
+    console.log('here');
+    $.ajax({
+        data: data,
+        type: 'GET',
+        url: "{{url('/admin/update-product-order/')}}",
+        dataType: 'json',
+        success: function (response) {
+            if (response.error == false) {
+                iziToast.success({
+                    message: response.message,
+                });
+            } else {
+                iziToast.error({
+                    message: response.message,
+                });
+            }
+        }
+    });
+});
 </script>
 @endsection
