@@ -50,7 +50,6 @@ class SegmentsController extends Controller
     }
     public function update_product_order()
     {
-
         $i = 0;
         $temp = array();
         foreach ($_GET['product_id'] as $row) {
@@ -58,18 +57,20 @@ class SegmentsController extends Controller
             $data = [
                 'row_order' => $i
             ];
-            $data = array_map($data);
-            print_r($data);die;
-            $segments = Segments::where(['id' => $row]);
-            $segments->save();
-            // $this->db->where(['id' => $row])->update('products', $data);
+    
+            $segment = Segments::find($row);
+    
+            if ($segment) {
+                $segment->update($data);
+                $message = 'Segments Order Saved Successfully';
+            } else {
+                $message = "Segment with id $row not found.";
+            }
+    
             $i++;
         }
-
-        $response['error'] = false;
-        $response['message'] = 'Product Order Saved !';
-
-        print_r(json_encode($response));
+        return response()->json($message);
+    
     }
     function escape_array(array $array)
     {

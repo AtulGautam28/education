@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Segments extends Model
 {
     protected $fillable=[
-        'practice_id','question','answer','question_audio','answer_audio','status'
+        'practice_id','row_order','question','answer','question_audio','answer_audio','status'
     ];
 
     public function practice(){

@@ -374,6 +374,7 @@ Route::group(['as'=> 'admin.', 'prefix' => 'admin'],function (){
 
     Route::resource('faq',FaqController::class);
     Route::get('faq-status/{id}', [FaqController::class,'changeStatus'])->name('faq.status');
+    Route::get('practice-status/{id}', [PracticeController::class,'changeStatus'])->name('practice.status');
     Route::post('faq-image', [FaqController::class,'faqImage'])->name('faq-image');
     Route::resource('service',ServiceController::class);
     Route::get('service-status/{id}', [ServiceController::class,'changeStatus'])->name('service.status');
@@ -420,6 +421,7 @@ Route::group(['as'=> 'admin.', 'prefix' => 'admin'],function (){
     // Route::resource('practice',PracticeController::class);
     Route::get('practice',[PracticeController::class,'index'])->name('practice');
     Route::post('store-practice',[PracticeController::class,'store'])->name('store.practice');
+    Route::post('practice-update/{id}',[PracticeController::class,'update'])->name('practice.update');
     Route::post('practice-update/{id}',[PracticeController::class,'update'])->name('practice.update');
     Route::get('practice-delete/{id}',[PracticeController::class,'destroy'])->name('practice.delete');
 

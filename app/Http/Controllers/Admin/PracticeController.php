@@ -50,6 +50,7 @@ class PracticeController extends Controller
         $practice->is_lastminutes=$request->is_lastminutes;
         $practice->description=$request->description;
         $practice->gender=$request->gender;
+        $practice->first_speak=$request->first_speak;
         $practice->instructions=$request->instructions;
         $practice->subject_id=$request->subject_id;
         $practice->status=$request->status;
@@ -78,6 +79,7 @@ class PracticeController extends Controller
         $practice->description=$request->description;
         $practice->instructions=$request->instructions;
         $practice->gender=$request->gender;
+        $practice->first_speak=$request->first_speak;
         $practice->subject_id=$request->subject_id;
         $practice->is_lastminutes=$request->is_lastminutes;
         $practice->status=$request->status;
@@ -111,7 +113,7 @@ class PracticeController extends Controller
     
 
     public function changeStatus($id){
-        $faq=Faq::find($id);
+        $faq=Practice::find($id);
         if($faq->status==1){
             $faq->status=0;
             $notify_lang=NotificationText::all();

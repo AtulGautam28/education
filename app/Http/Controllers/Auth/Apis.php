@@ -920,9 +920,9 @@ class Apis extends Controller
     {
         if($request->is_lastminutes == 1){
             
-            $practices=Practice::where('is_lastminutes',$request->is_lastminutes)->get();
+            $practices=Practice::where('is_lastminutes',$request->is_lastminutes)->where('status',1)->get();
         }else{
-            $practices=Practice::all();
+            $practices=Practice::where('status',1)->get();
         }
         if($practices){
             $notification='Data found successfully';
@@ -934,7 +934,7 @@ class Apis extends Controller
     }
     public function segments(Request $request)
     {
-        $segments=Segments::where('practice_id',$request->practice_id)->get();
+        $segments=Segments::where(['practice_id'=>$request->practice_id,'status'=>1])->orderBy('row_order','asc')->get();
         foreach ($segments as $key => $value) {
             $segments->practice  = $value->practice->title;
         }

@@ -113,7 +113,18 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-6">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="status">First Speak</label>
+                                    <select name="first_speak" id="status" class="form-control">
+                                        <option>Select First Speak</option>
+                                        <option {{ $item->first_speak=='0' ? 'selected' : '' }} value="0">English</option>
+                                        <option {{ $item->first_speak=='1' ? 'selected' : '' }} value="1">User Langauge
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
                                 <div class="form-group">
                                     <label for="status">Gender</label>
                                     <select name="gender" id="status" class="form-control">
@@ -123,7 +134,7 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <div class="form-group">
                                     <label for="status">Is Last Minutes Practice</label>
                                     <select name="is_lastminutes" id="status" class="form-control">
@@ -236,7 +247,18 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="status">First Speak</label>
+                                    <select name="first_speak" id="status" class="form-control">
+                                        <option>Select Gender</option>
+                                        <option {{ $item->first_speak=='0' ? 'selected' : '' }} value="0">English</option>
+                                        <option {{ $item->first_speak=='1' ? 'selected' : '' }} value="1">User Langauge
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
                                 <div class="form-group">
                                     <label for="status">Gender</label>
                                     <select name="gender" id="status" class="form-control">
@@ -247,7 +269,7 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <div class="form-group">
                                     <label for="status">Is Last Minutes Practices</label>
                                     <select name="is_lastminutes" id="status" class="form-control">
@@ -304,7 +326,7 @@
         }
         $.ajax({
             type: "get",
-            url: "{{url('/admin/faq-status/')}}" + "/" + id,
+            url: "{{url('/admin/practice-status/')}}"+"/"+id,
             success: function (response) {
                 toastr.success(response)
             },

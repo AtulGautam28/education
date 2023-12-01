@@ -25,6 +25,8 @@
 <h1 class="h3 mb-2 text-gray-800"><a href="#" data-toggle="modal" data-target="#addTestimonial"
         class="btn btn-success"><i class="fas fa-plus" aria-hidden="true"></i> {{
         $websiteLang->where('lang_key','create')->first()->custom_text }}</a></h1>
+        <h1 class="h3 mb-2 text-gray-800"><a href="#" data-toggle="modal" data-target="#addTestimonial1"
+            class="btn btn-success">Segment Order</a></h1>
 
 <div class="card shadow mb-4">
     <div class="card-body">
@@ -54,7 +56,6 @@
                         <th width="25%">{{ $websiteLang->where('lang_key','qus')->first()->custom_text }}</th>
                         <th width="50%">{{ $websiteLang->where('lang_key','ans')->first()->custom_text }}</th>
                         {{-- <th width="50%">Question Audio</th>--}}
-                        <th width="50%">Row Order</th> 
                         <th width="50%">Practice Dialogues</th>
                         <th width="10%">{{ $websiteLang->where('lang_key','status')->first()->custom_text }}</th>
                         <th width="10%">{{ $websiteLang->where('lang_key','action')->first()->custom_text }}</th>
@@ -66,9 +67,6 @@
                         <td>{{ ++$index }}</td>
                         <td>{{ $item->question }}</td>
                         <td>{{ $item->answer }}</td>
-                        <td><h1 class="h3 mb-2 text-gray-800"><a href="#" data-toggle="modal" data-target="#addTestimonial1"
-                            class="btn btn-success"><i class="fas fa-plus" aria-hidden="true"></i> {{
-                            $websiteLang->where('lang_key','create')->first()->custom_text }}</a></h1></td>
                         <td>{{ $item->practice->title }}</td>
                         <td>
                             @if ($item->status==1)
@@ -205,16 +203,13 @@
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Segments IOrder</h5>
+                <h5 class="modal-title">Segments Order</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
                 <div class="container-fluid">
-
-                    <form action="{{ route('admin.store.segments') }}" method="POST" enctype="multipart/form-data">
-                        @csrf
             <div class="row">
                 <div class="col-md-12 main-content">
                     <div class="card content-area p-4">
@@ -255,9 +250,9 @@
                                     <div class="col-md-12">
                                         <label for="subcategory_id" class="col-form-label">Segments List</label>
                                         <div class="row font-weight-bold">
-                                            <div class="col-4">No.</div>
-                                            <div class="col-4">Row Order Id</div>
-                                            <div class="col-4">Title</div>
+                                            <div class="col-2">No.</div>
+                                            <div class="col-2">Row Order Id</div>
+                                            <div class="col-8">Title</div>
                                         </div>
                                         <ul class="list-group bg-grey move order-container" id="sortable">
                                             <?php
@@ -285,7 +280,6 @@
                         $websiteLang->where('lang_key','close')->first()->custom_text }}</button>
                     <button type="submit" class="btn btn-success">{{
                         $websiteLang->where('lang_key','save')->first()->custom_text }}</button>
-                </form>
             </div>
         </div>
 
@@ -486,16 +480,13 @@ $(document).on('click', '#save_product_order', function () {
         url: "{{url('/admin/update-product-order/')}}",
         dataType: 'json',
         success: function (response) {
-            if (response.error == false) {
-                iziToast.success({
-                    message: response.message,
-                });
-            } else {
-                iziToast.error({
-                    message: response.message,
-                });
+                toastr.success(response)
+                location.reload();
+            },
+            error: function (err) {
+                console.log(err);
+                location.reload();
             }
-        }
     });
 });
 </script>
