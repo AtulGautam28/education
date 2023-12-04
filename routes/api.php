@@ -115,10 +115,12 @@ Route::post('planPurchaseHistory',[Apis::class,'planPurchaseHistory'])->name('pl
 Route::get('lastMinutesPractice',[Apis::class,'lastMinutesPractice'])->name('lastMinutesPractice');
 
 //Dashboard
-Route::get('dashboard',[Apis::class,'dashboard'])->name('dashboard');
+Route::post('dashboard',[Apis::class,'dashboard'])->name('dashboard');
 
 //Search Vocabulary 
 Route::post('searchVocabulary',[Apis::class,'searchVocabulary'])->name('searchVocabulary');
+Route::post('usesVocabulary',[Apis::class,'usesVocabulary'])->name('usesVocabulary');
+Route::post('usesPractice',[Apis::class,'usesPractice'])->name('usesPractice');
 
 
 

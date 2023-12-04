@@ -15,6 +15,8 @@ use App\PrivacyPolicy;
 use App\Blog;
 use App\Mail\ForgetPassword;
 use App\Message;
+use App\Usesvocabulary;
+use App\Usespractice;
 use App\Tutorial;
 use App\MessageComment;
 use App\Dashboardslider;
@@ -920,9 +922,9 @@ class Apis extends Controller
     {
         if($request->is_lastminutes == 1){
             
-            $practices=Practice::where('is_lastminutes',$request->is_lastminutes)->where('status',1)->get();
+            $practices=Practice::where('is_lastminutes',$request->is_lastminutes)->get();
         }else{
-            $practices=Practice::where('status',1)->get();
+            $practices=Practice::all();
         }
         if($practices){
             $notification='Data found successfully';
@@ -934,7 +936,7 @@ class Apis extends Controller
     }
     public function segments(Request $request)
     {
-        $segments=Segments::where(['practice_id'=>$request->practice_id,'status'=>1])->orderBy('row_order','asc')->get();
+        $segments=Segments::where('practice_id',$request->practice_id)->get();
         foreach ($segments as $key => $value) {
             $segments->practice  = $value->practice->title;
         }
@@ -1253,12 +1255,15 @@ class Apis extends Controller
         return "payment success";
     }
 
-    public function dashboard()
+    public function dashboard(Request $request)
     {
-        $dashboard = Dashboardslider::all();
-        if($dashboard){
+        $slider = Dashboardslider::all();
+        $usespractice = Usespractice::where('user_id',$request->user_id)->count();
+        $usesvocabulary = Usesvocabulary::where('user_id',$request->user_id)->count();
+        $data = array('slider'=>$slider, 'usespractice'=>$usespractice, 'usesvocabulary'=>$usesvocabulary);
+        if($data){
             $notification='Data found successfully';
-            return response()->json(['status'=>'success','message'=>$notification,'data'=>$dashboard]);
+            return response()->json(['status'=>'success','message'=>$notification,'data'=>$data]);
         }else{
             $notification='Data Not found!';
             return response()->json(['status'=>'error','message'=>$notification]);
@@ -1284,6 +1289,104 @@ class Apis extends Controller
                 $notification='Data Not found!';
                 return response()->json(['status'=>'error','message'=>$notification]);
             }
+        }
+    }
+    public function sendForgetEmail1(Request $request){
+ 
+        $validator = Validator::make($request->all(), [
+           'email'=>'required|email',
+           'g-recaptcha-response'=>new Captcha()
+       ]);
+
+       if ($validator->fails()) {
+           return response()->json(['status' => 'error', 'message' => $validator->messages()->first()]);
+       }
+
+        $user=User::where('email',$request->email)->first();
+
+        MailHelper::setMailConfig();
+        if($user){
+            $user->forget_password_token=Str::random(100);
+            $user->save();
+            $template=EmailTemplate::where('id',1)->first();
+            $message=$template->description;
+            $subject=$template->subject;
+            $message=str_replace('{{name}}',$user->name,$message);
+            $res = Mail::to($user->email)->send(new ForgetPassword($user,$message,$subject));
+            $notify_lang=NotificationText::all();
+            $notification=$notify_lang->where('lang_key','forget_pass')->first()->custom_text;
+            return response()->json(['status'=>'success','message'=>$notification]);
+
+        }else{
+            $notify_lang=NotificationText::all();
+            $notification=$notify_lang->where('lang_key','email_not_exist')->first()->custom_text;
+            return response()->json(['status'=>'error','message'=>$notification]);
+        }
+
+   }    
+    public function usesPractice(Request $request){
+
+       $validator = Validator::make($request->all(), [
+           'user_id'=>'required',
+           'practice_id'=>'required',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['status' => 'error', 'message' => $validator->messages()->first()]);
+        }
+        $result = Usespractice::where(['user_id'=>$request->user_id,'practice_id'=>$request->practice_id])->first();
+        
+        if(!blank($result)){
+            $notification='This Practice Aleready Uses!';
+            $notification=array('message'=>$notification,'status'=>'error');
+            return response()->json($notification);
+        }
+        $usespractice=new Usespractice();
+        $usespractice->user_id=$request->user_id;
+        $usespractice->practice_id=$request->practice_id;
+        $usespractice->save();
+
+        if($usespractice){
+            $notification='Data has been sent successfully';
+            $notification=array('message'=>$notification,'status'=>'success');
+            return response()->json($notification);
+        }{
+            $notification='Please Tyr Again!';
+            $notification=array('message'=>$notification,'status'=>'error');
+            return response()->json($notification);
+        }
+    }
+    public function usesVocabulary(Request $request){
+
+       $validator = Validator::make($request->all(), [
+           'user_id'=>'required',
+           'vocabulary_id'=>'required',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['status' => 'error', 'message' => $validator->messages()->first()]);
+        }
+        $result = Usespractice::where(['user_id'=>$request->user_id,'practice_id'=>$request->practice_id])->first();
+        
+        if(!blank($result)){
+            $notification='This Practice Aleready Uses!';
+            $notification=array('message'=>$notification,'status'=>'error');
+            return response()->json($notification);
+        }
+        
+        $usespractice=new Usesvocabulary();
+        $usespractice->user_id=$request->user_id;
+        $usespractice->vocabulary_id=$request->vocabulary_id;
+        $usespractice->save();
+
+        if($usespractice){
+            $notification='Data has been sent successfully';
+            $notification=array('message'=>$notification,'status'=>'success');
+            return response()->json($notification);
+        }{
+            $notification='Please Tyr Again!';
+            $notification=array('message'=>$notification,'status'=>'error');
+            return response()->json($notification);
         }
     }
 
